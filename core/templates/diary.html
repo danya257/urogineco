@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  {% with seo=seo_info %}
+  <title>{{ seo.meta_title|default:"Дневник врача | Доктор Гвоздев М.Ю." }}</title>
+  <meta name="description" content="{{ seo.meta_description|default:"Записи из практики урогинеколога: клинические случаи, операции, рекомендации." }}">
+  {% endwith %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <header>
+    <div class="logo">Gvozdev.MD</div>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/#about">Обо мне</a>
+      <a href="/#procedures">Операции</a>
+      <a href="/reviews/">Отзывы</a>
+      <a href="/events/">Мероприятия</a>
+    </nav>
+  </header>
+
+  <section id="diary-page">
+    <div class="container">
+      <h1>Дневник врача</h1>
+      <p>Клинические случаи, размышления и профессиональные заметки</p>
+
+      {% for post in blog_posts %}
+      <article class="blog-item spec-card" style="margin-top: 2rem;">
+        <h2>{{ post.title }}</h2>
+        <small style="color: var(--text-secondary);">{{ post.published_date|date:"d E Y" }}</small>
+        {% if post.image %}
+          <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-img" style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin:1.2rem 0;">
+        {% endif %}
+        <div>{{ post.content|safe }}</div>
+      </article>
+      {% empty %}
+      <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">Записей пока нет.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Доктор Гвоздев М.Ю.</p>
+      <div class="social-icons">
+        {% if contact_info.telegram_link %}
+          <a href="{{ contact_info.telegram_link }}" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+        {% endif %}
+        {% if contact_info.whatsapp_link %}
+          <a href="{{ contact_info.whatsapp_link }}" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        {% endif %}
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  <script>
+    // Частицы + анимация секций (повторяем логику из main.js)
+    document.addEventListener('DOMContentLoaded', () => {
+      const particlesContainer = document.getElementById('particles');
+      if (particlesContainer) {
+        for (let i = 0; i < 15; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          const size = Math.random() * 50 + 10;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.top = `${Math.random() * 100}%`;
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.animationDuration = `${Math.random() * 25 + 10}s`;
+          particle.style.animationDelay = `${Math.random() * 5}s`;
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('section').forEach(section => observer.observe(section));
+    });
+  </script>
+</body>
+</html>

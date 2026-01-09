@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  {% with seo=seo_info %}
+  <title>{{ seo.meta_title|default:"Мероприятия | Доктор Гвоздев М.Ю." }}</title>
+  <meta name="description" content="Участие в конференциях, мастер-классах и научных симпозиумах">
+  {% endwith %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <style>
+    .event-card {
+      background: var(--surface);
+      padding: 1.8rem;
+      border-radius: 16px;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    .event-date {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .past-events h2::after {
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <header>
+    <div class="logo">Gvozdev.MD</div>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/#about">Обо мне</a>
+      <a href="/diary/">Дневник</a>
+      <a href="/reviews/">Отзывы</a>
+    </nav>
+  </header>
+
+  <section id="events-page">
+    <div class="container">
+      <h1>Мероприятия</h1>
+
+      {% if future_events %}
+        <h2>Предстоящие события</h2>
+        {% for event in future_events %}
+        <div class="event-card">
+          <div class="event-date">{{ event.date|date:"d E Y" }}</div>
+          <h3>{{ event.title }}</h3>
+          <p><strong>Место:</strong> {{ event.location }}</p>
+          {% if event.description %}
+            <div>{{ event.description|safe }}</div>
+          {% endif %}
+          {% if event.link %}
+            <a href="{{ event.link }}" target="_blank" class="btn" style="margin-top: 1rem;">Подробнее</a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>Нет предстоящих мероприятий.</p>
+      {% endif %}
+
+      {% if past_events %}
+        <div class="past-events">
+          <h2>Прошедшие мероприятия</h2>
+          {% for event in past_events %}
+          <div class="event-card">
+            <div class="event-date" style="background: #6c757d;">{{ event.date|date:"d E Y" }}</div>
+            <h3>{{ event.title }}</h3>
+            <p><strong>Место:</strong> {{ event.location }}</p>
+            {% if event.description %}
+              <div>{{ event.description|safe }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Доктор Гвоздев М.Ю.</p>
+      <div class="social-icons">
+        {% if contact_info.telegram_link %}
+          <a href="{{ contact_info.telegram_link }}" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+        {% endif %}
+        {% if contact_info.whatsapp_link %}
+          <a href="{{ contact_info.whatsapp_link }}" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        {% endif %}
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
