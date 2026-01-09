@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-r5x)y4pb)i#t57=ny@+70ub7(s#&(ke#^b8$o&jnr56g5tl*ow
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["urogineco.onrender.com"]
+ALLOWED_HOSTS = ['urogineco.onrender.com']
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
