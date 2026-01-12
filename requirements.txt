@@ -3,3 +3,4 @@ Pillow
 django-ckeditor>=6.7.0
 django-admin-sortable2>=1.1.0
 gunicorn==22.0.0
+whitenoise==6.7.0
