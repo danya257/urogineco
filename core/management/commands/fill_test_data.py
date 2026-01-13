@@ -2,7 +2,7 @@ import os
 from django.core.management.base import BaseCommand
 from django.core.files import File
 from django.conf import settings
-from your_app.models import (
+from core.models import (
     SEOAndContent, Hero, Direction, WorkExample, Achievement,
     EducationItem, ContactInfo, Procedure, Testimonial,
     BlogPost, Event, AboutDoctor, UsefulInfo, ClinicLocation
