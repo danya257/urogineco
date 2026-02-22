@@ -1,13 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- SEO -->
   {% with seo=seo_info %}
   <title>{{ seo.meta_title|default:"Доктор Гвоздев М.Ю. | Урогинеколог в Москве" }}</title>
-  <meta name="description" content="{{ seo.meta_description|default:"Врач-урогинеколог высшей категории. Операции при недержании, пролапсе, свищах. Автор патентованной методики." }}">
+  <meta name="description" content="{{ seo.meta_description|default:" Врач-урогинеколог высшей категории. Операции при
+    недержании, пролапсе, свищах. Автор патентованной методики." }}">
   {% if seo.og_image %}
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ seo.og_image.url }}">
   {% endif %}
@@ -19,11 +21,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
+
 <body>
   <div class="particles" id="particles"></div>
-
   <header>
-    <div class="logo">Gvozdev.MD</div>
+    <div class="logo">Gvozdev.MU</div>
     <nav>
       <a href="#hero">Главная</a>
       <a href="#procedures">Консультирую и оперирую</a>
@@ -36,38 +38,38 @@
       <a href="#contact">Записаться</a>
     </nav>
   </header>
-
   <!-- Hero -->
   <section id="hero">
     <div class="container">
       {% if hero %}
-        <h1>{{ hero.title }}</h1>
-        <div class="subtitle">{{ hero.subtitle }}</div>
-        <!-- Видео или фото -->
-{% if hero.video_file %}
-  <div class="hero-video">
-    <video controls preload="metadata" style="width: 100%; max-width: 800px; border-radius: 12px; margin: 2rem auto; display: block;">
-      <source src="{{ hero.video_file.url }}" type="video/mp4">
-      Ваш браузер не поддерживает видео.
-    </video>
-  </div>
-{% elif hero.image %}
-  <img src="{{ hero.image.url }}" alt="Доктор" class="avatar">
-{% else %}
-  <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" class="avatar">
-{% endif %}
-        <a href="#contact" class="btn">{{ hero.cta_text }}</a>
+      <h1>{{ hero.title }}</h1>
+      <div class="subtitle">{{ hero.subtitle }}</div>
+      <!-- Видео или фото -->
+      {% if hero.video_file %}
+      <div class="hero-video">
+        <video controls preload="metadata"
+          style="width: 100%; max-width: 800px; border-radius: 12px; margin: 2rem auto; display: block;">
+          <source src="{{ hero.video_file.url }}" type="video/mp4">
+          Ваш браузер не поддерживает видео.
+        </video>
+      </div>
+      {% elif hero.image %}
+      <img src="{{ hero.image.url }}" alt="Доктор" class="avatar">
       {% else %}
-        <h1>Доктор Гвоздев Михаил Юрьевич</h1>
-        <div class="subtitle">Врач-урогинеколог • Хирург высшей категории</div>
-        <p>Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.</p>
-        <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" class="avatar">
-        <a href="#contact" class="btn">Записаться на приём</a>
+      <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg"
+        class="avatar">
       {% endif %}
-      
+      <a href="#contact" class="btn">{{ hero.cta_text }}</a>
+      {% else %}
+      <h1>Доктор Гвоздев Михаил Юрьевич</h1>
+      <div class="subtitle">Врач-урогинеколог • Хирург высшей категории</div>
+      <p>Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.</p>
+      <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg"
+        class="avatar">
+      <a href="#contact" class="btn">Записаться на приём</a>
+      {% endif %}
     </div>
   </section>
-
   <!-- Консультирую и оперирую -->
   <section id="procedures">
     <div class="container">
@@ -84,42 +86,39 @@
       </div>
     </div>
   </section>
-
   <!-- Обо мне -->
   <section id="about">
     <div class="container">
       <h2>Обо мне</h2>
       {% with about_doc=about_doctor.load %}
-        {{ about_doc.bio|safe }}
+      {{ about_doc.bio|safe }}
       {% endwith %}
     </div>
   </section>
-
   <!-- Важное пациенткам -->
   <section id="useful">
     <div class="container">
       <h2>Важное пациенткам</h2>
       {% with info=useful_info.load %}
-        <div class="useful-block">
-          <h3>Подготовка к консультации</h3>
-          {{ info.prep_consultation|safe }}
-        </div>
-        <div class="useful-block">
-          <h3>Подготовка к операции</h3>
-          {{ info.prep_surgery|safe }}
-        </div>
-        <div class="useful-block">
-          <h3>Обезболивание при операции</h3>
-          {{ info.anesthesia_info|safe }}
-        </div>
-        <div class="useful-block">
-          <h3>Послеоперационный период</h3>
-          {{ info.postop_period|safe }}
-        </div>
+      <div class="useful-block">
+        <h3>Подготовка к консультации</h3>
+        {{ info.prep_consultation|safe }}
+      </div>
+      <div class="useful-block">
+        <h3>Подготовка к операции</h3>
+        {{ info.prep_surgery|safe }}
+      </div>
+      <div class="useful-block">
+        <h3>Обезболивание при операции</h3>
+        {{ info.anesthesia_info|safe }}
+      </div>
+      <div class="useful-block">
+        <h3>Послеоперационный период</h3>
+        {{ info.postop_period|safe }}
+      </div>
       {% endwith %}
     </div>
   </section>
-
   <!-- Адреса клиник -->
   <section id="clinics">
     <div class="container">
@@ -129,7 +128,8 @@
         <h3>{{ clinic.name }}</h3>
         <p>{{ clinic.address|linebreaksbr }}</p>
         {% if clinic.map_link %}
-          <a href="{{ clinic.map_link }}" target="_blank" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Карта</a>
+        <a href="{{ clinic.map_link }}" target="_blank" class="btn"
+          style="padding: 8px 20px; font-size: 0.95rem;">Карта</a>
         {% endif %}
       </div>
       {% empty %}
@@ -137,10 +137,9 @@
       {% endfor %}
     </div>
   </section>
-
   <!-- Контакты / Запись -->
   <section id="contact">
-    <div class="container">
+    <div class="Fotter">
       <h2>Записаться на приём</h2>
       <form class="contact-form" id="contactForm">
         <div class="form-group">
@@ -159,21 +158,19 @@
       </form>
     </div>
   </section>
-
   <footer>
     <div class="container">
       <p>© 2026 Доктор Гвоздев М.Ю.</p>
       <div class="social-icons">
         {% if contact_info.telegram_link %}
-          <a href="{{ contact_info.telegram_link }}" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+        <a href="{{ contact_info.telegram_link }}" target="_blank"><i class="fab fa-telegram-plane"></i></a>
         {% endif %}
         {% if contact_info.whatsapp_link %}
-          <a href="{{ contact_info.whatsapp_link }}" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="{{ contact_info.whatsapp_link }}" target="_blank"><i class="fab fa-whatsapp"></i></a>
         {% endif %}
       </div>
     </div>
   </footer>
-
   <script src="{% static 'js/main.js' %}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -204,6 +201,22 @@
       }, { threshold: 0.15 });
       document.querySelectorAll('section').forEach(section => observer.observe(section));
 
+      // === НОВОЕ: Скрытие подсказок при фокусе ===
+      const formInputs = document.querySelectorAll('.form-input');
+      formInputs.forEach(input => {
+        const formGroup = input.closest('.form-group');
+
+        input.addEventListener('focus', () => {
+          formGroup.classList.add('hide-label');
+        });
+
+        input.addEventListener('blur', () => {
+          if (input.value.trim() === '') {
+            formGroup.classList.remove('hide-label');
+          }
+        });
+      });
+
       // Форма
       const form = document.getElementById('contactForm');
       if (form) {
@@ -211,9 +224,14 @@
           e.preventDefault();
           alert('✅ Спасибо за заявку!\nАдминистратор свяжется с вами в течение 24 часов.');
           form.reset();
+          // После сброса — вернуть все подсказки
+          document.querySelectorAll('.form-group').forEach(group => {
+            group.classList.remove('hide-label');
+          });
         });
       }
     });
   </script>
 </body>
+
 </html>
