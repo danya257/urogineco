@@ -175,12 +175,14 @@ class Testimonial(models.Model):
     age = models.PositiveIntegerField("Возраст", blank=True, null=True)
     text = RichTextField("Отзыв", config_name='minimal')
     photo = models.ImageField("Фото", upload_to="testimonials/", blank=True, null=True)
+    is_published = models.BooleanField("Опубликовано", default=False) 
+    created_at = models.DateTimeField(auto_now_add=True)  
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
-        ordering = ['order']
+        ordering = ['-created_at']  # новые — сверху
 
     def __str__(self):
         return f"Отзыв от {self.name}"
@@ -194,7 +196,13 @@ class BlogPost(models.Model):
     published_date = models.DateTimeField("Дата публикации", auto_now_add=True)
     is_published = models.BooleanField("Опубликовано", default=True)
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-
+    related_event = models.OneToOneField(
+        'Event',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Связанное мероприятие"
+    )
     class Meta:
         verbose_name = "Дневник врача"
         verbose_name_plural = "Дневник врача"
@@ -270,6 +278,7 @@ class UsefulInfo(models.Model):
 class ClinicLocation(models.Model):
     name = models.CharField("Название клиники", max_length=200)
     address = models.TextField("Адрес")
+    website = models.URLField("Сайт клиники", blank=True)  # ← добавлено
     map_link = models.URLField("Ссылка на карту (Google Maps и т.п.)", blank=True)
     order = models.PositiveIntegerField("Порядок отображения", default=0)
 
@@ -279,4 +288,4 @@ class ClinicLocation(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.name} — {self.address}"  
+        return f"{self.name} — {self.address}"

@@ -90,3 +90,19 @@ const observer = new IntersectionObserver((entries) => {
     });
   }
 });
+
+const mobileToggle = document.querySelector('.mobile-menu-toggle');
+const nav = document.getElementById('main-nav');
+
+if (mobileToggle && nav) {
+  mobileToggle.addEventListener('click', () => {
+    nav.classList.toggle('active');
+  });
+
+  // Закрыть меню при клике по ссылке
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('active');
+    });
+  });
+}
