@@ -143,7 +143,7 @@
 </section>
 
 <!-- Мероприятия -->
-{% if past_events or future_events %}
+{% if future_events or past_events %}
 <section id="events-preview">
 <div class="container">
 <h2>Мероприятия</h2>
@@ -157,6 +157,11 @@
 {% if event.link %}
 <a href="{{ event.link }}" target="_blank" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Подробнее</a>
 {% endif %}
+{% if event.has_diary_entry %}
+<a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" style="display: inline-flex; margin-left: 10px;">
+<i class="fas fa-arrow-right"></i>
+</a>
+{% endif %}
 </div>
 {% endfor %}
 {% endif %}
@@ -167,8 +172,11 @@
 <div class="spec-card" style="margin-bottom: 1.2rem;">
 <h4>{{ event.title }} ({{ event.date|date:"d.m.Y" }})</h4>
 <p>{{ event.location }}</p>
-<!-- Кнопка "Отчёт о мероприятии" -->
-<a href="/diary/report-{{ event.id }}/" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Отчёт о мероприятии</a>
+{% if event.has_diary_entry %}
+<a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" style="display: inline-flex; margin-left: 10px;">
+<i class="fas fa-arrow-right"></i>
+</a>
+{% endif %}
 </div>
 {% endfor %}
 {% endif %}

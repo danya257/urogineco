@@ -30,6 +30,10 @@ def home(request):
     today = date.today()
     future_events = [e for e in all_events if e.date >= today]
     past_events = [e for e in all_events if e.date < today][:2]  # ← только 2 прошедших
+    
+    # Добавляем информацию о связанных записях в дневнике
+    for event in list(future_events) + list(past_events):
+        event.has_diary_entry = BlogPost.objects.filter(related_event=event, is_published=True).exists()
 
     context = {
         'seo_info': seo_info,
@@ -75,8 +79,13 @@ def add_testimonial(request):
 
 def events(request):
     today = date.today()
-    future_events = Event.objects.filter(date__gte=today).order_by('date')
-    past_events = Event.objects.filter(date__lt=today).order_by('-date')
+    future_events = Event.objects.filter(date__gte=today).order_by('date')[:2]  # ← только 2 предстоящих
+    past_events = Event.objects.filter(date__lt=today).order_by('-date')[:2]  # ← только 2 прошедших
+    
+    # Добавляем информацию о связанных записях в дневнике
+    for event in list(future_events) + list(past_events):
+        event.has_diary_entry = BlogPost.objects.filter(related_event=event, is_published=True).exists()
+    
     return render(request, 'events.html', {
         'future_events': future_events,
         'past_events': past_events,
