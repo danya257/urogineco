@@ -567,15 +567,16 @@ footer {
   justify-content: center;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, #c8a9a4, #9e999f);
   border-radius: 50%;
   color: white;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   margin-top: 1rem;
-  box-shadow: 0 4px 15px rgba(200, 169, 164, 0.3);
+  box-shadow: 0 4px 15px rgba(200, 169, 164, 0.5);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .event-diary-link::before {
@@ -585,7 +586,7 @@ footer {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
   transition: left 0.5s;
 }
 
@@ -594,29 +595,32 @@ footer {
 }
 
 .event-diary-link:hover {
-  transform: translateX(6px) scale(1.1);
-  box-shadow: 0 6px 25px rgba(200, 169, 164, 0.5);
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  transform: translateX(6px) scale(1.15);
+  box-shadow: 0 6px 25px rgba(200, 169, 164, 0.8);
+  background: linear-gradient(135deg, #9e999f, #c8a9a4);
 }
 
 .event-diary-link i {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   transition: transform 0.3s ease;
   position: relative;
   z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .event-diary-link:hover i {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 /* Анимация пульсации для привлечения внимания */
 @keyframes pulse-arrow {
   0%, 100% {
-    box-shadow: 0 4px 15px rgba(200, 169, 164, 0.3);
+    box-shadow: 0 4px 15px rgba(200, 169, 164, 0.5), 0 0 0 0 rgba(200, 169, 164, 0.4);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 4px 25px rgba(200, 169, 164, 0.6);
+    box-shadow: 0 4px 25px rgba(200, 169, 164, 0.9), 0 0 0 8px rgba(200, 169, 164, 0);
+    transform: scale(1.05);
   }
 }
 

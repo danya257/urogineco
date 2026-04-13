@@ -1,7 +1,7 @@
 // main.js
 
-// Частицы
 document.addEventListener('DOMContentLoaded', () => {
+  // Частицы
   const particlesContainer = document.getElementById('particles');
   if (particlesContainer) {
     for (let i = 0; i < 15; i++) {
@@ -17,21 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
       particlesContainer.appendChild(particle);
     }
   }
-
+  
   // Анимация при скролле
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      entry.target.style.transitionDelay = `${i * 0.1}s`;
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15 });
-
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = `${i * 0.1}s`;
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  
   document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
   });
-
+  
   // Галерея: клик → убрать блюр + модалка
   const galleryItems = document.querySelectorAll('.gallery-item');
   galleryItems.forEach(item => {
@@ -47,7 +47,7 @@ const observer = new IntersectionObserver((entries) => {
       }
     });
   });
-
+  
   // Закрытие модального окна
   const modal = document.getElementById('imageModal');
   const closeModalBtn = document.getElementById('closeModal');
@@ -89,20 +89,29 @@ const observer = new IntersectionObserver((entries) => {
       contactForm.reset();
     });
   }
-});
 
-const mobileToggle = document.querySelector('.mobile-menu-toggle');
-const nav = document.getElementById('main-nav');
-
-if (mobileToggle && nav) {
-  mobileToggle.addEventListener('click', () => {
-    nav.classList.toggle('active');
-  });
-
-  // Закрыть меню при клике по ссылке
-  nav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      nav.classList.remove('active');
+  // === Мобильное меню ===
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const nav = document.getElementById('main-nav');
+  
+  if (mobileToggle && nav) {
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('active');
     });
-  });
-}
+    
+    // Закрыть меню при клике вне его
+    document.addEventListener('click', (e) => {
+      if (!nav.contains(e.target) && !mobileToggle.contains(e.target)) {
+        nav.classList.remove('active');
+      }
+    });
+  
+    // Закрыть меню при клике по ссылке
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('active');
+      });
+    });
+  }
+});
