@@ -157,6 +157,11 @@
 {% if event.link %}
 <a href="{{ event.link }}" target="_blank" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Подробнее</a>
 {% endif %}
+{% if event.blogpost_set.first %}
+<a href="/diary/report-{{ event.id }}/" class="event-diary-link" title="Запись в дневнике" style="display: inline-flex; margin-left: 10px;">
+<i class="fas fa-arrow-right"></i>
+</a>
+{% endif %}
 </div>
 {% endfor %}
 {% endif %}

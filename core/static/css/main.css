@@ -101,6 +101,12 @@ section.visible {
 .container {
   max-width: 1300px;
   width: 100%;
+  overflow-x: hidden;
+}
+.container * {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Типографика — строго, без градиентов */
@@ -112,6 +118,9 @@ h4 {
   color: var(--text-primary);
   letter-spacing: -0.5px;
   text-shadow: none;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 h1 {
@@ -146,14 +155,18 @@ li {
   font-size: 1.05rem;
   color: var(--text-secondary);
   margin: 0.8rem 0;
-  max-width: 800px;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 ul {
   text-align: left;
-  max-width: 800px;
+  max-width: 100%;
   margin: 1.2rem auto;
   padding-left: 1.8rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 li {
@@ -182,6 +195,9 @@ li::before {
   box-shadow: none;
   transition: var(--transition);
   cursor: pointer;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .btn:hover {
@@ -303,7 +319,8 @@ nav a:hover::after {
 .spec-card,
 .testimonial-card,
 .blog-item,
-.achievement-card {
+.achievement-card,
+.event-card {
   background: #01090a42;
   border-radius: 16px;
   padding: 0.2rem 2rem 2rem 2rem;
@@ -311,6 +328,17 @@ nav a:hover::after {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
   margin: 0 10px 20px 10px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.spec-card *,
+.testimonial-card *,
+.blog-item *,
+.achievement-card *,
+.event-card * {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .spec-card:hover,
@@ -529,4 +557,15 @@ footer {
     margin: 12px 0;
     display: block;
   }
+}
+/* Дополнительные стили для предотвращения вылезания текста */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+ RichTextField *, .cke *, .ck-editor__editable * {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }

@@ -75,8 +75,8 @@ def add_testimonial(request):
 
 def events(request):
     today = date.today()
-    future_events = Event.objects.filter(date__gte=today).order_by('date')
-    past_events = Event.objects.filter(date__lt=today).order_by('-date')
+    future_events = Event.objects.filter(date__gte=today).order_by('date')[:2]  # ← только 2 предстоящих
+    past_events = Event.objects.filter(date__lt=today).order_by('-date')[:2]  # ← только 2 прошедших
     return render(request, 'events.html', {
         'future_events': future_events,
         'past_events': past_events,
