@@ -77,6 +77,8 @@
     <div class="container">
       <h1>Отзывы пациенток</h1>
       <p>Благодарности и истории выздоровления</p>
+      
+      <a href="{% url 'add_review' %}" class="btn" style="margin-bottom: 2rem;">Оставить отзыв</a>
 
       {% if testimonials %}
       <div class="carousel-container">
