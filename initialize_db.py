@@ -1,6 +1,7 @@
 # initialize_db.py
 import os
 import django
+from datetime import date, timedelta
 from django.core.management import execute_from_command_line
 
 # Настройка Django
@@ -10,7 +11,7 @@ django.setup()
 from django.contrib.auth.models import User
 from core.models import (
     SEOAndContent, Hero, AboutDoctor, UsefulInfo, ContactInfo,
-    Procedure, ClinicLocation
+    Procedure, ClinicLocation, Event, BlogPost
 )
 
 def create_superuser():
@@ -62,6 +63,53 @@ def create_initial_data():
             address="г. Москва, ул. Новокузнецкая, д. 35/1",
             order=1
         )
+
+    # Мероприятия: 2 прошедших и 1 текущее
+    today = date.today()
+    
+    # Прошедшее мероприятие 1
+    event1, _ = Event.objects.get_or_create(
+        title="Конференция по урогинекологии 2024",
+        defaults={
+            'date': today - timedelta(days=30),
+            'location': "Москва, Конгресс-центр",
+            'description': "<p>Ежегодная конференция по современным методам лечения недержания мочи.</p>",
+            'order': 1
+        }
+    )
+    
+    # Прошедшее мероприятие 2
+    event2, _ = Event.objects.get_or_create(
+        title="Мастер-класс по хирургии тазового дна",
+        defaults={
+            'date': today - timedelta(days=15),
+            'location': "Санкт-Петербург, Медицинский центр",
+            'description': "<p>Практический мастер-класс для врачей по операциям при пролапсе.</p>",
+            'order': 2
+        }
+    )
+    
+    # Текущее/будущее мероприятие
+    event3, _ = Event.objects.get_or_create(
+        title="Вебинар: Новые методики в урогинекологии",
+        defaults={
+            'date': today + timedelta(days=7),
+            'location': "Онлайн",
+            'description': "<p>Открытый вебинар для пациенток и специалистов.</p>",
+            'link': "https://example.com/webinar",
+            'order': 3
+        }
+    )
+
+    # Запись в дневнике врача, привязанная к первому прошедшему мероприятию
+    if not BlogPost.objects.filter(related_event=event1).exists():
+        BlogPost.objects.create(
+            title="Отчёт о конференции 2024",
+            content="<p>Поделюсь впечатлениями от прошедшей конференции. Обсудили новые подходы к лечению...</p>",
+            related_event=event1,
+            is_published=True
+        )
+        print("✅ Запись в дневнике врача создана и привязана к мероприятию")
 
     print("✅ Базовые данные созданы")
 
