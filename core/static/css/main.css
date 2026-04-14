@@ -511,7 +511,8 @@ footer {
     height: 180px;
   }
 
-  nav {
+  /* Скрываем десктопное меню на мобильных */
+  nav#main-nav.desktop-nav {
     display: none;
   }
 
@@ -551,6 +552,7 @@ footer {
     z-index: 999;
     max-height: calc(100vh - 70px);
     overflow-y: auto;
+    display: block !important; /* Всегда показывать на мобильных при активации */
   }
 
   nav#main-nav.active {
