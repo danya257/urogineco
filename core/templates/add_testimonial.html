@@ -1,16 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8" />
-    <title>Оставить отзыв | Доктор Гвоздев</title>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-</head>
-<body>
-<header>
-    <div class="logo">Gvozdev.MU</div>
-    <nav><a href="/">← На главную</a></nav>
-</header>
+
+{% block title %}Оставить отзыв | Доктор Гвоздев{% endblock %}
+
+{% block content %}
 <section style="padding: 120px 5%;">
     <div class="container" style="max-width: 600px;">
         <h2>Оставить отзыв</h2>
@@ -32,5 +25,4 @@
         </form>
     </div>
 </section>
-</body>
-</html>
+{% endblock %}

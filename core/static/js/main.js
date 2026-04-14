@@ -90,20 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === Мобильное меню ===
+  // === Мобильное меню - универсальное для всех страниц ===
   const mobileToggle = document.querySelector('.mobile-menu-toggle');
   const nav = document.getElementById('main-nav');
   
   if (mobileToggle && nav) {
+    // Открытие/закрытие меню по клику на кнопку
     mobileToggle.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
       nav.classList.toggle('active');
+      
+      // Меняем иконку
+      const icon = mobileToggle.querySelector('i');
+      if (nav.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
     });
     
     // Закрыть меню при клике вне его
     document.addEventListener('click', (e) => {
       if (!nav.contains(e.target) && !mobileToggle.contains(e.target)) {
         nav.classList.remove('active');
+        const icon = mobileToggle.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
       }
     });
   
@@ -111,7 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('active');
+        const icon = mobileToggle.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
       });
+    });
+    
+    // Закрыть меню при изменении размера окна (если стало десктопом)
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && nav.classList.contains('active')) {
+        nav.classList.remove('active');
+        const icon = mobileToggle.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
     });
   }
 });

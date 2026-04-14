@@ -521,6 +521,7 @@ footer {
     font-size: 1rem;
   }
 }
+/* Мобильное меню - универсальное для всех страниц */
 .mobile-menu-toggle {
   display: none;
   background: transparent;
@@ -528,15 +529,15 @@ footer {
   color: var(--text-primary);
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 8px;
 }
 
-/* Мобильный режим */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: block;
   }
 
-  nav {
+  nav#main-nav {
     position: fixed;
     top: 70px;
     left: 0;
@@ -544,19 +545,23 @@ footer {
     background: var(--surface);
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
+    padding: 20px 5%;
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
     transition: clip-path 0.4s ease;
     z-index: 999;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
   }
 
-  nav.active {
+  nav#main-nav.active {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
 
-  nav a {
+  nav#main-nav a {
     margin: 12px 0;
     display: block;
+    width: 100%;
+    padding: 8px 0;
   }
 }
 
