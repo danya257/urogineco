@@ -3,128 +3,95 @@
 
 {% block title %}Календарь мероприятий | Доктор Гвоздев М.Ю.{% endblock %}
 
-{% block extra_css %}
-<style>
-  .event-card {
-    background: var(--surface);
-    padding: 1.8rem;
-    border-radius: 16px;
-    margin-bottom: 1.8rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-  .event-card-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .event-card-row > .event-meta { flex: 1; min-width: 0; }
-  .event-date {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  .event-description {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .past-events {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    width: 100%;
-  }
-  .event-actions {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  .event-actions .btn {
-    margin-top: 0;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 <section id="events-page">
   <div class="container">
-    <h1>Календарь мероприятий</h1>
+
+    <div class="section-head" style="text-align: left;">
+      <span class="eyebrow">Расписание</span>
+      <h1>Календарь мероприятий</h1>
+      <p>Конференции, выступления, образовательные события</p>
+    </div>
 
     {% if future_events %}
-      <h2>Предстоящие события</h2>
-      {% for event in future_events %}
-        <div class="event-card">
-          <div class="event-card-row">
-            <div class="event-meta">
-              <div class="event-date">{{ event.date|date:"d E Y" }}</div>
+      <div class="events-block">
+        <h2 style="font-size: 1.5rem; margin-bottom: 1.2rem;">Предстоящие</h2>
+        {% for event in future_events %}
+          <article class="event-card">
+            <div class="event-date-block">
+              <span class="day">{{ event.date|date:"d" }}</span>
+              <span class="month">{{ event.date|date:"M" }}</span>
+              <span class="year">{{ event.date|date:"Y" }}</span>
+            </div>
+            <div class="event-content">
               <h3>{{ event.title }}</h3>
-              <p><strong>Место:</strong> {{ event.location }}</p>
+              <div class="event-meta"><i class="fas fa-location-dot"></i>{{ event.location }}</div>
               {% if event.description %}
-                <div class="event-description">{{ event.description|safe }}</div>
+                <div class="text-muted">{{ event.description|safe }}</div>
               {% endif %}
               <div class="event-actions">
                 {% if event.link %}
-                  <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn">Подробнее</a>
+                  <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn btn-sm">
+                    <i class="fas fa-external-link-alt"></i> Подробнее
+                  </a>
                 {% endif %}
                 {% if event.has_diary_entry %}
-                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline">
-                    <i class="fas fa-file-alt"></i> Отчёт о мероприятии
+                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline btn-sm">
+                    <i class="fas fa-file-lines"></i> Отчёт о мероприятии
                   </a>
                 {% endif %}
               </div>
             </div>
             {% if event.has_diary_entry %}
-              <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
+              <a href="{% url 'event_report' event.id %}" class="event-diary-link" aria-label="Запись в дневнике">
                 <i class="fas fa-arrow-right"></i>
               </a>
             {% endif %}
-          </div>
-        </div>
-      {% endfor %}
+          </article>
+        {% endfor %}
+      </div>
     {% else %}
-      <p>Нет предстоящих мероприятий.</p>
+      <div class="card" style="text-align: center; padding: 3rem 2rem;">
+        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-calendar"></i></span>
+        <h3>Нет предстоящих мероприятий</h3>
+        <p class="text-muted">Следите за обновлениями.</p>
+      </div>
     {% endif %}
 
     {% if past_events %}
-      <div class="past-events">
-        <h2>Прошедшие мероприятия</h2>
+      <div class="events-block">
+        <h2 style="font-size: 1.5rem; margin-bottom: 1.2rem;">Прошедшие</h2>
         {% for event in past_events %}
-          <div class="event-card">
-            <div class="event-card-row">
-              <div class="event-meta">
-                <div class="event-date past">{{ event.date|date:"d E Y" }}</div>
-                <h3>{{ event.title }}</h3>
-                <p><strong>Место:</strong> {{ event.location }}</p>
-                {% if event.description %}
-                  <div class="event-description">{{ event.description|safe }}</div>
-                {% endif %}
-                {% if event.has_diary_entry %}
-                  <div class="event-actions">
-                    <a href="{% url 'event_report' event.id %}" class="btn btn-outline">
-                      <i class="fas fa-file-alt"></i> Отчёт о мероприятии
-                    </a>
-                  </div>
-                {% endif %}
-              </div>
+          <article class="event-card">
+            <div class="event-date-block past">
+              <span class="day">{{ event.date|date:"d" }}</span>
+              <span class="month">{{ event.date|date:"M" }}</span>
+              <span class="year">{{ event.date|date:"Y" }}</span>
+            </div>
+            <div class="event-content">
+              <h3>{{ event.title }}</h3>
+              <div class="event-meta"><i class="fas fa-location-dot"></i>{{ event.location }}</div>
+              {% if event.description %}
+                <div class="text-muted">{{ event.description|safe }}</div>
+              {% endif %}
               {% if event.has_diary_entry %}
-                <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
-                  <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="event-actions">
+                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline btn-sm">
+                    <i class="fas fa-file-lines"></i> Отчёт о мероприятии
+                  </a>
+                </div>
               {% endif %}
             </div>
-          </div>
+            {% if event.has_diary_entry %}
+              <a href="{% url 'event_report' event.id %}" class="event-diary-link" aria-label="Запись в дневнике">
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            {% endif %}
+          </article>
         {% endfor %}
       </div>
     {% endif %}
+
   </div>
 </section>
 {% endblock %}

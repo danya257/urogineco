@@ -3,55 +3,54 @@
 
 {% block title %}{{ event.title }} | Отчёт о мероприятии{% endblock %}
 
-{% block extra_css %}
-<style>
-  .event-report-content * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .event-report-img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    margin: 0 0 1.5rem 0;
-    max-height: 500px;
-    object-fit: cover;
-  }
-  .event-meta-line {
-    color: var(--text-secondary);
-    margin-bottom: 1.2rem;
-  }
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 1.5rem;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 <section>
   <div class="container">
-    <h1>{{ event.title }}</h1>
-    <div class="event-meta-line">
-      <strong>{{ event.date|date:"d E Y" }}</strong> &middot; {{ event.location }}
+
+    <a href="{% url 'events' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+      <i class="fas fa-chevron-left"></i> Календарь мероприятий
+    </a>
+
+    <div style="display: grid; grid-template-columns: 110px 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem;">
+      <div class="event-date-block">
+        <span class="day">{{ event.date|date:"d" }}</span>
+        <span class="month">{{ event.date|date:"M" }}</span>
+        <span class="year">{{ event.date|date:"Y" }}</span>
+      </div>
+      <div>
+        <span class="eyebrow">Отчёт о мероприятии</span>
+        <h1 style="margin-bottom: 0.6rem;">{{ event.title }}</h1>
+        <div class="event-meta" style="margin: 0;">
+          <i class="fas fa-location-dot"></i>{{ event.location }}
+        </div>
+      </div>
     </div>
 
     {% if blog_post %}
-      <article class="spec-card event-report-content">
+      <article class="blog-item">
         {% if blog_post.image %}
-          <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" class="event-report-img">
+          <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}">
         {% endif %}
         <h2>{{ blog_post.title }}</h2>
-        {{ blog_post.content|safe }}
+        <div class="blog-content">{{ blog_post.content|safe }}</div>
       </article>
     {% else %}
-      <p style="color: var(--text-secondary); margin-top: 1.5rem;">Отчёт о мероприятии пока не опубликован.</p>
+      <div class="card" style="text-align: center; padding: 3rem 2rem;">
+        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-clock"></i></span>
+        <h3>Отчёт готовится</h3>
+        <p class="text-muted">Материалы по этому мероприятию скоро будут опубликованы.</p>
+      </div>
     {% endif %}
 
-    <a href="{% url 'events' %}" class="btn back-link">← Календарь мероприятий</a>
+    <div style="margin-top: 2.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+      <a href="{% url 'events' %}" class="btn btn-ghost">
+        <i class="fas fa-chevron-left"></i> Все мероприятия
+      </a>
+      <a href="{% url 'diary' %}" class="btn btn-outline">
+        <i class="fas fa-book-open"></i> Дневник врача
+      </a>
+    </div>
+
   </div>
 </section>
 {% endblock %}

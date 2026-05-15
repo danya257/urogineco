@@ -4,323 +4,405 @@
 {% block title %}{{ seo_info.meta_title|default:"Доктор Гвоздев М.Ю. | Урогинеколог в Москве" }}{% endblock %}
 
 {% block extra_css %}
-<meta property="og:title" content="{% if hero %}{{ hero.title }}{% else %}Доктор Гвоздев М.Ю.{% endif %}">
+<meta property="og:title" content="{% if hero %}{{ hero.title }}{% else %}Доктор Гвоздев М.Ю. — урогинеколог{% endif %}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% if seo_info.og_image %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ seo_info.og_image.url }}">
 {% endif %}
-<style>
-  .hero-video {
-    margin: 2rem auto;
-    max-width: 800px;
-  }
-  .hero-video video {
-    width: 100%;
-    border-radius: 12px;
-    display: block;
-  }
-  .useful-block {
-    margin-bottom: 2rem;
-  }
-  .useful-block * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .clinic-card { margin-bottom: 1.2rem; }
-  .clinic-card .btn {
-    padding: 8px 20px;
-    font-size: 0.95rem;
-    margin-right: 0.5rem;
-  }
-  .event-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .event-row > .event-meta { flex: 1; min-width: 0; }
-  .event-actions {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 0.6rem;
-  }
-  .event-actions .btn { margin-top: 0; }
-</style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero -->
+
+<!-- ====== HERO ====== -->
 <section id="hero">
   <div class="container">
-    {% if hero %}
-      <h1>{{ hero.title }}</h1>
-      <div class="subtitle">{{ hero.subtitle }}</div>
-      {% if hero.description %}<div>{{ hero.description|safe }}</div>{% endif %}
-      {% if hero.video_file %}
-        <div class="hero-video">
-          <video controls preload="metadata">
-            <source src="{{ hero.video_file.url }}" type="video/mp4">
-            Ваш браузер не поддерживает видео.
-          </video>
+    <div class="hero-grid">
+      <div class="hero-content">
+        <span class="eyebrow">Урогинеколог · хирург высшей категории</span>
+        {% if hero %}
+          <h1>{{ hero.title }}</h1>
+          <p class="hero-subtitle">{{ hero.subtitle }}</p>
+        {% else %}
+          <h1>Возвращаю женщинам <em>здоровье</em> и качество жизни</h1>
+          <p class="hero-subtitle">Деликатное и профессиональное лечение пролапса, недержания, свищей. Автор патентованной методики транспозиции уретры — наибольший в мире опыт.</p>
+        {% endif %}
+
+        <div class="hero-cta">
+          <a href="#contact" class="btn">{% if hero.cta_text %}{{ hero.cta_text }}{% else %}Записаться на приём{% endif %}</a>
+          <a href="#procedures" class="btn btn-ghost">Что я лечу</a>
         </div>
-      {% elif hero.image %}
-        <img src="{{ hero.image.url }}" alt="Доктор Гвоздев М.Ю." class="avatar">
-      {% else %}
-        <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" alt="Доктор Гвоздев М.Ю." class="avatar">
-      {% endif %}
-      <a href="#contact" class="btn">{{ hero.cta_text|default:"Записаться на приём" }}</a>
-    {% else %}
-      <h1>Доктор Гвоздев Михаил Юрьевич</h1>
-      <div class="subtitle">Врач-урогинеколог • Хирург высшей категории</div>
-      <p>Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.</p>
-      <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" alt="Доктор Гвоздев М.Ю." class="avatar">
-      <a href="#contact" class="btn">Записаться на приём</a>
-    {% endif %}
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-number">{{ about_doctor.experience_years|default:18 }}+</span>
+            <span class="hero-stat-label">Лет опыта</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">200+</span>
+            <span class="hero-stat-label">Операций по методике</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">1</span>
+            <span class="hero-stat-label">Авторский патент</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        {% if hero.video_file %}
+          <video controls preload="metadata" poster="{% if hero.image %}{{ hero.image.url }}{% endif %}">
+            <source src="{{ hero.video_file.url }}" type="video/mp4">
+          </video>
+        {% elif hero.image %}
+          <img class="hero-img" src="{{ hero.image.url }}" alt="Доктор Гвоздев М.Ю.">
+        {% else %}
+          <img class="hero-img" src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" alt="Доктор Гвоздев М.Ю.">
+        {% endif %}
+
+        <div class="hero-badge">
+          <i class="fas fa-award"></i>
+          <div class="hero-badge-text">
+            Автор патентованной методики
+            <small>Транспозиция уретры</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Консультирую и оперирую -->
+<!-- ====== PROCEDURES ====== -->
 <section id="procedures">
   <div class="container">
-    <h2>Консультирую и оперирую</h2>
-    <div class="spec-grid">
+    <div class="section-head">
+      <span class="eyebrow">Направления</span>
+      <h2>Консультирую и оперирую</h2>
+      <p>Полный спектр диагностики и хирургического лечения урогинекологических заболеваний</p>
+    </div>
+
+    <div class="grid-2">
       {% for proc in procedures %}
-        <div class="spec-card">
-          <h3>
-            {% if proc.icon %}<i class="fas {{ proc.icon }}" aria-hidden="true"></i> {% endif %}
-            {{ proc.title }}
-          </h3>
-          {{ proc.description|safe }}
-        </div>
+        <article class="card">
+          <span class="card-icon">
+            <i class="fas {% if proc.icon %}{{ proc.icon }}{% else %}fa-stethoscope{% endif %}"></i>
+          </span>
+          <h3>{{ proc.title }}</h3>
+          <div class="text-muted">{{ proc.description|safe }}</div>
+        </article>
       {% empty %}
-        <p>Разделы пока не добавлены.</p>
+        <p class="text-muted">Разделы скоро появятся.</p>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- Обо мне -->
+<!-- ====== ABOUT ====== -->
 {% if about_doctor.bio %}
 <section id="about">
   <div class="container">
-    <h2>Обо мне</h2>
-    {{ about_doctor.bio|safe }}
-    {% if about_doctor.experience_years %}
-      <p><strong>Стаж:</strong> {{ about_doctor.experience_years }} лет</p>
-    {% endif %}
-    {% if about_doctor.patents %}
-      <h3>Патенты и разработки</h3>
-      {{ about_doctor.patents|safe }}
-    {% endif %}
-    {% if about_doctor.awards %}
-      <h3>Награды и заслуги</h3>
-      {{ about_doctor.awards|safe }}
-    {% endif %}
+    <div class="about-grid">
+      <div>
+        <span class="eyebrow">Обо мне</span>
+        <h2>Опыт, который доверяют</h2>
+        <div class="text-muted">{{ about_doctor.bio|safe }}</div>
+
+        <div class="about-stats">
+          <div class="stat-box">
+            <span class="stat-num">{{ about_doctor.experience_years|default:18 }}+</span>
+            <span class="stat-label">лет в профессии</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">200+</span>
+            <span class="stat-label">успешных операций</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-side">
+        {% if about_doctor.patents %}
+          <h3>Патенты и разработки</h3>
+          <div class="text-muted">{{ about_doctor.patents|safe }}</div>
+        {% endif %}
+        {% if about_doctor.awards %}
+          <h3 style="margin-top: 1.5rem;">Награды</h3>
+          <div class="text-muted">{{ about_doctor.awards|safe }}</div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </section>
 {% endif %}
 
-<!-- Важное пациенткам -->
+<!-- ====== USEFUL ====== -->
 <section id="useful">
   <div class="container">
-    <h2>Важное пациенткам</h2>
-    {% if useful_info.prep_consultation %}
-    <div class="useful-block">
-      <h3>Подготовка к консультации</h3>
-      {{ useful_info.prep_consultation|safe }}
+    <div class="section-head">
+      <span class="eyebrow">Пациенткам</span>
+      <h2>Важное перед визитом</h2>
+      <p>Всё, что нужно знать о подготовке и восстановлении</p>
     </div>
-    {% endif %}
-    {% if useful_info.prep_surgery %}
-    <div class="useful-block">
-      <h3>Подготовка к операции</h3>
-      {{ useful_info.prep_surgery|safe }}
+
+    <div class="useful-grid">
+      {% if useful_info.prep_consultation %}
+      <article class="useful-card">
+        <span class="num">01</span>
+        <h3>Подготовка к консультации</h3>
+        <div class="text-muted">{{ useful_info.prep_consultation|safe }}</div>
+      </article>
+      {% endif %}
+      {% if useful_info.prep_surgery %}
+      <article class="useful-card">
+        <span class="num">02</span>
+        <h3>Подготовка к операции</h3>
+        <div class="text-muted">{{ useful_info.prep_surgery|safe }}</div>
+      </article>
+      {% endif %}
+      {% if useful_info.anesthesia_info %}
+      <article class="useful-card">
+        <span class="num">03</span>
+        <h3>Обезболивание</h3>
+        <div class="text-muted">{{ useful_info.anesthesia_info|safe }}</div>
+      </article>
+      {% endif %}
+      {% if useful_info.postop_period %}
+      <article class="useful-card">
+        <span class="num">04</span>
+        <h3>Послеоперационный период</h3>
+        <div class="text-muted">{{ useful_info.postop_period|safe }}</div>
+      </article>
+      {% endif %}
     </div>
-    {% endif %}
-    {% if useful_info.anesthesia_info %}
-    <div class="useful-block">
-      <h3>Обезболивание при операции</h3>
-      {{ useful_info.anesthesia_info|safe }}
-    </div>
-    {% endif %}
-    {% if useful_info.postop_period %}
-    <div class="useful-block">
-      <h3>Послеоперационный период</h3>
-      {{ useful_info.postop_period|safe }}
-    </div>
-    {% endif %}
   </div>
 </section>
 
-<!-- Адреса клиник -->
+<!-- ====== CLINICS ====== -->
 <section id="clinics">
   <div class="container">
-    <h2>Адреса клиник</h2>
-    {% for clinic in clinic_locations %}
-      <div class="spec-card clinic-card">
-        <h3>{{ clinic.name }}</h3>
-        <p>{{ clinic.address|linebreaksbr }}</p>
-        {% if clinic.website %}
-          <a href="{{ clinic.website }}" target="_blank" rel="noopener" class="btn">Сайт клиники</a>
-        {% endif %}
-        {% if clinic.map_link %}
-          <a href="{{ clinic.map_link }}" target="_blank" rel="noopener" class="btn btn-outline">Карта</a>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p>Адреса клиник не указаны.</p>
-    {% endfor %}
+    <div class="section-head">
+      <span class="eyebrow">Где принимаю</span>
+      <h2>Адреса клиник</h2>
+      <p>Выберите удобную локацию для консультации</p>
+    </div>
+
+    <div class="grid-2">
+      {% for clinic in clinic_locations %}
+        <article class="clinic-card">
+          <h3><i class="fas fa-location-dot"></i>{{ clinic.name }}</h3>
+          <p class="clinic-address">{{ clinic.address|linebreaksbr }}</p>
+          <div class="clinic-actions">
+            {% if clinic.website %}
+              <a href="{{ clinic.website }}" target="_blank" rel="noopener" class="btn btn-sm">
+                <i class="fas fa-external-link-alt"></i> Сайт клиники
+              </a>
+            {% endif %}
+            {% if clinic.map_link %}
+              <a href="{{ clinic.map_link }}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i class="fas fa-map"></i> На карте
+              </a>
+            {% endif %}
+          </div>
+        </article>
+      {% empty %}
+        <p class="text-muted">Адреса скоро появятся.</p>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
-<!-- Мероприятия -->
+<!-- ====== EVENTS preview ====== -->
 {% if future_events or past_events %}
 <section id="events-preview">
   <div class="container">
-    <h2>Мероприятия</h2>
+    <div class="section-head">
+      <span class="eyebrow">Расписание</span>
+      <h2>Мероприятия</h2>
+      <p>Конференции, выступления и образовательные события</p>
+    </div>
 
     {% if future_events %}
-      <h3>Ближайшие</h3>
+    <div class="events-block">
+      <h3 style="margin-bottom: 1.2rem; color: var(--text);">Ближайшие</h3>
       {% for event in future_events %}
-        <div class="spec-card">
-          <div class="event-row">
-            <div class="event-meta">
-              <h4>{{ event.title }} ({{ event.date|date:"d.m.Y" }})</h4>
-              <p>{{ event.location }}</p>
-              <div class="event-actions">
-                {% if event.link %}
-                  <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Подробнее</a>
-                {% endif %}
-                {% if event.has_diary_entry %}
-                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.95rem;">
-                    <i class="fas fa-file-alt"></i> Отчёт о мероприятии
-                  </a>
-                {% endif %}
-              </div>
-            </div>
-            {% if event.has_diary_entry %}
-              <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            {% endif %}
+        <article class="event-card">
+          <div class="event-date-block">
+            <span class="day">{{ event.date|date:"d" }}</span>
+            <span class="month">{{ event.date|date:"M" }}</span>
+            <span class="year">{{ event.date|date:"Y" }}</span>
           </div>
-        </div>
+          <div class="event-content">
+            <h3>{{ event.title }}</h3>
+            <div class="event-meta"><i class="fas fa-location-dot"></i>{{ event.location }}</div>
+            <div class="event-actions">
+              {% if event.link %}
+                <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn btn-sm">Подробнее</a>
+              {% endif %}
+              {% if event.has_diary_entry %}
+                <a href="{% url 'event_report' event.id %}" class="btn btn-outline btn-sm">
+                  <i class="fas fa-file-lines"></i> Отчёт о мероприятии
+                </a>
+              {% endif %}
+            </div>
+          </div>
+          {% if event.has_diary_entry %}
+            <a href="{% url 'event_report' event.id %}" class="event-diary-link" aria-label="Запись в дневнике">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          {% endif %}
+        </article>
       {% endfor %}
+    </div>
     {% endif %}
 
     {% if past_events %}
-      <h3>Прошедшие</h3>
+    <div class="events-block">
+      <h3 style="margin-bottom: 1.2rem; color: var(--text);">Прошедшие</h3>
       {% for event in past_events %}
-        <div class="spec-card">
-          <div class="event-row">
-            <div class="event-meta">
-              <h4>{{ event.title }} ({{ event.date|date:"d.m.Y" }})</h4>
-              <p>{{ event.location }}</p>
-              {% if event.has_diary_entry %}
-                <div class="event-actions">
-                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.95rem;">
-                    <i class="fas fa-file-alt"></i> Отчёт о мероприятии
-                  </a>
-                </div>
-              {% endif %}
-            </div>
+        <article class="event-card">
+          <div class="event-date-block past">
+            <span class="day">{{ event.date|date:"d" }}</span>
+            <span class="month">{{ event.date|date:"M" }}</span>
+            <span class="year">{{ event.date|date:"Y" }}</span>
+          </div>
+          <div class="event-content">
+            <h3>{{ event.title }}</h3>
+            <div class="event-meta"><i class="fas fa-location-dot"></i>{{ event.location }}</div>
             {% if event.has_diary_entry %}
-              <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
-                <i class="fas fa-arrow-right"></i>
-              </a>
+              <div class="event-actions">
+                <a href="{% url 'event_report' event.id %}" class="btn btn-outline btn-sm">
+                  <i class="fas fa-file-lines"></i> Отчёт о мероприятии
+                </a>
+              </div>
             {% endif %}
           </div>
-        </div>
+          {% if event.has_diary_entry %}
+            <a href="{% url 'event_report' event.id %}" class="event-diary-link" aria-label="Запись в дневнике">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          {% endif %}
+        </article>
       {% endfor %}
+    </div>
     {% endif %}
 
-    <a href="{% url 'events' %}" class="btn">Все мероприятия</a>
-  </div>
-</section>
-{% endif %}
-
-<!-- Отзывы -->
-{% if testimonials %}
-<section id="testimonials-preview">
-  <div class="container">
-    <h2>Отзывы</h2>
-    {% for t in testimonials|slice:":3" %}
-      <div class="spec-card">
-        <strong>{{ t.name }}{% if t.age %}, {{ t.age }} лет{% endif %}</strong>
-        <div>{{ t.text|safe }}</div>
-      </div>
-    {% endfor %}
-    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem;">
-      <a href="{% url 'reviews' %}" class="btn">Все отзывы</a>
-      <a href="{% url 'add_review' %}" class="btn btn-outline">Оставить отзыв</a>
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="{% url 'events' %}" class="btn btn-ghost">Все мероприятия</a>
     </div>
   </div>
 </section>
 {% endif %}
 
-<!-- Контакты / Запись -->
-<section id="contact">
-  <div class="footer-wrap">
-    <h2>Записаться на приём</h2>
-    <form class="contact-form" id="contactForm" novalidate>
-      <div class="form-group">
-        <input type="text" name="name" id="name" class="form-input" required>
-        <label for="name" class="form-label">Ваше имя</label>
-      </div>
-      <div class="form-group">
-        <input type="tel" name="phone" id="phone" class="form-input" required>
-        <label for="phone" class="form-label">Телефон или Telegram</label>
-      </div>
-      <div class="form-group">
-        <textarea name="message" id="message" class="form-input" rows="3" required></textarea>
-        <label for="message" class="form-label">Кратко опишите проблему</label>
-      </div>
-      <button type="submit" class="btn">Отправить заявку</button>
-    </form>
+<!-- ====== TESTIMONIALS preview ====== -->
+{% if testimonials %}
+<section id="testimonials-preview">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Истории</span>
+      <h2>Что говорят пациентки</h2>
+      <p>Реальные отзывы женщин, прошедших лечение</p>
+    </div>
+
+    <div class="reviews-grid">
+      {% for t in testimonials|slice:":3" %}
+        <article class="review-card">
+          <div class="review-text">{{ t.text|safe }}</div>
+          <div class="review-author">
+            {% if t.photo %}
+              <img src="{{ t.photo.url }}" alt="{{ t.name }}">
+            {% else %}
+              <span class="review-author-default">{{ t.name|first|upper }}</span>
+            {% endif %}
+            <div>
+              <div class="review-author-name">{{ t.name }}</div>
+              {% if t.age %}<div class="review-author-meta">{{ t.age }} лет</div>{% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 2.5rem; display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
+      <a href="{% url 'reviews' %}" class="btn btn-ghost">Все отзывы</a>
+      <a href="{% url 'add_review' %}" class="btn">Оставить отзыв</a>
+    </div>
   </div>
 </section>
-{% endblock %}
+{% endif %}
 
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Скрытие подсказок при фокусе
-  document.querySelectorAll('.contact-form .form-input').forEach(input => {
-    const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    const sync = () => {
-      if (document.activeElement === input || input.value.trim() !== '') {
-        formGroup.classList.add('hide-label');
-      } else {
-        formGroup.classList.remove('hide-label');
-      }
-    };
-    input.addEventListener('focus', sync);
-    input.addEventListener('blur', sync);
-    input.addEventListener('input', sync);
-  });
+<!-- ====== CONTACT ====== -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info-block">
+        <span class="eyebrow">Контакты</span>
+        <h2>Запишитесь на приём</h2>
+        <p>Заполните форму — я свяжусь с вами в течение 24 часов. Все обращения конфиденциальны.</p>
 
-  // Заявка
-  const form = document.getElementById('contactForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = form.name.value.trim();
-      const phone = form.phone.value.trim();
-      const message = form.message.value.trim();
-      if (!name || !phone || !message) {
-        alert('Пожалуйста, заполните все поля.');
-        return;
-      }
-      alert('✅ Спасибо за заявку!\nАдминистратор свяжется с вами в течение 24 часов.');
-      form.reset();
-      form.querySelectorAll('.form-group').forEach(g => g.classList.remove('hide-label'));
-    });
-  }
-});
-</script>
+        <ul class="contact-info-list">
+          {% if contact_info.address %}
+          <li>
+            <i class="fas fa-location-dot"></i>
+            <div>
+              <div class="ci-label">Адрес приёма</div>
+              <span class="ci-value">{{ contact_info.address }}</span>
+            </div>
+          </li>
+          {% endif %}
+          {% if contact_info.telegram_link %}
+          <li>
+            <i class="fab fa-telegram-plane"></i>
+            <div>
+              <div class="ci-label">Telegram</div>
+              <a class="ci-value" href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener">{{ contact_info.telegram_link }}</a>
+            </div>
+          </li>
+          {% endif %}
+          {% if contact_info.whatsapp_link %}
+          <li>
+            <i class="fab fa-whatsapp"></i>
+            <div>
+              <div class="ci-label">WhatsApp</div>
+              <a class="ci-value" href="{{ contact_info.whatsapp_link }}" target="_blank" rel="noopener">{{ contact_info.whatsapp_link }}</a>
+            </div>
+          </li>
+          {% endif %}
+          {% if contact_info.email %}
+          <li>
+            <i class="fas fa-envelope"></i>
+            <div>
+              <div class="ci-label">Email</div>
+              <a class="ci-value" href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a>
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="contact-form-card">
+        <h3>Оставить заявку</h3>
+        <p class="form-intro">Кратко опишите ситуацию — я перезвоню в удобное вам время.</p>
+
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="name">Как к вам обращаться</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Анна" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон или Telegram</label>
+            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Что беспокоит</label>
+            <textarea id="message" name="message" class="form-input" rows="4" placeholder="Опишите ситуацию своими словами..." required></textarea>
+          </div>
+          <button type="submit" class="btn" style="width: 100%;">Отправить заявку</button>
+          <p style="margin-top: 1rem; font-size: 0.82rem; color: var(--text-soft); text-align: center;">
+            Нажимая кнопку, вы соглашаетесь на обработку персональных данных
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}

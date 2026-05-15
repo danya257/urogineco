@@ -3,58 +3,37 @@
 
 {% block title %}Дневник врача | Доктор Гвоздев М.Ю.{% endblock %}
 
-{% block extra_css %}
-<style>
-  .blog-item {
-    background: var(--surface);
-    padding: 1.8rem;
-    border-radius: 16px;
-    margin-bottom: 1.8rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-  .blog-img {
-    width: 100%;
-    max-height: 380px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin: 1.2rem 0;
-  }
-  .blog-content * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .blog-meta {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 0.8rem;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 <section id="diary-page">
   <div class="container">
-    <h1>Дневник врача</h1>
-    <p>Клинические случаи, размышления и профессиональные заметки</p>
+    <div class="section-head" style="text-align: left;">
+      <span class="eyebrow">Дневник</span>
+      <h1>Заметки практикующего врача</h1>
+      <p>Клинические случаи, размышления и наблюдения из практики</p>
+    </div>
 
     {% for post in blog_posts %}
       <article class="blog-item">
-        <h2>{{ post.title }}</h2>
         <div class="blog-meta">{{ post.published_date|date:"d E Y" }}</div>
+        <h2>{{ post.title }}</h2>
         {% if post.image %}
-          <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-img">
+          <img src="{{ post.image.url }}" alt="{{ post.title }}">
         {% endif %}
         <div class="blog-content">{{ post.content|safe }}</div>
         {% if post.related_event %}
-          <a href="{% url 'event_report' post.related_event.id %}" class="event-diary-link" title="Перейти к мероприятию" aria-label="Перейти к мероприятию">
-            <i class="fas fa-arrow-right"></i>
-          </a>
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <a href="{% url 'event_report' post.related_event.id %}" class="btn btn-outline btn-sm">
+              <i class="fas fa-arrow-right"></i> Связанное мероприятие
+            </a>
+          </div>
         {% endif %}
       </article>
     {% empty %}
-      <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">Записей пока нет.</p>
+      <div class="card" style="text-align: center; padding: 4rem 2rem;">
+        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-book-open"></i></span>
+        <h3>Записей пока нет</h3>
+        <p class="text-muted">Скоро здесь появятся первые заметки.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
