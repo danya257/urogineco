@@ -5,57 +5,93 @@
 
 {% block extra_css %}
 <style>
-  .carousel-container {
-    max-width: 900px;
-    margin: 2rem auto;
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+  @media (max-width: 768px) {
+    .reviews-grid { grid-template-columns: 1fr; }
+  }
+  .review-card {
     background: var(--surface);
-    box-shadow: var(--shadow);
-  }
-  .carousel-track {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
-  }
-  .carousel-slide {
-    min-width: 100%;
-    padding: 2.5rem;
+    border-radius: 16px;
+    padding: 1.5rem 1.8rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     text-align: left;
   }
-  .testimonial-img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 1.2rem;
-    float: left;
-  }
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(45, 125, 220, 0.2);
-    color: white;
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    cursor: pointer;
-    z-index: 10;
-    backdrop-filter: blur(4px);
-  }
-  .carousel-btn:hover {
-    background: var(--primary);
-  }
-  .carousel-btn.prev { left: 20px; }
-  .carousel-btn.next { right: 20px; }
-  .testimonial-content * {
+  .review-card * {
     word-wrap: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
+  }
+  .review-card .meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .review-card .meta img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .review-card h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+  }
+  .review-card .date {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    flex-wrap: wrap;
+  }
+  .pagination a, .pagination .current, .pagination .disabled {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  .pagination a:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  .pagination .current {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    font-weight: 700;
+  }
+  .pagination .disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
   }
 </style>
 {% endblock %}
@@ -63,62 +99,60 @@
 {% block content %}
 <section id="reviews-page">
   <div class="container">
-    <h1>Отзывы пациенток</h1>
-    <p>Благодарности и истории выздоровления</p>
-
-    <a href="{% url 'add_review' %}" class="btn" style="margin-bottom: 2rem;">Оставить отзыв</a>
+    <div class="reviews-header">
+      <div>
+        <h1>Отзывы пациенток</h1>
+        <p style="margin: 0;">Благодарности и истории выздоровления</p>
+      </div>
+      <a href="{% url 'add_review' %}" class="btn">Оставить отзыв</a>
+    </div>
 
     {% if testimonials %}
-    <div class="carousel-container">
-      <div class="carousel-track" id="testimonialTrack">
+      <div class="reviews-grid">
         {% for test in testimonials %}
-        <div class="carousel-slide testimonial-card">
-          {% if test.photo %}
-            <img src="{{ test.photo.url }}" alt="{{ test.name }}" class="testimonial-img">
-          {% endif %}
-          <h3>{{ test.name }}{% if test.age %}, {{ test.age }} лет{% endif %}</h3>
-          <div class="testimonial-content" style="overflow: hidden; margin-top: 0.8rem;">{{ test.text|safe }}</div>
-        </div>
+          <article class="review-card">
+            <div class="meta">
+              {% if test.photo %}
+                <img src="{{ test.photo.url }}" alt="{{ test.name }}">
+              {% endif %}
+              <div>
+                <h3>{{ test.name }}{% if test.age %}, {{ test.age }} лет{% endif %}</h3>
+                <div class="date">{{ test.created_at|date:"d E Y" }}</div>
+              </div>
+            </div>
+            <div>{{ test.text|safe }}</div>
+          </article>
         {% endfor %}
       </div>
-      <button class="carousel-btn prev" id="prevTestimonial">&#8249;</button>
-      <button class="carousel-btn next" id="nextTestimonial">&#8250;</button>
-    </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="pagination" aria-label="Навигация по страницам">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" aria-label="Назад">&#8249;</a>
+          {% else %}
+            <span class="disabled" aria-hidden="true">&#8249;</span>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+              <span class="current" aria-current="page">{{ num }}</span>
+            {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+              <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" aria-label="Вперёд">&#8250;</a>
+          {% else %}
+            <span class="disabled" aria-hidden="true">&#8250;</span>
+          {% endif %}
+        </nav>
+      {% endif %}
     {% else %}
-    <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">Отзывов пока нет.</p>
+      <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+        Отзывов пока нет. <a href="{% url 'add_review' %}" style="color: var(--primary);">Будьте первой!</a>
+      </p>
     {% endif %}
   </div>
 </section>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Карусель отзывов
-  const track = document.getElementById('testimonialTrack');
-  if (track) {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const prevBtn = document.getElementById('prevTestimonial');
-    const nextBtn = document.getElementById('nextTestimonial');
-    let currentIndex = 0;
-
-    function updateCarousel() {
-      track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    if (nextBtn) nextBtn.addEventListener('click', () => {
-      if (currentIndex < slides.length - 1) {
-        currentIndex++;
-        updateCarousel();
-      }
-    });
-    if (prevBtn) prevBtn.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateCarousel();
-      }
-    });
-  }
-});
-</script>
 {% endblock %}

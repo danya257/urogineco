@@ -158,7 +158,7 @@ class Procedure(models.Model):
     title = models.CharField("Название операции", max_length=200)
     description = RichTextField("Описание", config_name='minimal')
     icon = models.CharField("Иконка (например, fa-syringe)", max_length=50, blank=True)
-    photo = models.ImageField("Фото", upload_to="testimonials/", blank=True, null=True)
+    photo = models.ImageField("Фото", upload_to="procedures/", blank=True, null=True)
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
     class Meta:

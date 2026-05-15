@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       particlesContainer.appendChild(particle);
     }
   }
-  
+
   // Анимация при скролле
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
@@ -27,118 +27,71 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, { threshold: 0.15 });
-  
+
   document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
   });
-  
-  // Галерея: клик → убрать блюр + модалка
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.add('revealed');
-      const imgUrl = item.getAttribute('data-modal-src');
-      if (imgUrl) {
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImage');
-        modalImg.src = imgUrl;
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+
+  // Плавный скролл по якорям
+  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      const isOnHome = location.pathname === '/' || location.pathname === '';
+      let hash = href.startsWith('/#') ? href.slice(1) : href;
+      if (href.startsWith('/#') && !isOnHome) return; // переход на главную с якорем
+      if (!hash || hash === '#') return;
+      const target = document.querySelector(hash);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
-  
-  // Закрытие модального окна
-  const modal = document.getElementById('imageModal');
-  const closeModalBtn = document.getElementById('closeModal');
-  
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    });
-  }
 
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      }
-    });
-  }
-
-  // Theme toggle
-  const themeToggle = document.getElementById('themeToggle');
-  const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
-
-  if (themeToggle && themeIcon) {
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.body.getAttribute('data-theme') === 'dark';
-      document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
-    });
-  }
-
-  // Форма
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('✅ Спасибо за заявку!\n\nАдминистратор свяжется с вами в течение 24 часов.');
-      contactForm.reset();
-    });
-  }
-
-  // === Мобильное меню - универсальное для всех страниц ===
+  // === Мобильное меню ===
   const mobileToggle = document.querySelector('.mobile-menu-toggle');
   const nav = document.getElementById('main-nav');
-  
+
+  const closeMenu = () => {
+    if (!nav || !mobileToggle) return;
+    nav.classList.remove('active');
+    const icon = mobileToggle.querySelector('i');
+    if (icon) {
+      icon.classList.remove('fa-times');
+      icon.classList.add('fa-bars');
+    }
+  };
+
   if (mobileToggle && nav) {
-    // Открытие/закрытие меню по клику на кнопку
     mobileToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
       nav.classList.toggle('active');
-      
-      // Меняем иконку
       const icon = mobileToggle.querySelector('i');
-      if (nav.classList.contains('active')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-      } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
+      if (icon) {
+        if (nav.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
       }
     });
-    
-    // Закрыть меню при клике вне его
+
     document.addEventListener('click', (e) => {
       if (!nav.contains(e.target) && !mobileToggle.contains(e.target)) {
-        nav.classList.remove('active');
-        const icon = mobileToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
+        closeMenu();
       }
     });
-  
-    // Закрыть меню при клике по ссылке
+
     nav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('active');
-        const icon = mobileToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      });
+      link.addEventListener('click', closeMenu);
     });
-    
-    // Закрыть меню при изменении размера окна (если стало десктопом)
+
     window.addEventListener('resize', () => {
       if (window.innerWidth > 768 && nav.classList.contains('active')) {
-        nav.classList.remove('active');
-        const icon = mobileToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
+        closeMenu();
       }
     });
   }

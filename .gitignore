@@ -1,1 +1,40 @@
-Nothing should be ignored based on the provided file changes, as they only include source files (.css, .html, .py) and no build artifacts, dependencies, or temporary files.
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Static collected
+/staticfiles/
+
+# Backups
+*.bak
+*.bak.*
+*.bak.[0-9]*
+core.bak.*/
+**/settings.py.bak.*
+*.backup
+
+# OS / Editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Env
+.env
+.env.local
