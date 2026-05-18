@@ -7,16 +7,31 @@
 <section id="reviews-page">
   <div class="container">
 
-    <div style="display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: end; margin-bottom: clamp(2rem, 4vw, 3rem); flex-wrap: wrap;">
-      <div>
+    <div class="reviews-header">
+      <div class="reviews-header-text">
         <span class="eyebrow">Истории пациенток</span>
         <h1>Отзывы и благодарности</h1>
         <p class="text-muted" style="margin-top: 0.4rem;">Каждый отзыв — личная история возвращённого здоровья</p>
       </div>
-      <a href="{% url 'add_review' %}" class="btn">
+      <a href="{% url 'add_review' %}" class="btn reviews-header-cta">
         <i class="fas fa-pen-to-square"></i> Оставить отзыв
       </a>
     </div>
+
+    <style>
+      .reviews-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: clamp(2rem, 4vw, 3rem);
+      }
+      .reviews-header-text { flex: 1 1 280px; min-width: 0; }
+      @media (max-width: 600px) {
+        .reviews-header-cta { width: 100%; }
+      }
+    </style>
 
     {% if testimonials %}
       <div class="reviews-grid">
