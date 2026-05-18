@@ -7,29 +7,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Palette — Emerald & Champagne (premium medical spa) */
-  --bg: #F4EFE6;
-  --bg-deep: #E8DFCB;
+  /* Palette — Calmate (calm seafoam-teal medical with dusty rose accents) */
+  --bg: #F4F8F9;
+  --bg-deep: #DCE8EA;
   --surface: #FFFFFF;
-  --surface-tinted: #FAF6EC;
+  --surface-tinted: #EBF3F4;
 
-  --primary: #264F3D;          /* deep forest emerald */
-  --primary-hover: #1A3A2A;
-  --primary-soft: rgba(38, 79, 61, 0.08);
-  --primary-soft-2: rgba(38, 79, 61, 0.18);
+  --primary: #2D7E89;          /* calm seafoam teal — основной */
+  --primary-hover: #1F5F68;    /* darker teal */
+  --primary-soft: rgba(45, 126, 137, 0.08);
+  --primary-soft-2: rgba(45, 126, 137, 0.18);
 
-  --accent: #B8915C;           /* champagne gold */
-  --accent-soft: rgba(184, 145, 92, 0.15);
-  --sage: #7B8B6F;
-  --sage-soft: rgba(123, 139, 111, 0.12);
+  --accent: #D4B5B0;           /* dusty rose — мягкий акцент */
+  --accent-soft: rgba(212, 181, 176, 0.25);
+  --dark-teal: #2E5F6E;        /* deep teal — для футера/тёмных зон */
 
-  --text: #1F2A26;             /* deep charcoal-emerald */
-  --text-muted: #5C6660;
-  --text-soft: #8B9089;
-  --text-on-dark: #EFE9DC;
+  --sage: #94A5AC;             /* серо-голубой */
+  --sage-soft: rgba(148, 165, 172, 0.15);
 
-  --border: #E4DCC9;
-  --border-strong: #C8BFA8;
+  --text: #1F3540;             /* deep navy-teal */
+  --text-muted: #5C737C;
+  --text-soft: #94A5AC;
+  --text-on-dark: #E9F0F2;
+
+  --border: #DDE7E9;
+  --border-strong: #B8C8CB;
 
   --shadow-sm: 0 1px 3px rgba(46, 38, 27, 0.04), 0 2px 8px rgba(46, 38, 27, 0.05);
   --shadow-md: 0 8px 24px rgba(46, 38, 27, 0.08);
@@ -75,8 +77,8 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(900px circle at 0% 0%, rgba(38, 79, 61, 0.05), transparent 60%),
-    radial-gradient(1000px circle at 100% 100%, rgba(184, 145, 92, 0.07), transparent 60%);
+    radial-gradient(900px circle at 0% 0%, rgba(45, 126, 137, 0.06), transparent 60%),
+    radial-gradient(1000px circle at 100% 100%, rgba(212, 181, 176, 0.10), transparent 60%);
   pointer-events: none;
 }
 
@@ -200,10 +202,10 @@ header {
   width: 28px;
   height: 28px;
   background:
-    radial-gradient(circle at 30% 30%, #4A7A5F 0%, var(--primary) 70%);
+    radial-gradient(circle at 30% 30%, #5BAEB8 0%, var(--primary) 70%);
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 4px 10px rgba(38, 79, 61, 0.25);
+  box-shadow: 0 4px 10px rgba(45, 126, 137, 0.3);
 }
 .logo-mark::after {
   content: '';
@@ -280,7 +282,7 @@ nav a.nav-cta:hover {
   border-color: var(--primary-hover);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(38, 79, 61, 0.28);
+  box-shadow: 0 10px 24px rgba(45, 126, 137, 0.28);
 }
 .btn-outline { background: transparent; color: var(--primary); }
 .btn-outline:hover { background: var(--primary); color: white; }
@@ -356,7 +358,7 @@ nav a.nav-cta:hover {
   left: 20px;
   right: -20px;
   bottom: -20px;
-  background: linear-gradient(135deg, var(--accent-soft), var(--primary-soft-2));
+  background: linear-gradient(135deg, var(--primary-soft-2) 0%, var(--accent-soft) 100%);
   border-radius: var(--radius-lg);
   z-index: 0;
 }
@@ -371,7 +373,7 @@ nav a.nav-cta:hover {
   border: 1px solid rgba(228, 220, 201, 0.6);
   border-radius: 14px;
   padding: 0.9rem 1.1rem;
-  box-shadow: 0 8px 24px rgba(38, 79, 61, 0.18);
+  box-shadow: 0 8px 24px rgba(45, 126, 137, 0.18);
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -381,13 +383,13 @@ nav a.nav-cta:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #D4A874);
+  background: linear-gradient(135deg, var(--accent), #E8C8C2);
   color: white;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(184, 145, 92, 0.3);
+  box-shadow: 0 4px 12px rgba(212, 181, 176, 0.5);
 }
 .hero-badge-text {
   font-size: 0.86rem;
@@ -906,8 +908,8 @@ form textarea { resize: vertical; min-height: 120px; }
 
 /* ======== Footer ======== */
 footer {
-  background: #1F1A18;
-  color: rgba(240, 233, 223, 0.7);
+  background: var(--dark-teal);
+  color: rgba(233, 240, 242, 0.7);
   padding: 4.5rem 0 2rem;
   margin-top: 6rem;
 }
@@ -931,7 +933,7 @@ footer ul li { margin: 0; }
 footer ul li::marker { content: none; }
 footer ul li::before { content: none; }
 footer a {
-  color: rgba(240, 233, 223, 0.65);
+  color: rgba(233, 240, 242, 0.65);
   display: block;
   padding: 5px 0;
   font-size: 0.92rem;
@@ -943,7 +945,7 @@ footer .footer-tag {
   font-size: 0.92rem;
   line-height: 1.65;
   margin: 1rem 0;
-  color: rgba(240, 233, 223, 0.6);
+  color: rgba(233, 240, 242, 0.6);
   max-width: 360px;
 }
 .social-icons {
@@ -969,7 +971,7 @@ footer .footer-tag {
   padding-top: 1.8rem;
   text-align: center;
   font-size: 0.85rem;
-  color: rgba(240, 233, 223, 0.45);
+  color: rgba(233, 240, 242, 0.45);
 }
 
 /* ======== Reveal animation ======== */
