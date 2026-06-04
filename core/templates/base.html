@@ -7,10 +7,14 @@
     <meta name="description" content="{{ seo_info.meta_description|default:'Врач-урогинеколог высшей категории. Операции при недержании, пролапсе, свищах. Автор патентованной методики.' }}">
     <title>{% block title %}{{ seo_info.meta_title|default:"Доктор Гвоздев М.Ю. | Урогинеколог в Москве" }}{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=4">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
     <div class="particles" id="particles"></div>
 
     <header>
@@ -61,7 +65,9 @@
         </div>
     </footer>
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="{% static 'js/main.js' %}?v=4"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

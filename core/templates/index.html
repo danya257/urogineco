@@ -56,6 +56,7 @@
 {% block content %}
 <!-- Hero -->
 <section id="hero">
+  <canvas id="hero-canvas"></canvas>
   <div class="container">
     {% if hero %}
       <h1>{{ hero.title }}</h1>
@@ -82,6 +83,7 @@
       <a href="#contact" class="btn">Записаться на приём</a>
     {% endif %}
   </div>
+  <div class="hero-scroll-hint">Листайте вниз</div>
 </section>
 
 <!-- Консультирую и оперирую -->
