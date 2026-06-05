@@ -227,6 +227,32 @@ section.visible .reveal, .reveal.visible { opacity: 1; transform: none; }
 }
 @keyframes scrollPulse { 0%,100%{ transform: scaleY(.4); opacity:.4 } 50%{ transform: scaleY(1); opacity:1 } }
 
+/* hero staggered entrance */
+@keyframes heroIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+#hero .container > * { animation: heroIn 1s var(--ease-out) backwards; }
+#hero .container > *:nth-child(1) { animation-delay: .15s; }
+#hero .container > *:nth-child(2) { animation-delay: .28s; }
+#hero .container > *:nth-child(3) { animation-delay: .41s; }
+#hero .container > *:nth-child(4) { animation-delay: .54s; }
+#hero .container > *:nth-child(5) { animation-delay: .67s; }
+#hero .container > *:nth-child(6) { animation-delay: .80s; }
+
+/* ============ STATS BAND ============ */
+.stats-band { background: var(--teal-900); color: #fff; padding: clamp(46px, 6vw, 78px) 0; position: relative; z-index: 1; }
+.stats-band .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+.stat-item { text-align: center; padding: 4px 8px; }
+.stats-band .stat-num {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(2.6rem, 5vw, 4rem); line-height: 1; color: #fff;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+}
+.stats-band .stat-num.stat-text { color: var(--aqua); }
+.stats-band .stat-label {
+  margin: .8rem auto 0; font-size: .92rem; color: var(--aqua-soft);
+  line-height: 1.4; max-width: 22ch;
+}
+@media (max-width: 760px) { .stats-band .stats-grid { grid-template-columns: 1fr 1fr; gap: 34px 18px; } }
+
 /* ============ SECTION BACKGROUNDS ============ */
 section > .container > h2 { margin-bottom: 1.6rem; max-width: 20ch; }
 #procedures, #clinics, #testimonials-preview { background: var(--paper); }

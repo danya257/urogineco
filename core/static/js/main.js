@@ -7,6 +7,7 @@
     headerAndProgress();
     ambientParticles();
     revealOnScroll();
+    countUp();
     if (!reduced) magneticButtons();
     mobileMenu();
     smoothScroll();
@@ -16,12 +17,17 @@
   /* ---------- Header scroll state + progress bar ---------- */
   var header = document.querySelector('header');
   var progress = document.getElementById('scrollProgress');
+  var heroC = document.querySelector('#hero .container');
   function onScroll() {
     var y = window.scrollY || document.documentElement.scrollTop || 0;
     if (header) header.classList.toggle('scrolled', y > 60);
     if (progress) {
       var h = document.documentElement.scrollHeight - window.innerHeight;
       progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    }
+    if (!reduced && heroC && y < window.innerHeight) {
+      heroC.style.transform = 'translateY(' + (y * 0.22) + 'px)';
+      heroC.style.opacity = String(Math.max(0, 1 - (y / window.innerHeight) * 1.1));
     }
   }
   function headerAndProgress() {
@@ -74,6 +80,34 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Count-up numbers ---------- */
+  function countUp() {
+    var nums = document.querySelectorAll('.stat-num[data-count]');
+    if (!nums.length) return;
+    if (reduced || !('IntersectionObserver' in window)) {
+      nums.forEach(function (el) { el.textContent = (el.dataset.count || '') + (el.dataset.suffix || ''); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (ent) {
+        if (!ent.isIntersecting) return;
+        var el = ent.target; io.unobserve(el);
+        var target = parseFloat(el.dataset.count) || 0;
+        var suffix = el.dataset.suffix || '';
+        var dur = 1700, startT = null;
+        function step(ts) {
+          if (startT === null) startT = ts;
+          var p = Math.min((ts - startT) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    nums.forEach(function (n) { io.observe(n); });
   }
 
   /* ---------- Magnetic buttons ---------- */
