@@ -111,9 +111,9 @@ header {
   transition: background .4s var(--ease), padding .4s var(--ease), box-shadow .4s var(--ease);
 }
 header.scrolled {
-  background: rgba(247,244,238,.82);
-  backdrop-filter: saturate(140%) blur(14px);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  /* без backdrop-filter: фильтр сделал бы шапку containing-block для
+     fixed-меню, и выезжающее меню ломалось бы по высоте шапки */
+  background: rgba(247,244,238,.97);
   padding-top: 12px; padding-bottom: 12px;
   box-shadow: 0 1px 0 var(--line), var(--shadow-sm);
 }
