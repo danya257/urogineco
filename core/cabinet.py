@@ -13,10 +13,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.html import strip_tags, linebreaks
 from django.utils.text import slugify
 
-from .models import Lead, Testimonial, ContactInfo, Hero, AboutDoctor, BlogPost
-from .forms import ContactForm, HeroForm, AboutForm, DiaryPostForm
+from .models import Lead, Testimonial, ContactInfo, Hero, AboutDoctor, BlogPost, UsefulInfo
+from .forms import ContactForm, HeroForm, AboutForm, DiaryPostForm, UsefulForm
 
-RICH_FIELDS = {'description', 'bio', 'patents', 'awards', 'content'}
+RICH_FIELDS = {'description', 'bio', 'patents', 'awards', 'content',
+               'prep_consultation', 'prep_surgery', 'anesthesia_info', 'postop_period'}
 
 
 def _is_staff(u):
@@ -188,6 +189,26 @@ def cabinet_about(request):
         'form': form,
         'page_title': 'Обо мне',
         'page_hint': 'Расскажите о себе простым текстом. Каждый абзац — с новой строки.',
+    })
+
+
+# ===================== Важное пациенткам =====================
+@cabinet_required
+def cabinet_useful(request):
+    obj = UsefulInfo.load()
+    if request.method == 'POST':
+        form = UsefulForm(request.POST, instance=obj)
+        if form.is_valid():
+            _save_rich(form)
+            messages.success(request, 'Раздел «Важное пациенткам» сохранён.')
+            return redirect('cabinet_useful')
+    else:
+        form = UsefulForm(instance=obj, initial=_rich_initial(obj))
+    return render(request, 'cabinet/form_page.html', {
+        'form': form,
+        'page_title': 'Важное пациенткам',
+        'page_hint': 'Полезная информация для пациенток (логистика, подготовка). '
+                     'Пишите простым текстом, каждый абзац с новой строки.',
     })
 
 

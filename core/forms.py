@@ -1,5 +1,5 @@
 from django import forms
-from .models import Testimonial, ContactInfo, Hero, AboutDoctor, BlogPost
+from .models import Testimonial, ContactInfo, Hero, AboutDoctor, BlogPost, UsefulInfo
 
 
 class TestimonialForm(forms.ModelForm):
@@ -97,6 +97,24 @@ class AboutForm(forms.ModelForm):
             'experience_years': 'Стаж, лет',
             'patents': 'Патенты и разработки',
             'awards': 'Награды и заслуги',
+        }
+
+
+class UsefulForm(forms.ModelForm):
+    class Meta:
+        model = UsefulInfo
+        fields = ['prep_consultation', 'prep_surgery', 'anesthesia_info', 'postop_period']
+        widgets = {
+            'prep_consultation': _cab(forms.Textarea, rows=4, placeholder='Что взять с собой, как подготовиться…'),
+            'prep_surgery': _cab(forms.Textarea, rows=4, placeholder='Подготовка к операции'),
+            'anesthesia_info': _cab(forms.Textarea, rows=4, placeholder='Об обезболивании'),
+            'postop_period': _cab(forms.Textarea, rows=4, placeholder='Восстановление после операции'),
+        }
+        labels = {
+            'prep_consultation': 'Подготовка к консультации',
+            'prep_surgery': 'Подготовка к операции',
+            'anesthesia_info': 'Обезболивание при операции',
+            'postop_period': 'Послеоперационный период',
         }
 
 

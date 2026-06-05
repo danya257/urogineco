@@ -21,6 +21,7 @@ urlpatterns = [
     path('cabinet/kontakty/', cabinet.cabinet_contacts, name='cabinet_contacts'),
     path('cabinet/glavnyy/', cabinet.cabinet_hero, name='cabinet_hero'),
     path('cabinet/obo-mne/', cabinet.cabinet_about, name='cabinet_about'),
+    path('cabinet/vazhnoe/', cabinet.cabinet_useful, name='cabinet_useful'),
     path('cabinet/dnevnik/', cabinet.cabinet_diary, name='cabinet_diary'),
     path('cabinet/dnevnik/novaya/', cabinet.cabinet_diary_edit, name='cabinet_diary_new'),
     path('cabinet/dnevnik/<int:post_id>/', cabinet.cabinet_diary_edit, name='cabinet_diary_edit'),
