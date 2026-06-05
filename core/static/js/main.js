@@ -24,10 +24,6 @@
       var h = document.documentElement.scrollHeight - window.innerHeight;
       progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
     }
-    if (!reduced && heroC && y < window.innerHeight) {
-      heroC.style.transform = 'translateY(' + (y * 0.22) + 'px)';
-      heroC.style.opacity = String(Math.max(0, 1 - (y / window.innerHeight) * 1.1));
-    }
   }
   function headerAndProgress() {
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -54,21 +50,20 @@
 
   /* ---------- Reveal on scroll (staggered) ---------- */
   function revealOnScroll() {
-    var sel = '.spec-card, .useful-block, section:not(#hero) > .container > h2,' +
-              ' #about .container > p, #events-preview h3, #contact .footer-wrap > *';
-    var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
     if (!els.length) return;
-    // stagger inside grids
-    document.querySelectorAll('.spec-grid').forEach(function (grid) {
-      Array.prototype.slice.call(grid.children).forEach(function (c, i) {
-        c.dataset.delay = (Math.min(i, 6) * 80) + 'ms';
+    // лёгкий стаггер внутри групп
+    ['.ed-index', '.ed-stats', '.ed-faq'].forEach(function (g) {
+      document.querySelectorAll(g).forEach(function (grp) {
+        Array.prototype.slice.call(grp.querySelectorAll('.reveal')).forEach(function (c, i) {
+          c.dataset.delay = (Math.min(i, 8) * 70) + 'ms';
+        });
       });
     });
     if (reduced || !('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('reveal', 'visible'); });
+      els.forEach(function (el) { el.classList.add('visible'); });
       return;
     }
-    els.forEach(function (el) { el.classList.add('reveal'); });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (ent) {
         if (ent.isIntersecting) {
@@ -83,7 +78,7 @@
 
   /* ---------- Count-up numbers ---------- */
   function countUp() {
-    var nums = document.querySelectorAll('.stat-num[data-count]');
+    var nums = document.querySelectorAll('.stat-num[data-count], .ed-stat-num[data-count]');
     if (!nums.length) return;
     if (reduced || !('IntersectionObserver' in window)) {
       nums.forEach(function (el) { el.textContent = (el.dataset.count || '') + (el.dataset.suffix || ''); });

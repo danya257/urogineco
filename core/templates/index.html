@@ -7,347 +7,241 @@
 <meta property="og:title" content="{% if hero %}{{ hero.title }}{% else %}Доктор Гвоздев М.Ю.{% endif %}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
-{% if seo_info.og_image %}
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ seo_info.og_image.url }}">
-{% endif %}
-<style>
-  .hero-video {
-    margin: 2rem auto;
-    max-width: 800px;
-  }
-  .hero-video video {
-    width: 100%;
-    border-radius: 12px;
-    display: block;
-  }
-  .useful-block {
-    margin-bottom: 2rem;
-  }
-  .useful-block * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .clinic-card { margin-bottom: 1.2rem; }
-  .clinic-card .btn {
-    padding: 8px 20px;
-    font-size: 0.95rem;
-    margin-right: 0.5rem;
-  }
-  .event-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .event-row > .event-meta { flex: 1; min-width: 0; }
-  .event-actions {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 0.6rem;
-  }
-  .event-actions .btn { margin-top: 0; }
-</style>
+{% if seo_info.og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ seo_info.og_image.url }}">{% endif %}
 {% endblock %}
 
 {% block content %}
-<!-- Hero -->
-<section id="hero">
-  <div class="container hero-grid">
-    <div class="hero-copy">
-      <h1>{{ hero.title|default:"Доктор Гвоздев Михаил Юрьевич" }}</h1>
-      <div class="subtitle">{{ hero.subtitle|default:"Врач-урогинеколог · Хирург высшей категории" }}</div>
-      <div class="hero-desc">{% if hero.description %}{{ hero.description|safe }}{% else %}Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.{% endif %}</div>
-      <div class="hero-actions">
-        <a href="#contact" class="btn">{{ hero.cta_text|default:"Записаться на приём" }}</a>
-        {% if hero.video_file %}<a href="#hero-video" class="btn btn-hero-ghost">▶&nbsp;Смотреть видео</a>{% endif %}
-      </div>
-    </div>
-    <div class="hero-media">
-      {% if hero.video_file %}
-        <video id="hero-video" class="hero-video-el" controls preload="metadata"{% if hero.image %} poster="{{ hero.image.url }}"{% endif %}>
-          <source src="{{ hero.video_file.url }}" type="video/mp4">
-          Ваш браузер не поддерживает видео.
-        </video>
-      {% else %}
-        <figure class="hero-photo">
-          <img src="{% if hero.image %}{{ hero.image.url }}{% else %}https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg{% endif %}" alt="Доктор Гвоздев М.Ю.">
-          <figcaption>Сюда встанет видео-визитка врача</figcaption>
-        </figure>
-      {% endif %}
-    </div>
-  </div>
-  <div class="hero-scroll-hint">Листайте вниз</div>
-</section>
 
-<!-- Достижения / цифры -->
-<section id="stats" class="stats-band">
+{# ===================== HERO — редакторская обложка ===================== #}
+<section id="hero" class="ed-hero">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-num" data-count="200" data-suffix="+">0</div>
-        <div class="stat-label">успешно проведённых операций</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num" data-count="{{ about_doctor.experience_years|default:18 }}">0</div>
-        <div class="stat-label">лет в урогинекологии</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num stat-text">№1</div>
-        <div class="stat-label">мировой опыт транспозиции уретры</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num stat-text">Высшая</div>
-        <div class="stat-label">врачебная категория</div>
-      </div>
+    <div class="ed-hero-top">
+      <span class="ed-eyebrow">Урогинекология · хирургия высшей категории</span>
+      <span class="ed-hero-loc">Москва</span>
     </div>
-  </div>
-</section>
-
-<!-- Консультирую и оперирую -->
-<section id="procedures">
-  <div class="container">
-    <h2>Консультирую и оперирую</h2>
-    <div class="spec-grid">
-      {% for proc in procedures %}
-        <div class="spec-card">
-          <h3>
-            {% if proc.icon %}<i class="fas {{ proc.icon }}" aria-hidden="true"></i> {% endif %}
-            {{ proc.title }}
-          </h3>
-          {{ proc.description|safe }}
+    <h1 class="ed-hero-title">
+      <span>Доктор</span>
+      <span class="is-accent">Гвоздев</span>
+    </h1>
+    <div class="ed-hero-grid">
+      <div class="ed-hero-copy">
+        <p class="ed-hero-lead">{% if hero.subtitle %}{{ hero.subtitle }}{% else %}Михаил Юрьевич — врач-уролог, хирург. Автор патентованной методики транспозиции уретры и наибольший в мире опыт таких операций.{% endif %}</p>
+        <div class="ed-hero-actions">
+          <a href="#contact" class="btn">Записаться на приём</a>
+          <a href="#expertise" class="ed-link">Что я лечу <span>→</span></a>
         </div>
+      </div>
+      <div class="ed-hero-media">
+        {% if hero.video_file %}
+          <video id="hero-video" class="ed-media-frame" controls preload="metadata"{% if hero.image %} poster="{{ hero.image.url }}"{% endif %}>
+            <source src="{{ hero.video_file.url }}" type="video/mp4">
+          </video>
+          <span class="ed-media-tag">Видео-визитка</span>
+        {% else %}
+          <img class="ed-media-frame" src="{% if hero.image %}{{ hero.image.url }}{% else %}https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg{% endif %}" alt="Доктор Гвоздев М.Ю.">
+          <span class="ed-media-tag">Здесь будет видео-визитка</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ===================== МАНИФЕСТ + ЦИФРЫ (drench) ===================== #}
+<section id="manifesto" class="ed-drench">
+  <div class="container">
+    <p class="ed-manifesto reveal">
+      Возвращаю женщинам <em>качество жизни</em> — деликатно, точно и с опытом,
+      которому доверяют коллеги по всему миру.
+    </p>
+    <div class="ed-stats">
+      <div class="ed-stat reveal"><span class="ed-stat-num" data-count="200" data-suffix="+">0</span><span class="ed-stat-lab">успешных операций</span></div>
+      <div class="ed-stat reveal"><span class="ed-stat-num" data-count="{{ about_doctor.experience_years|default:18 }}">0</span><span class="ed-stat-lab">лет в урогинекологии</span></div>
+      <div class="ed-stat reveal"><span class="ed-stat-num is-word">№1</span><span class="ed-stat-lab">опыт транспозиции уретры в мире</span></div>
+      <div class="ed-stat reveal"><span class="ed-stat-num is-word">Высшая</span><span class="ed-stat-lab">врачебная категория</span></div>
+    </div>
+  </div>
+</section>
+
+{# ===================== ЭКСПЕРТИЗА — редакторский индекс ===================== #}
+<section id="expertise" class="ed-section">
+  <div class="container">
+    <div class="ed-head reveal">
+      <span class="ed-eyebrow">01 — Экспертиза</span>
+      <h2 class="ed-h2">Консультирую<br>и оперирую</h2>
+    </div>
+    <div class="ed-index">
+      {% for proc in procedures %}
+      <a class="ed-row reveal" href="#contact">
+        <span class="ed-row-num">{{ forloop.counter|stringformat:"02d" }}</span>
+        <span class="ed-row-title">{{ proc.title }}</span>
+        <span class="ed-row-desc">{{ proc.description|striptags|truncatewords:18 }}</span>
+        <span class="ed-row-arrow">→</span>
+      </a>
       {% empty %}
-        <p>Разделы пока не добавлены.</p>
+      <p>Разделы пока не добавлены.</p>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- Обо мне -->
+{# ===================== О ВРАЧЕ — асимметричный разворот ===================== #}
 {% if about_doctor.bio %}
-<section id="about">
-  <div class="container">
-    <h2>Обо мне</h2>
-    {{ about_doctor.bio|safe }}
-    {% if about_doctor.experience_years %}
-      <p><strong>Стаж:</strong> {{ about_doctor.experience_years }} лет</p>
-    {% endif %}
-    {% if about_doctor.patents %}
-      <h3>Патенты и разработки</h3>
-      {{ about_doctor.patents|safe }}
-    {% endif %}
-    {% if about_doctor.awards %}
-      <h3>Награды и заслуги</h3>
-      {{ about_doctor.awards|safe }}
-    {% endif %}
+<section id="about" class="ed-section ed-about">
+  <div class="container ed-about-grid">
+    <div class="ed-about-media reveal">
+      <img src="{% if hero.image %}{{ hero.image.url }}{% else %}https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg{% endif %}" alt="Доктор Гвоздев М.Ю.">
+      {% if about_doctor.experience_years %}<div class="ed-about-badge"><b>{{ about_doctor.experience_years }}</b><span>лет<br>практики</span></div>{% endif %}
+    </div>
+    <div class="ed-about-copy reveal">
+      <span class="ed-eyebrow">02 — Обо мне</span>
+      <h2 class="ed-h2">Врач, которому<br>доверяют</h2>
+      <div class="ed-prose">{{ about_doctor.bio|safe }}</div>
+      {% if about_doctor.patents %}<div class="ed-credit"><h3>Патенты и разработки</h3>{{ about_doctor.patents|safe }}</div>{% endif %}
+      {% if about_doctor.awards %}<div class="ed-credit"><h3>Награды и заслуги</h3>{{ about_doctor.awards|safe }}</div>{% endif %}
+    </div>
   </div>
 </section>
 {% endif %}
 
-<!-- Важное пациенткам -->
-<section id="useful">
+{# ===================== ВАЖНОЕ ПАЦИЕНТКАМ ===================== #}
+{% if useful_info.prep_consultation or useful_info.prep_surgery or useful_info.anesthesia_info or useful_info.postop_period %}
+<section id="useful" class="ed-section ed-soft">
   <div class="container">
-    <h2>Важное пациенткам</h2>
-    {% if useful_info.prep_consultation %}
-    <div class="useful-block">
-      <h3>Подготовка к консультации</h3>
-      {{ useful_info.prep_consultation|safe }}
+    <div class="ed-head reveal">
+      <span class="ed-eyebrow">03 — Пациенткам</span>
+      <h2 class="ed-h2">Важное<br>перед приёмом</h2>
     </div>
-    {% endif %}
-    {% if useful_info.prep_surgery %}
-    <div class="useful-block">
-      <h3>Подготовка к операции</h3>
-      {{ useful_info.prep_surgery|safe }}
+    <div class="ed-faq">
+      {% if useful_info.prep_consultation %}<details class="ed-faq-item reveal"><summary>Подготовка к консультации</summary><div class="ed-prose">{{ useful_info.prep_consultation|safe }}</div></details>{% endif %}
+      {% if useful_info.prep_surgery %}<details class="ed-faq-item reveal"><summary>Подготовка к операции</summary><div class="ed-prose">{{ useful_info.prep_surgery|safe }}</div></details>{% endif %}
+      {% if useful_info.anesthesia_info %}<details class="ed-faq-item reveal"><summary>Обезболивание при операции</summary><div class="ed-prose">{{ useful_info.anesthesia_info|safe }}</div></details>{% endif %}
+      {% if useful_info.postop_period %}<details class="ed-faq-item reveal"><summary>Послеоперационный период</summary><div class="ed-prose">{{ useful_info.postop_period|safe }}</div></details>{% endif %}
     </div>
-    {% endif %}
-    {% if useful_info.anesthesia_info %}
-    <div class="useful-block">
-      <h3>Обезболивание при операции</h3>
-      {{ useful_info.anesthesia_info|safe }}
-    </div>
-    {% endif %}
-    {% if useful_info.postop_period %}
-    <div class="useful-block">
-      <h3>Послеоперационный период</h3>
-      {{ useful_info.postop_period|safe }}
-    </div>
-    {% endif %}
   </div>
 </section>
+{% endif %}
 
-<!-- Адреса клиник -->
-<section id="clinics">
+{# ===================== ОТЗЫВ — крупная цитата ===================== #}
+{% if testimonials %}
+<section id="testimonials-preview" class="ed-drench ed-quote-sec">
   <div class="container">
-    <h2>Адреса клиник</h2>
-    {% for clinic in clinic_locations %}
-      <div class="spec-card clinic-card">
+    <span class="ed-eyebrow is-light">04 — Отзывы</span>
+    <div class="ed-quotes">
+      {% for t in testimonials|slice:":3" %}
+      <figure class="ed-quote{% if forloop.first %} is-active{% endif %}" data-q="{{ forloop.counter0 }}">
+        <blockquote>{{ t.text|striptags }}</blockquote>
+        <figcaption>— {{ t.name }}{% if t.age %}, {{ t.age }} лет{% endif %}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <div class="ed-quote-actions">
+      <a href="{% url 'reviews' %}" class="btn btn-light">Все отзывы</a>
+      <a href="{% url 'add_review' %}" class="ed-link is-light">Оставить отзыв <span>→</span></a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ===================== КЛИНИКИ + СОБЫТИЯ ===================== #}
+<section id="clinics" class="ed-section ed-soft">
+  <div class="container ed-two">
+    <div class="ed-col reveal">
+      <span class="ed-eyebrow">05 — Где принимаю</span>
+      <h2 class="ed-h2-sm">Адреса клиник</h2>
+      {% for clinic in clinic_locations %}
+      <div class="ed-clinic">
         <h3>{{ clinic.name }}</h3>
         <p>{{ clinic.address|linebreaksbr }}</p>
-        {% if clinic.website %}
-          <a href="{{ clinic.website }}" target="_blank" rel="noopener" class="btn">Сайт клиники</a>
-        {% endif %}
-        {% if clinic.map_link %}
-          <a href="{{ clinic.map_link }}" target="_blank" rel="noopener" class="btn btn-outline">Карта</a>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p>Адреса клиник не указаны.</p>
-    {% endfor %}
-  </div>
-</section>
-
-<!-- Мероприятия -->
-{% if future_events or past_events %}
-<section id="events-preview">
-  <div class="container">
-    <h2>Мероприятия</h2>
-
-    {% if future_events %}
-      <h3>Ближайшие</h3>
-      {% for event in future_events %}
-        <div class="spec-card">
-          <div class="event-row">
-            <div class="event-meta">
-              <h4>{{ event.title }} ({{ event.date|date:"d.m.Y" }})</h4>
-              <p>{{ event.location }}</p>
-              <div class="event-actions">
-                {% if event.link %}
-                  <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn" style="padding: 8px 20px; font-size: 0.95rem;">Подробнее</a>
-                {% endif %}
-                {% if event.has_diary_entry %}
-                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.95rem;">
-                    <i class="fas fa-file-alt"></i> Отчёт о мероприятии
-                  </a>
-                {% endif %}
-              </div>
-            </div>
-            {% if event.has_diary_entry %}
-              <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            {% endif %}
-          </div>
+        <div class="ed-clinic-links">
+          {% if clinic.website %}<a href="{{ clinic.website }}" target="_blank" rel="noopener" class="ed-link">Сайт клиники <span>→</span></a>{% endif %}
+          {% if clinic.map_link %}<a href="{{ clinic.map_link }}" target="_blank" rel="noopener" class="ed-link">Карта <span>→</span></a>{% endif %}
         </div>
-      {% endfor %}
-    {% endif %}
-
-    {% if past_events %}
-      <h3>Прошедшие</h3>
-      {% for event in past_events %}
-        <div class="spec-card">
-          <div class="event-row">
-            <div class="event-meta">
-              <h4>{{ event.title }} ({{ event.date|date:"d.m.Y" }})</h4>
-              <p>{{ event.location }}</p>
-              {% if event.has_diary_entry %}
-                <div class="event-actions">
-                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.95rem;">
-                    <i class="fas fa-file-alt"></i> Отчёт о мероприятии
-                  </a>
-                </div>
-              {% endif %}
-            </div>
-            {% if event.has_diary_entry %}
-              <a href="{% url 'event_report' event.id %}" class="event-diary-link" title="Запись в дневнике" aria-label="Запись в дневнике">
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    {% endif %}
-
-    <a href="{% url 'events' %}" class="btn">Все мероприятия</a>
-  </div>
-</section>
-{% endif %}
-
-<!-- Отзывы -->
-{% if testimonials %}
-<section id="testimonials-preview">
-  <div class="container">
-    <h2>Отзывы</h2>
-    {% for t in testimonials|slice:":3" %}
-      <div class="spec-card">
-        <strong>{{ t.name }}{% if t.age %}, {{ t.age }} лет{% endif %}</strong>
-        <div>{{ t.text|safe }}</div>
       </div>
-    {% endfor %}
-    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem;">
-      <a href="{% url 'reviews' %}" class="btn">Все отзывы</a>
-      <a href="{% url 'add_review' %}" class="btn btn-outline">Оставить отзыв</a>
+      {% empty %}<p>Адреса клиник не указаны.</p>{% endfor %}
     </div>
+    {% if future_events %}
+    <div class="ed-col reveal">
+      <span class="ed-eyebrow">Календарь</span>
+      <h2 class="ed-h2-sm">Ближайшие события</h2>
+      {% for event in future_events %}
+      <a class="ed-event" href="{% if event.link %}{{ event.link }}{% else %}{% url 'events' %}{% endif %}"{% if event.link %} target="_blank" rel="noopener"{% endif %}>
+        <span class="ed-event-date">{{ event.date|date:"d.m.Y" }}</span>
+        <span class="ed-event-title">{{ event.title }}</span>
+        <span class="ed-event-loc">{{ event.location }}</span>
+      </a>
+      {% endfor %}
+      <a href="{% url 'events' %}" class="ed-link">Все мероприятия <span>→</span></a>
+    </div>
+    {% endif %}
   </div>
 </section>
-{% endif %}
 
-<!-- Контакты / Запись -->
-<section id="contact">
-  <div class="footer-wrap">
-    <h2>Записаться на приём</h2>
-    <form class="contact-form" id="contactForm" method="post" action="{% url 'submit_lead' %}" novalidate>
+{# ===================== КОНТАКТ (drench) ===================== #}
+<section id="contact" class="ed-contact">
+  <div class="container ed-contact-grid">
+    <div class="ed-contact-copy">
+      <span class="ed-eyebrow is-light">06 — Запись</span>
+      <h2 class="ed-h2 is-light">Запишитесь<br>на приём</h2>
+      <p class="ed-contact-note">Оставьте контакты — администратор перезвонит в течение&nbsp;24&nbsp;часов и подберёт удобное время.</p>
+      {% if contact_info.telegram_link or contact_info.whatsapp_link or contact_info.email %}
+      <div class="ed-contact-direct">
+        {% if contact_info.telegram_link %}<a href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener"><i class="fab fa-telegram-plane"></i> Telegram</a>{% endif %}
+        {% if contact_info.whatsapp_link %}<a href="{{ contact_info.whatsapp_link }}" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a>{% endif %}
+        {% if contact_info.email %}<a href="mailto:{{ contact_info.email }}"><i class="fas fa-envelope"></i> Email</a>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <form class="ed-form" id="contactForm" method="post" action="{% url 'submit_lead' %}" novalidate>
       {% csrf_token %}
-      <div class="form-group">
-        <input type="text" name="name" id="name" class="form-input" required>
-        <label for="name" class="form-label">Ваше имя</label>
-      </div>
-      <div class="form-group">
-        <input type="tel" name="phone" id="phone" class="form-input" required>
-        <label for="phone" class="form-label">Телефон или Telegram</label>
-      </div>
-      <div class="form-group">
-        <textarea name="message" id="message" class="form-input" rows="3" required></textarea>
-        <label for="message" class="form-label">Кратко опишите проблему</label>
-      </div>
-      <button type="submit" class="btn">Отправить заявку</button>
+      <div class="form-group"><input type="text" name="name" id="name" class="ed-input" required><label for="name" class="ed-label">Ваше имя</label></div>
+      <div class="form-group"><input type="tel" name="phone" id="phone" class="ed-input" required><label for="phone" class="ed-label">Телефон или Telegram</label></div>
+      <div class="form-group"><textarea name="message" id="message" class="ed-input" rows="3" required></textarea><label for="message" class="ed-label">Кратко опишите проблему</label></div>
+      <button type="submit" class="btn btn-light btn-block">Отправить заявку</button>
     </form>
   </div>
 </section>
+
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Плавающие подписи полей
-  document.querySelectorAll('.contact-form .form-input').forEach(input => {
+  document.querySelectorAll('.ed-form .ed-input').forEach(input => {
     const fg = input.closest('.form-group');
     if (!fg) return;
     const sync = () => fg.classList.toggle('hide-label', document.activeElement === input || input.value.trim() !== '');
-    input.addEventListener('focus', sync);
-    input.addEventListener('blur', sync);
-    input.addEventListener('input', sync);
+    ['focus','blur','input'].forEach(e => input.addEventListener(e, sync));
   });
 
-  // Отправка заявки — сохраняется в БД (модель Lead)
+  // Ротация отзывов-цитат
+  const quotes = Array.from(document.querySelectorAll('.ed-quote'));
+  if (quotes.length > 1) {
+    let qi = 0;
+    setInterval(() => {
+      quotes[qi].classList.remove('is-active');
+      qi = (qi + 1) % quotes.length;
+      quotes[qi].classList.add('is-active');
+    }, 6000);
+  }
+
+  // Отправка заявки в БД
   const form = document.getElementById('contactForm');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(form);
-      const name = (fd.get('name') || '').trim();
-      const phone = (fd.get('phone') || '').trim();
-      const message = (fd.get('message') || '').trim();
-      if (!name || !phone || !message) { alert('Пожалуйста, заполните все поля.'); return; }
-      const btn = form.querySelector('button[type=submit]');
-      const orig = btn.textContent;
+      if (!(fd.get('name')||'').trim() || !(fd.get('phone')||'').trim() || !(fd.get('message')||'').trim()) {
+        alert('Пожалуйста, заполните все поля.'); return;
+      }
+      const btn = form.querySelector('button[type=submit]'); const orig = btn.textContent;
       btn.disabled = true; btn.textContent = 'Отправляем…';
       try {
         const resp = await fetch(form.action, { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
         const data = await resp.json();
-        if (data.ok) {
-          form.innerHTML = '<div class="form-success"><i class="fas fa-check-circle"></i><div>Спасибо! Администратор свяжется с вами в течение 24&nbsp;часов.</div></div>';
-        } else {
-          alert(data.error || 'Не удалось отправить. Попробуйте позже.');
-          btn.disabled = false; btn.textContent = orig;
-        }
-      } catch (err) {
-        alert('Ошибка сети. Попробуйте ещё раз.');
-        btn.disabled = false; btn.textContent = orig;
-      }
+        if (data.ok) { form.innerHTML = '<div class="ed-form-ok"><i class="fas fa-check-circle"></i><div>Спасибо! Администратор свяжется с вами в течение 24&nbsp;часов.</div></div>'; }
+        else { alert(data.error || 'Не удалось отправить.'); btn.disabled = false; btn.textContent = orig; }
+      } catch (err) { alert('Ошибка сети. Попробуйте ещё раз.'); btn.disabled = false; btn.textContent = orig; }
     });
   }
 });
