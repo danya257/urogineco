@@ -11,7 +11,6 @@
     if (!reduced) magneticButtons();
     mobileMenu();
     smoothScroll();
-    if (!reduced) heroScene();
   });
 
   /* ---------- Header scroll state + progress bar ---------- */

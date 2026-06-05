@@ -63,20 +63,22 @@ class ContactForm(forms.ModelForm):
 class HeroForm(forms.ModelForm):
     class Meta:
         model = Hero
-        fields = ['title', 'subtitle', 'description', 'cta_text', 'image']
+        fields = ['title', 'subtitle', 'description', 'cta_text', 'video_file', 'image']
         widgets = {
             'title': _cab(forms.TextInput, placeholder='Доктор Гвоздев Михаил Юрьевич'),
             'subtitle': _cab(forms.TextInput, placeholder='Врач-урогинеколог · Хирург высшей категории'),
             'description': _cab(forms.Textarea, rows=4, placeholder='Короткое описание под именем'),
             'cta_text': _cab(forms.TextInput, placeholder='Записаться на приём'),
-            'image': forms.ClearableFileInput(attrs={'class': 'cab-file'}),
+            'video_file': forms.ClearableFileInput(attrs={'class': 'cab-file', 'accept': 'video/*'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'cab-file', 'accept': 'image/*'}),
         }
         labels = {
             'title': 'Имя и фамилия (крупный заголовок)',
             'subtitle': 'Подпись под именем',
             'description': 'Короткий текст под именем',
             'cta_text': 'Надпись на кнопке записи',
-            'image': 'Ваша фотография',
+            'video_file': 'Видео-визитка (.mp4) — врач рассказывает о себе',
+            'image': 'Фотография (показывается, пока нет видео)',
         }
 
 

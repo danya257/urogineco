@@ -56,32 +56,29 @@
 {% block content %}
 <!-- Hero -->
 <section id="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="container">
-    {% if hero %}
-      <h1>{{ hero.title }}</h1>
-      <div class="subtitle">{{ hero.subtitle }}</div>
-      {% if hero.description %}<div>{{ hero.description|safe }}</div>{% endif %}
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <h1>{{ hero.title|default:"Доктор Гвоздев Михаил Юрьевич" }}</h1>
+      <div class="subtitle">{{ hero.subtitle|default:"Врач-урогинеколог · Хирург высшей категории" }}</div>
+      <div class="hero-desc">{% if hero.description %}{{ hero.description|safe }}{% else %}Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.{% endif %}</div>
+      <div class="hero-actions">
+        <a href="#contact" class="btn">{{ hero.cta_text|default:"Записаться на приём" }}</a>
+        {% if hero.video_file %}<a href="#hero-video" class="btn btn-hero-ghost">▶&nbsp;Смотреть видео</a>{% endif %}
+      </div>
+    </div>
+    <div class="hero-media">
       {% if hero.video_file %}
-        <div class="hero-video">
-          <video controls preload="metadata">
-            <source src="{{ hero.video_file.url }}" type="video/mp4">
-            Ваш браузер не поддерживает видео.
-          </video>
-        </div>
-      {% elif hero.image %}
-        <img src="{{ hero.image.url }}" alt="Доктор Гвоздев М.Ю." class="avatar">
+        <video id="hero-video" class="hero-video-el" controls preload="metadata"{% if hero.image %} poster="{{ hero.image.url }}"{% endif %}>
+          <source src="{{ hero.video_file.url }}" type="video/mp4">
+          Ваш браузер не поддерживает видео.
+        </video>
       {% else %}
-        <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" alt="Доктор Гвоздев М.Ю." class="avatar">
+        <figure class="hero-photo">
+          <img src="{% if hero.image %}{{ hero.image.url }}{% else %}https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg{% endif %}" alt="Доктор Гвоздев М.Ю.">
+          <figcaption>Сюда встанет видео-визитка врача</figcaption>
+        </figure>
       {% endif %}
-      <a href="#contact" class="btn">{{ hero.cta_text|default:"Записаться на приём" }}</a>
-    {% else %}
-      <h1>Доктор Гвоздев Михаил Юрьевич</h1>
-      <div class="subtitle">Врач-урогинеколог • Хирург высшей категории</div>
-      <p>Автор патентованной методики транспозиции уретры. Наибольший в мире опыт — более 200 операций.</p>
-      <img src="https://www.emcmos.ru/upload/iblock/4a0/%D0%93%D0%B2%D0%BE%D0%B7%D0%B4%D0%B5%D0%B2_700x700.jpg" alt="Доктор Гвоздев М.Ю." class="avatar">
-      <a href="#contact" class="btn">Записаться на приём</a>
-    {% endif %}
+    </div>
   </div>
   <div class="hero-scroll-hint">Листайте вниз</div>
 </section>
