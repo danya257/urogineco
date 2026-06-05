@@ -177,7 +177,7 @@ header:not(.scrolled) .mobile-menu-toggle { color: #fff; }
 .btn-outline:hover { background: var(--teal); color: #fff; }
 
 /* ============ SECTIONS (reveal) ============ */
-section { position: relative; padding: clamp(70px, 9vw, 130px) 0; z-index: 1; }
+section { position: relative; padding: clamp(82px, 9vw, 142px) 0; z-index: 1; }
 .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease-out), transform .9s var(--ease-out); will-change: transform, opacity; }
 section.visible .reveal, .reveal.visible { opacity: 1; transform: none; }
 
@@ -281,30 +281,44 @@ section > .container > h2 { margin-bottom: 1.6rem; max-width: 20ch; }
 #about, #useful, #events-preview { background: var(--paper-2); }
 
 /* ============ SPEC GRID (procedures / cards) ============ */
-.spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; margin-top: 1rem; }
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(312px, 1fr)); gap: 26px; margin-top: 1.7rem; }
 .spec-card {
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 30px 30px 28px;
-  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+  border-radius: var(--radius-lg); padding: 34px 32px 32px;
+  box-shadow: var(--shadow-xs); position: relative; overflow: hidden;
   transition: transform .45s var(--ease-out), box-shadow .45s var(--ease), border-color .45s var(--ease);
 }
-.spec-card::before {
-  content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 3px;
-  background: linear-gradient(var(--aqua), var(--teal)); transform: scaleY(0); transform-origin: top;
+.spec-card::after {
+  content: ""; position: absolute; left: 32px; right: 32px; bottom: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--aqua));
+  transform: scaleX(0); transform-origin: left; border-radius: 3px 3px 0 0;
   transition: transform .5s var(--ease-out);
 }
-.spec-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }
-.spec-card:hover::before { transform: scaleY(1); }
-.spec-card h3 { display: flex; align-items: center; gap: .6rem; font-size: 1.32rem; margin-bottom: .5rem; }
+.spec-card:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); border-color: var(--brand-100); }
+.spec-card:hover::after { transform: scaleX(1); }
+.spec-card h3 { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; font-size: 1.34rem; margin-bottom: .7rem; line-height: 1.25; }
 .spec-card h3 i {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 46px; height: 46px; flex: none; border-radius: 14px; font-size: 1.1rem;
-  color: var(--teal); background: var(--aqua-soft);
-  transition: transform .45s var(--ease-out), background .35s var(--ease), color .35s var(--ease);
+  width: 56px; height: 56px; flex: none; border-radius: 16px; font-size: 1.4rem;
+  color: #fff; background: linear-gradient(135deg, var(--teal), var(--aqua));
+  box-shadow: 0 10px 22px rgba(31,110,120,.28);
+  transition: transform .45s var(--ease-out);
 }
-.spec-card:hover h3 i { transform: rotate(-6deg) scale(1.06); background: var(--teal); color: #fff; }
-.spec-card p, .spec-card li { color: var(--ink-soft); font-size: 1rem; }
+.spec-card:hover h3 i { transform: translateY(-3px) scale(1.07) rotate(-5deg); }
+.spec-card p, .spec-card li { color: var(--ink-soft); font-size: 1.02rem; line-height: 1.62; }
 .spec-card ul { padding-left: 1.1rem; margin: .4rem 0; }
+
+/* нумерация — только у процедур (01, 02, …) */
+#procedures .spec-grid { counter-reset: spec; }
+#procedures .spec-card { counter-increment: spec; }
+#procedures .spec-card > h3 { padding-right: 50px; }
+#procedures .spec-card::before {
+  content: counter(spec, decimal-leading-zero);
+  position: absolute; top: 22px; right: 26px;
+  font-family: var(--font-display); font-weight: 600; font-size: 2.5rem; line-height: 1;
+  color: var(--brand-100); pointer-events: none; transition: color .4s var(--ease);
+}
+#procedures .spec-card:hover::before { color: var(--aqua); }
 
 /* ============ ABOUT / USEFUL prose ============ */
 #about .container, #useful .container { max-width: 920px; }
