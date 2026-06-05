@@ -8,4 +8,5 @@ urlpatterns = [
     path('reviews/', views.reviews, name='reviews'),
     path('events/', views.events, name='events'),
     path('diary/report-<int:event_id>/', views.event_report, name='event_report'),
+    path('submit-lead/', views.submit_lead, name='submit_lead'),
 ]

@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import (
     SEOAndContent, Hero, Direction, WorkExample, Achievement, EducationItem,
     ContactInfo, Procedure, Testimonial, BlogPost, Event,
-    AboutDoctor, UsefulInfo, ClinicLocation,
+    AboutDoctor, UsefulInfo, ClinicLocation, Lead,
 )
 
 
@@ -56,6 +56,26 @@ class TestimonialAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         # Отзывы создаются только пользователями через форму на сайте
+        return False
+
+
+@admin.register(Lead)
+class LeadAdmin(admin.ModelAdmin):
+    """Заявки на приём с сайта. Создаются только посетителями через форму."""
+    list_display = ['name', 'phone', 'short_message', 'is_processed', 'created_at']
+    list_filter = ['is_processed', 'created_at']
+    list_editable = ['is_processed']
+    search_fields = ['name', 'phone', 'message']
+    ordering = ['-created_at']
+    readonly_fields = ['name', 'phone', 'message', 'created_at']
+    fields = ['name', 'phone', 'message', 'created_at', 'is_processed']
+
+    @admin.display(description='Сообщение')
+    def short_message(self, obj):
+        text = obj.message or ''
+        return text[:70] + ('…' if len(text) > 70 else '')
+
+    def has_add_permission(self, request):
         return False
 
 

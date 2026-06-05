@@ -188,6 +188,23 @@ class Testimonial(models.Model):
         return f"Отзыв от {self.name}"
 
 
+class Lead(models.Model):
+    """Заявка на приём с формы на сайте."""
+    name = models.CharField("Имя", max_length=120)
+    phone = models.CharField("Телефон / Telegram", max_length=120)
+    message = models.TextField("Сообщение", max_length=2000, blank=True)
+    is_processed = models.BooleanField("Обработана", default=False)
+    created_at = models.DateTimeField("Получена", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Заявка на приём"
+        verbose_name_plural = "Заявки на приём"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Заявка от {self.name} ({self.created_at:%d.%m.%Y %H:%M})"
+
+
 class BlogPost(models.Model):
     title = models.CharField("Заголовок", max_length=200)
     slug = models.SlugField("URL", unique=True, blank=True)

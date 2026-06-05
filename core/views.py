@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from datetime import date
 
 from .models import (
     Hero, AboutDoctor, UsefulInfo, ClinicLocation,
     Direction, WorkExample, Achievement, EducationItem,
-    Procedure, Testimonial, BlogPost, Event,
+    Procedure, Testimonial, BlogPost, Event, Lead,
 )
 from .forms import TestimonialForm
 
@@ -101,3 +103,15 @@ def event_report(request, event_id):
         'event': event,
         'blog_post': blog_post,
     })
+
+
+@require_POST
+def submit_lead(request):
+    """Приём заявки с формы «Записаться на приём» (сохраняет в БД)."""
+    name = (request.POST.get('name') or '').strip()[:120]
+    phone = (request.POST.get('phone') or '').strip()[:120]
+    message = (request.POST.get('message') or '').strip()[:2000]
+    if not name or not phone:
+        return JsonResponse({'ok': False, 'error': 'Укажите имя и контакт для связи.'}, status=400)
+    Lead.objects.create(name=name, phone=phone, message=message)
+    return JsonResponse({'ok': True})
