@@ -110,7 +110,7 @@
     });
     nav.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 860 && nav.classList.contains('active')) close();
+      if (window.innerWidth > 1200 && nav.classList.contains('active')) close();
     });
   }
 
