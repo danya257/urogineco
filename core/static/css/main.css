@@ -654,6 +654,64 @@ textarea.ed-input { resize: vertical; min-height: 64px; }
 #useful.ed-soft { background: var(--paper-2); }
 #about.ed-about .container, #useful.ed-soft .container, #clinics.ed-soft .container { max-width: var(--maxw); }
 
+/* ===================================================================
+   INNER PAGES — единый редакторский стиль (как на главной)
+   =================================================================== */
+.inner { background: var(--paper); }
+.inner-hero { position: static; display: block; z-index: auto; background: transparent; box-shadow: none; padding: clamp(124px, 16vh, 188px) 0 clamp(34px, 4vw, 58px); border-top: none; border-bottom: 1px solid var(--line); margin-bottom: clamp(40px, 5vw, 66px); }
+.inner-eyebrow { font-family: var(--font-body); font-size: .78rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--teal); }
+.inner-title { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.6rem, 6vw, 5rem); line-height: .98; letter-spacing: -.02em; color: var(--ink); margin: 14px 0 0; }
+.inner-intro { color: var(--ink-soft); font-size: 1.14rem; margin: 1.1rem 0 0; max-width: 52ch; line-height: 1.5; }
+.inner-hero .btn, .inner-hero .ed-link { margin-top: 1.7rem; }
+.inner-hero .container { display: flex; flex-direction: column; align-items: flex-start; }
+.inner-body { padding-bottom: clamp(80px, 9vw, 140px); }
+
+/* — Отзывы — */
+.rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 720px) { .rev-grid { grid-template-columns: 1fr; } }
+.rev-card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 38px 34px 32px; position: relative; transition: transform .4s var(--ease-out), box-shadow .4s var(--ease); }
+.rev-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.rev-card::before { content: "“"; position: absolute; top: 16px; right: 26px; font-family: var(--font-display); font-size: 4rem; line-height: 1; color: var(--aqua-soft); }
+.rev-text { font-family: var(--font-display); font-size: clamp(1.2rem, 1.8vw, 1.5rem); line-height: 1.42; color: var(--ink); margin: 0 0 1.4rem; position: relative; z-index: 1; }
+.rev-author { font-weight: 700; color: var(--teal); font-family: var(--font-body); }
+.rev-date { font-size: .9rem; color: var(--muted); margin-top: 2px; }
+.rev-pagination { display: flex; gap: 10px; justify-content: center; margin-top: 3rem; }
+.rev-pagination a, .rev-pagination span { padding: 9px 15px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); text-decoration: none; font-weight: 600; }
+.rev-pagination a:hover, .rev-pagination .current { background: var(--teal); border-color: var(--teal); color: var(--paper); }
+
+/* — Дневник — */
+.diary-post { padding: clamp(34px, 4vw, 56px) 0; border-bottom: 1px solid var(--line); }
+.diary-post:first-child { padding-top: 0; }
+.diary-post .d-meta { color: var(--rose); font-size: .88rem; font-weight: 700; letter-spacing: .04em; }
+.diary-post h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: 1.05; letter-spacing: -.01em; color: var(--ink); margin: .5rem 0 1.2rem; max-width: 26ch; }
+.diary-post .blog-img { width: 100%; max-height: 440px; object-fit: cover; border-radius: 6px; margin: 0 0 1.4rem; }
+.diary-post .blog-content { color: var(--ink-soft); font-size: 1.08rem; line-height: 1.75; max-width: 68ch; }
+.diary-post .blog-content p { margin: 0 0 1rem; }
+
+/* — Отчёт о мероприятии — */
+.report-article { max-width: 780px; }
+.report-img { width: 100%; max-height: 480px; object-fit: cover; border-radius: 6px; margin: 0 0 1.8rem; }
+.report-article h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.6vw, 2.3rem); color: var(--ink); margin: 0 0 1rem; }
+.report-body { color: var(--ink-soft); font-size: 1.08rem; line-height: 1.75; }
+.report-body p { margin: 0 0 1rem; }
+
+/* — Форма отзыва — */
+.rev-form-card { max-width: 620px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: clamp(28px, 3vw, 44px); }
+.rev-form-card .form-group { margin-bottom: 1.5rem; }
+.rev-form-card label { display: block; font-family: var(--font-body); font-weight: 600; font-size: .95rem; color: var(--ink); margin-bottom: .5rem; }
+.rev-form-card input:not([type=checkbox]):not([type=radio]), .rev-form-card textarea, .rev-form-card select {
+  width: 100%; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 6px;
+  font-family: var(--font-body); font-size: 1rem; color: var(--ink); background: var(--paper-2); transition: border-color .3s, background .3s;
+}
+.rev-form-card input:focus, .rev-form-card textarea:focus, .rev-form-card select:focus { outline: none; border-color: var(--teal); background: var(--surface); }
+.rev-form-card small { color: var(--muted); }
+.rev-form-card .field-errors { list-style: none; padding: 0; margin: .5rem 0 0; color: #C0584B; font-size: .92rem; }
+.rev-form-card .field-errors li::before { display: none; }
+.rev-form-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 1.4rem; }
+
+/* — Мероприятия (заголовок страницы) — */
+#events-page.inner .events-list { margin-top: 0; }
+
 /* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

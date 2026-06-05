@@ -3,59 +3,32 @@
 
 {% block title %}Дневник врача | Доктор Гвоздев М.Ю.{% endblock %}
 
-{% block extra_css %}
-<style>
-  .blog-item {
-    background: var(--surface);
-    padding: 1.8rem;
-    border-radius: 16px;
-    margin-bottom: 1.8rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-  .blog-img {
-    width: 100%;
-    max-height: 380px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin: 1.2rem 0;
-  }
-  .blog-content * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .blog-meta {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 0.8rem;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<section id="diary-page">
-  <div class="container">
-    <h1>Дневник врача</h1>
-    <p>Клинические случаи, размышления и профессиональные заметки</p>
+<div class="inner">
+  <header class="inner-hero">
+    <div class="container">
+      <span class="inner-eyebrow">Дневник врача</span>
+      <h1 class="inner-title">Клинические<br>заметки</h1>
+      <p class="inner-intro">Клинические случаи, размышления и профессиональные заметки.</p>
+    </div>
+  </header>
 
-    {% for post in blog_posts %}
-      <article class="blog-item">
+  <section class="inner-body">
+    <div class="container" style="max-width: 940px;">
+      {% for post in blog_posts %}
+      <article class="diary-post">
+        <div class="d-meta">{{ post.published_date|date:"d E Y" }}</div>
         <h2>{{ post.title }}</h2>
-        <div class="blog-meta">{{ post.published_date|date:"d E Y" }}</div>
-        {% if post.image %}
-          <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-img">
-        {% endif %}
+        {% if post.image %}<img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-img">{% endif %}
         <div class="blog-content">{{ post.content|safe }}</div>
         {% if post.related_event %}
-          <a href="{% url 'event_report' post.related_event.id %}" class="event-diary-link" title="Перейти к мероприятию" aria-label="Перейти к мероприятию">
-            <i class="fas fa-arrow-right"></i>
-          </a>
+        <a href="{% url 'event_report' post.related_event.id %}" class="ed-link" style="margin-top:1.2rem;">К мероприятию&nbsp;<span>→</span></a>
         {% endif %}
       </article>
-    {% empty %}
-      <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">Записей пока нет.</p>
-    {% endfor %}
-  </div>
-</section>
+      {% empty %}
+      <p class="ed-prose">Записей пока нет.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
 {% endblock %}

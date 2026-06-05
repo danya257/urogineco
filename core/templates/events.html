@@ -5,33 +5,32 @@
 
 {% block extra_css %}
 <style>
-  #events-page { padding-top: clamp(110px, 13vh, 152px); }
-  #events-page > .container > h2 { margin-bottom: 0; }
-  .events-list { display: flex; flex-direction: column; gap: 18px; margin: 1.6rem 0 1rem; }
+  .events-list { display: flex; flex-direction: column; gap: 18px; margin: 0 0 1rem; }
   .event-card {
     display: grid; grid-template-columns: 108px 1fr; gap: 26px; align-items: start;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
     padding: 26px 28px; box-shadow: var(--shadow-xs);
     transition: transform .4s var(--ease-out), box-shadow .4s var(--ease), border-color .4s var(--ease);
   }
   .event-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--brand-100); }
   .event-date-block {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: linear-gradient(150deg, var(--teal), var(--teal-700)); color: #fff;
-    border-radius: 14px; padding: 14px 6px; min-height: 106px; text-align: center;
-    box-shadow: 0 10px 24px rgba(31,110,120,.28);
+    background: linear-gradient(150deg, var(--teal), var(--teal-700)); color: var(--paper);
+    border-radius: 12px; padding: 14px 6px; min-height: 106px; text-align: center;
+    box-shadow: 0 10px 24px rgba(20,48,42,.25);
   }
-  .event-date-block.past { background: linear-gradient(150deg, #6f7d79, #4f5c59); box-shadow: none; }
+  .event-date-block.past { background: linear-gradient(150deg, #7d8a82, #5a655f); box-shadow: none; }
   .ed-day { font-family: var(--font-display); font-size: 2.7rem; font-weight: 600; line-height: 1; }
   .ed-mon { font-size: .95rem; font-weight: 700; text-transform: lowercase; margin-top: 3px; }
   .ed-year { font-size: .8rem; opacity: .82; margin-top: 2px; }
-  .event-content h3 { font-size: 1.42rem; margin: 0 0 .45rem; }
+  .event-content h3 { font-family: var(--font-display); font-size: 1.45rem; margin: 0 0 .45rem; color: var(--ink); }
   .event-loc { color: var(--muted); font-size: 1rem; margin: 0 0 .7rem; display: flex; align-items: center; gap: 8px; }
   .event-loc i { color: var(--teal); }
   .event-description { color: var(--ink-soft); margin-bottom: .9rem; line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word; }
   .event-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .event-actions .btn { padding: 11px 22px; font-size: .94rem; }
-  .past-events { margin-top: 2.8rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+  .past-events { margin-top: 3rem; }
+  .past-events > h2 { font-family: var(--font-display); font-size: clamp(1.6rem,2.4vw,2.2rem); color: var(--ink); margin: 0 0 1.4rem; }
   @media (max-width: 560px) {
     .event-card { grid-template-columns: 1fr; gap: 16px; padding: 22px; }
     .event-date-block { flex-direction: row; gap: 12px; min-height: 0; padding: 12px 18px; align-self: start; }
@@ -41,45 +40,22 @@
 {% endblock %}
 
 {% block content %}
-<section id="events-page">
-  <div class="container">
-    <h1>Календарь мероприятий</h1>
+<div class="inner">
+  <header class="inner-hero">
+    <div class="container">
+      <span class="inner-eyebrow">Календарь</span>
+      <h1 class="inner-title">Мероприятия</h1>
+      <p class="inner-intro">Конференции, симпозиумы и мастер-классы с участием Михаила Юрьевича.</p>
+    </div>
+  </header>
 
-    {% if future_events %}
-      <h2>Предстоящие события</h2>
-      <div class="events-list">
-        {% for event in future_events %}
-        <article class="event-card">
-          <div class="event-date-block">
-            <span class="ed-day">{{ event.date|date:"d" }}</span>
-            <span class="ed-mon">{{ event.date|date:"E" }}</span>
-            <span class="ed-year">{{ event.date|date:"Y" }}</span>
-          </div>
-          <div class="event-content">
-            <h3>{{ event.title }}</h3>
-            <p class="event-loc"><i class="fas fa-location-dot"></i>{{ event.location }}</p>
-            {% if event.description %}<div class="event-description">{{ event.description|safe }}</div>{% endif %}
-            {% if event.link or event.has_diary_entry %}
-            <div class="event-actions">
-              {% if event.link %}<a href="{{ event.link }}" target="_blank" rel="noopener" class="btn">Подробнее</a>{% endif %}
-              {% if event.has_diary_entry %}<a href="{% url 'event_report' event.id %}" class="btn btn-outline"><i class="fas fa-file-alt"></i> Отчёт о мероприятии</a>{% endif %}
-            </div>
-            {% endif %}
-          </div>
-        </article>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p>Нет предстоящих мероприятий.</p>
-    {% endif %}
-
-    {% if past_events %}
-      <div class="past-events">
-        <h2>Прошедшие мероприятия</h2>
+  <section class="inner-body">
+    <div class="container">
+      {% if future_events %}
         <div class="events-list">
-          {% for event in past_events %}
+          {% for event in future_events %}
           <article class="event-card">
-            <div class="event-date-block past">
+            <div class="event-date-block">
               <span class="ed-day">{{ event.date|date:"d" }}</span>
               <span class="ed-mon">{{ event.date|date:"E" }}</span>
               <span class="ed-year">{{ event.date|date:"Y" }}</span>
@@ -88,17 +64,47 @@
               <h3>{{ event.title }}</h3>
               <p class="event-loc"><i class="fas fa-location-dot"></i>{{ event.location }}</p>
               {% if event.description %}<div class="event-description">{{ event.description|safe }}</div>{% endif %}
-              {% if event.has_diary_entry %}
+              {% if event.link or event.has_diary_entry %}
               <div class="event-actions">
-                <a href="{% url 'event_report' event.id %}" class="btn btn-outline"><i class="fas fa-file-alt"></i> Отчёт о мероприятии</a>
+                {% if event.link %}<a href="{{ event.link }}" target="_blank" rel="noopener" class="btn">Подробнее</a>{% endif %}
+                {% if event.has_diary_entry %}<a href="{% url 'event_report' event.id %}" class="btn btn-outline"><i class="fas fa-file-alt"></i> Отчёт о мероприятии</a>{% endif %}
               </div>
               {% endif %}
             </div>
           </article>
           {% endfor %}
         </div>
-      </div>
-    {% endif %}
-  </div>
-</section>
+      {% else %}
+        <p class="ed-prose">Нет предстоящих мероприятий.</p>
+      {% endif %}
+
+      {% if past_events %}
+        <div class="past-events">
+          <h2>Прошедшие</h2>
+          <div class="events-list">
+            {% for event in past_events %}
+            <article class="event-card">
+              <div class="event-date-block past">
+                <span class="ed-day">{{ event.date|date:"d" }}</span>
+                <span class="ed-mon">{{ event.date|date:"E" }}</span>
+                <span class="ed-year">{{ event.date|date:"Y" }}</span>
+              </div>
+              <div class="event-content">
+                <h3>{{ event.title }}</h3>
+                <p class="event-loc"><i class="fas fa-location-dot"></i>{{ event.location }}</p>
+                {% if event.description %}<div class="event-description">{{ event.description|safe }}</div>{% endif %}
+                {% if event.has_diary_entry %}
+                <div class="event-actions">
+                  <a href="{% url 'event_report' event.id %}" class="btn btn-outline"><i class="fas fa-file-alt"></i> Отчёт о мероприятии</a>
+                </div>
+                {% endif %}
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
 {% endblock %}

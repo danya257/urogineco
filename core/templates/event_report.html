@@ -3,55 +3,29 @@
 
 {% block title %}{{ event.title }} | Отчёт о мероприятии{% endblock %}
 
-{% block extra_css %}
-<style>
-  .event-report-content * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .event-report-img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    margin: 0 0 1.5rem 0;
-    max-height: 500px;
-    object-fit: cover;
-  }
-  .event-meta-line {
-    color: var(--text-secondary);
-    margin-bottom: 1.2rem;
-  }
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 1.5rem;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<section id="event-report">
-  <div class="container">
-    <h1>{{ event.title }}</h1>
-    <div class="event-meta-line">
-      <strong>{{ event.date|date:"d E Y" }}</strong> &middot; {{ event.location }}
+<div class="inner">
+  <header class="inner-hero">
+    <div class="container">
+      <span class="inner-eyebrow">Отчёт о мероприятии · {{ event.date|date:"d E Y" }}</span>
+      <h1 class="inner-title" style="font-size: clamp(2rem, 4.5vw, 3.6rem);">{{ event.title }}</h1>
+      <p class="inner-intro">{{ event.location }}</p>
     </div>
+  </header>
 
-    {% if blog_post %}
-      <article class="spec-card event-report-content">
-        {% if blog_post.image %}
-          <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" class="event-report-img">
-        {% endif %}
+  <section class="inner-body">
+    <div class="container">
+      {% if blog_post %}
+      <article class="report-article">
+        {% if blog_post.image %}<img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" class="report-img">{% endif %}
         <h2>{{ blog_post.title }}</h2>
-        {{ blog_post.content|safe }}
+        <div class="report-body">{{ blog_post.content|safe }}</div>
       </article>
-    {% else %}
-      <p style="color: var(--text-secondary); margin-top: 1.5rem;">Отчёт о мероприятии пока не опубликован.</p>
-    {% endif %}
-
-    <a href="{% url 'events' %}" class="btn back-link">← Календарь мероприятий</a>
-  </div>
-</section>
+      {% else %}
+      <p class="ed-prose">Отчёт о мероприятии пока не опубликован.</p>
+      {% endif %}
+      <a href="{% url 'events' %}" class="ed-link" style="margin-top: 2.2rem;"><span>←</span>&nbsp;Календарь мероприятий</a>
+    </div>
+  </section>
+</div>
 {% endblock %}

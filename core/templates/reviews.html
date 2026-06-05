@@ -3,156 +3,44 @@
 
 {% block title %}Отзывы | Доктор Гвоздев М.Ю.{% endblock %}
 
-{% block extra_css %}
-<style>
-  .reviews-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin: 2rem 0;
-  }
-  @media (max-width: 768px) {
-    .reviews-grid { grid-template-columns: 1fr; }
-  }
-  .review-card {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 1.5rem 1.8rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    text-align: left;
-  }
-  .review-card * {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-  .review-card .meta {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 0.8rem;
-  }
-  .review-card .meta img {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .review-card h3 {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 1.15rem;
-  }
-  .review-card .date {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-  }
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 2rem 0 0;
-    flex-wrap: wrap;
-  }
-  .pagination a, .pagination .current, .pagination .disabled {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 40px;
-    height: 40px;
-    padding: 0 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--text-primary);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    transition: var(--transition);
-  }
-  .pagination a:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-  }
-  .pagination .current {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-    font-weight: 700;
-  }
-  .pagination .disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .reviews-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<section id="reviews-page">
-  <div class="container">
-    <div class="reviews-header">
-      <div>
-        <h1>Отзывы пациенток</h1>
-        <p style="margin: 0;">Благодарности и истории выздоровления</p>
-      </div>
+<div class="inner">
+  <header class="inner-hero">
+    <div class="container">
+      <span class="inner-eyebrow">Отзывы</span>
+      <h1 class="inner-title">Отзывы<br>пациенток</h1>
+      <p class="inner-intro">Благодарности и истории выздоровления.</p>
       <a href="{% url 'add_review' %}" class="btn">Оставить отзыв</a>
     </div>
+  </header>
 
-    {% if testimonials %}
-      <div class="reviews-grid">
-        {% for test in testimonials %}
-          <article class="review-card">
-            <div class="meta">
-              {% if test.photo %}
-                <img src="{{ test.photo.url }}" alt="{{ test.name }}">
-              {% endif %}
-              <div>
-                <h3>{{ test.name }}{% if test.age %}, {{ test.age }} лет{% endif %}</h3>
-                <div class="date">{{ test.created_at|date:"d E Y" }}</div>
-              </div>
-            </div>
-            <div>{{ test.text|safe }}</div>
+  <section class="inner-body">
+    <div class="container">
+      {% if testimonials %}
+        <div class="rev-grid">
+          {% for test in testimonials %}
+          <article class="rev-card">
+            <div class="rev-text">{{ test.text|striptags }}</div>
+            <div class="rev-author">{{ test.name }}{% if test.age %}, {{ test.age }} лет{% endif %}</div>
+            <div class="rev-date">{{ test.created_at|date:"d E Y" }}</div>
           </article>
-        {% endfor %}
-      </div>
-
-      {% if page_obj.paginator.num_pages > 1 %}
-        <nav class="pagination" aria-label="Навигация по страницам">
-          {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" aria-label="Назад">&#8249;</a>
-          {% else %}
-            <span class="disabled" aria-hidden="true">&#8249;</span>
-          {% endif %}
-
-          {% for num in page_obj.paginator.page_range %}
-            {% if num == page_obj.number %}
-              <span class="current" aria-current="page">{{ num }}</span>
-            {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-              <a href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
           {% endfor %}
+        </div>
 
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" aria-label="Вперёд">&#8250;</a>
-          {% else %}
-            <span class="disabled" aria-hidden="true">&#8250;</span>
-          {% endif %}
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="rev-pagination" aria-label="Навигация по страницам">
+          {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" aria-label="Назад">‹</a>{% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}<span class="current">{{ num }}</span>
+            {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}<a href="?page={{ num }}">{{ num }}</a>{% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" aria-label="Вперёд">›</a>{% endif %}
         </nav>
+        {% endif %}
+      {% else %}
+        <p class="ed-prose">Отзывов пока нет. <a href="{% url 'add_review' %}" class="ed-link">Будьте первой&nbsp;<span>→</span></a></p>
       {% endif %}
-    {% else %}
-      <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
-        Отзывов пока нет. <a href="{% url 'add_review' %}" style="color: var(--primary);">Будьте первой!</a>
-      </p>
-    {% endif %}
-  </div>
-</section>
+    </div>
+  </section>
+</div>
 {% endblock %}
