@@ -1,0 +1,58 @@
+{% extends 'cabinet/base.html' %}
+{% block title %}Кабинет{% endblock %}
+{% block content %}
+<h1 class="cab-h1">Здравствуйте!</h1>
+<p class="cab-lead">Выберите, что хотите сделать. Нажмите на любой большой прямоугольник.</p>
+
+<div class="cab-grid">
+  <a class="cab-card" href="{% url 'cabinet_leads' %}">
+    {% if new_leads %}<span class="cab-badge">{{ new_leads }}</span>{% endif %}
+    <span class="ico">📨</span>
+    <span>
+      <span class="ct">Заявки с сайта</span>
+      <span class="cs">{% if new_leads %}{{ new_leads }} новых · {% endif %}всего {{ total_leads }}</span>
+    </span>
+  </a>
+
+  <a class="cab-card" href="{% url 'cabinet_reviews' %}">
+    {% if pending_reviews %}<span class="cab-badge muted">{{ pending_reviews }}</span>{% endif %}
+    <span class="ico">⭐</span>
+    <span>
+      <span class="ct">Отзывы</span>
+      <span class="cs">{% if pending_reviews %}{{ pending_reviews }} на проверке{% else %}все проверены{% endif %}</span>
+    </span>
+  </a>
+
+  <a class="cab-card" href="{% url 'cabinet_diary' %}">
+    <span class="ico">📔</span>
+    <span>
+      <span class="ct">Дневник врача</span>
+      <span class="cs">записей: {{ diary_count }}</span>
+    </span>
+  </a>
+
+  <a class="cab-card" href="{% url 'cabinet_contacts' %}">
+    <span class="ico">📞</span>
+    <span>
+      <span class="ct">Мои контакты</span>
+      <span class="cs">телефон, мессенджеры, почта</span>
+    </span>
+  </a>
+
+  <a class="cab-card" href="{% url 'cabinet_about' %}">
+    <span class="ico">👤</span>
+    <span>
+      <span class="ct">Обо мне</span>
+      <span class="cs">текст о себе и стаж</span>
+    </span>
+  </a>
+
+  <a class="cab-card" href="{% url 'cabinet_hero' %}">
+    <span class="ico">🖼️</span>
+    <span>
+      <span class="ct">Главный экран</span>
+      <span class="cs">имя, подпись, фото вверху сайта</span>
+    </span>
+  </a>
+</div>
+{% endblock %}

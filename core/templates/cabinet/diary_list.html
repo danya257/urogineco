@@ -1,0 +1,28 @@
+{% extends 'cabinet/base.html' %}
+{% block title %}Дневник{% endblock %}
+{% block back %}<a class="cab-back" href="{% url 'cabinet' %}">← В кабинет</a>{% endblock %}
+{% block content %}
+<h1 class="cab-h1">Дневник врача</h1>
+<p class="cab-lead">Ваши записи и статьи для пациентов.</p>
+
+<a class="cab-btn cab-btn-lg" href="{% url 'cabinet_diary_new' %}" style="margin-bottom:26px;">＋ Написать новую запись</a>
+
+{% for p in posts %}
+<div class="cab-item {% if not p.is_published %}pending{% endif %}">
+  <div class="cab-item-head">
+    <div>
+      <div class="cab-item-name">{{ p.title }}</div>
+      <div class="cab-item-meta">{{ p.published_date|date:"d E Y" }}</div>
+    </div>
+    {% if p.is_published %}<span class="cab-tag on">На сайте</span>{% else %}<span class="cab-tag off">Черновик</span>{% endif %}
+  </div>
+  <div class="cab-item-actions">
+    <a class="cab-btn cab-btn-ghost cab-btn-sm" href="{% url 'cabinet_diary_edit' p.id %}">✏️ Изменить</a>
+    <form method="post" action="{% url 'cabinet_diary_delete' p.id %}" onsubmit="return confirm('Удалить эту запись?');">{% csrf_token %}
+      <button class="cab-btn cab-btn-danger cab-btn-sm">Удалить</button></form>
+  </div>
+</div>
+{% empty %}
+<div class="cab-empty"><span class="big">📔</span>Записей пока нет. Нажмите «Написать новую запись».</div>
+{% endfor %}
+{% endblock %}

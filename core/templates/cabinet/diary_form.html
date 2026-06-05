@@ -1,0 +1,29 @@
+{% extends 'cabinet/base.html' %}
+{% block title %}{% if post %}Изменить запись{% else %}Новая запись{% endif %}{% endblock %}
+{% block back %}<a class="cab-back" href="{% url 'cabinet_diary' %}">← К дневнику</a>{% endblock %}
+{% block content %}
+<h1 class="cab-h1">{% if post %}Изменить запись{% else %}Новая запись{% endif %}</h1>
+<p class="cab-lead">Заполните заголовок и текст. Каждый новый абзац начинайте с новой строки.</p>
+
+<form class="cab-form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in form %}
+    {% if field.field.widget.input_type == 'checkbox' %}
+      <div class="cab-field">
+        <div class="cab-checkrow">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label></div>
+      </div>
+    {% else %}
+      <div class="cab-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="cab-help">{{ field.help_text }}</div>{% endif %}
+        {% if field.errors %}<ul class="cab-errors">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+  <div class="cab-form-actions">
+    <button type="submit" class="cab-btn cab-btn-lg">💾 Сохранить</button>
+    <a class="cab-btn cab-btn-ghost" href="{% url 'cabinet_diary' %}">Отмена</a>
+  </div>
+</form>
+{% endblock %}

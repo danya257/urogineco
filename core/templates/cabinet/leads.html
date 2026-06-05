@@ -1,0 +1,34 @@
+{% extends 'cabinet/base.html' %}
+{% block title %}Заявки{% endblock %}
+{% block back %}<a class="cab-back" href="{% url 'cabinet' %}">← В кабинет</a>{% endblock %}
+{% block content %}
+<h1 class="cab-h1">Заявки с сайта</h1>
+<p class="cab-lead">Здесь видны все, кто хочет записаться на приём.{% if new_count %} Новых: {{ new_count }}.{% endif %}</p>
+
+{% for l in leads %}
+<div class="cab-item {% if l.is_processed %}done{% else %}pending{% endif %}">
+  <div class="cab-item-head">
+    <div>
+      <div class="cab-item-name">{{ l.name }}</div>
+      <div class="cab-item-meta">{{ l.created_at|date:"d E Y, H:i" }}</div>
+    </div>
+    {% if l.is_processed %}<span class="cab-tag done">Обработана</span>{% else %}<span class="cab-tag new">Новая</span>{% endif %}
+  </div>
+  <div class="cab-item-body">
+    📞 <a class="cab-phone" href="tel:{{ l.phone }}">{{ l.phone }}</a>
+    {% if l.message %}<div style="margin-top:8px;">{{ l.message }}</div>{% endif %}
+  </div>
+  <div class="cab-item-actions">
+    <form method="post" action="{% url 'cabinet_lead_toggle' l.id %}">{% csrf_token %}
+      {% if l.is_processed %}
+        <button class="cab-btn cab-btn-ghost cab-btn-sm">Вернуть в новые</button>
+      {% else %}
+        <button class="cab-btn cab-btn-ok cab-btn-sm">✓ Я связался(ась)</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% empty %}
+<div class="cab-empty"><span class="big">📭</span>Пока заявок нет. Они появятся здесь, когда кто-то заполнит форму на сайте.</div>
+{% endfor %}
+{% endblock %}

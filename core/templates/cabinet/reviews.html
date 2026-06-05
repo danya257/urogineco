@@ -1,0 +1,33 @@
+{% extends 'cabinet/base.html' %}
+{% block title %}Отзывы{% endblock %}
+{% block back %}<a class="cab-back" href="{% url 'cabinet' %}">← В кабинет</a>{% endblock %}
+{% block content %}
+<h1 class="cab-h1">Отзывы</h1>
+<p class="cab-lead">Новые отзывы сначала скрыты. Прочитайте и нажмите «Показать на сайте», если отзыв хороший.</p>
+
+{% for r in reviews %}
+<div class="cab-item {% if not r.is_published %}pending{% endif %}">
+  <div class="cab-item-head">
+    <div>
+      <div class="cab-item-name">{{ r.name }}{% if r.age %}, {{ r.age }} лет{% endif %}</div>
+      <div class="cab-item-meta">{{ r.created_at|date:"d E Y" }}</div>
+    </div>
+    {% if r.is_published %}<span class="cab-tag on">На сайте</span>{% else %}<span class="cab-tag off">Скрыт</span>{% endif %}
+  </div>
+  <div class="cab-item-body">{{ r.text|safe }}</div>
+  <div class="cab-item-actions">
+    {% if r.is_published %}
+      <form method="post" action="{% url 'cabinet_review_action' r.id 'hide' %}">{% csrf_token %}
+        <button class="cab-btn cab-btn-warn cab-btn-sm">Скрыть с сайта</button></form>
+    {% else %}
+      <form method="post" action="{% url 'cabinet_review_action' r.id 'publish' %}">{% csrf_token %}
+        <button class="cab-btn cab-btn-ok cab-btn-sm">✓ Показать на сайте</button></form>
+    {% endif %}
+    <form method="post" action="{% url 'cabinet_review_action' r.id 'delete' %}" onsubmit="return confirm('Удалить этот отзыв навсегда?');">{% csrf_token %}
+      <button class="cab-btn cab-btn-danger cab-btn-sm">Удалить</button></form>
+  </div>
+</div>
+{% empty %}
+<div class="cab-empty"><span class="big">⭐</span>Отзывов пока нет.</div>
+{% endfor %}
+{% endblock %}

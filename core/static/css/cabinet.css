@@ -1,0 +1,167 @@
+/* ============================================================
+   Кабинет — простой крупный интерфейс для пожилого пользователя
+   ============================================================ */
+:root {
+  --c-ink: #1a2b27;
+  --c-muted: #5a6b66;
+  --c-teal: #1f6e78;
+  --c-teal-dark: #155055;
+  --c-aqua: #2d9aa3;
+  --c-bg: #eef2f1;
+  --c-card: #ffffff;
+  --c-line: #d8e0de;
+  --c-ok: #1f8a4c;
+  --c-ok-bg: #e6f5ec;
+  --c-warn: #b4621f;
+  --c-danger: #c0392b;
+  --c-shadow: 0 4px 18px rgba(20,50,45,.08);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Manrope", "Segoe UI", system-ui, sans-serif;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--c-ink);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--c-teal); }
+
+/* ---------- Top bar ---------- */
+.cab-top {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 22px;
+  background: #fff; border-bottom: 1px solid var(--c-line);
+  box-shadow: var(--c-shadow);
+}
+.cab-brand { font-size: 1.35rem; font-weight: 800; color: var(--c-ink); text-decoration: none; }
+.cab-top-right { display: flex; align-items: center; gap: 10px; }
+.cab-link {
+  text-decoration: none; font-weight: 700; font-size: 1rem;
+  padding: 11px 18px; border-radius: 12px; color: var(--c-teal);
+  border: 2px solid var(--c-line); background: #fff;
+}
+.cab-link:hover { border-color: var(--c-teal); background: #f3f8f7; }
+.cab-logout { color: var(--c-danger); border-color: #f0d5d2; }
+.cab-logout:hover { background: var(--c-danger); color: #fff; border-color: var(--c-danger); }
+
+/* ---------- Layout ---------- */
+.cab-main { max-width: 860px; margin: 0 auto; padding: 30px 22px 80px; }
+.cab-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 1.05rem; font-weight: 700; text-decoration: none;
+  color: var(--c-teal); margin-bottom: 20px;
+}
+.cab-back:hover { text-decoration: underline; }
+h1.cab-h1 { font-size: 2.1rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -.01em; }
+.cab-lead { font-size: 1.12rem; color: var(--c-muted); margin: 0 0 26px; }
+
+/* ---------- Messages ---------- */
+.cab-messages { margin-bottom: 22px; }
+.cab-msg {
+  background: var(--c-ok-bg); color: var(--c-ok);
+  border: 2px solid #bfe6cd; border-radius: 14px;
+  padding: 16px 20px; font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ---------- Dashboard cards ---------- */
+.cab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+@media (max-width: 620px) { .cab-grid { grid-template-columns: 1fr; } }
+.cab-card {
+  display: flex; align-items: flex-start; gap: 18px;
+  background: var(--c-card); border: 2px solid var(--c-line);
+  border-radius: 20px; padding: 24px; text-decoration: none; color: var(--c-ink);
+  box-shadow: var(--c-shadow); transition: transform .15s, border-color .15s, box-shadow .15s;
+  position: relative;
+}
+.cab-card:hover { transform: translateY(-3px); border-color: var(--c-teal); box-shadow: 0 12px 30px rgba(20,50,45,.14); }
+.cab-card .ico { font-size: 2.6rem; line-height: 1; flex: none; }
+.cab-card .ct { font-size: 1.3rem; font-weight: 800; }
+.cab-card .cs { font-size: 1rem; color: var(--c-muted); margin-top: 4px; }
+.cab-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--c-danger); color: #fff; font-weight: 800; font-size: .95rem;
+  min-width: 30px; height: 30px; padding: 0 9px;
+  border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+}
+.cab-badge.muted { background: var(--c-muted); }
+
+/* ---------- Buttons ---------- */
+.cab-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  font-family: inherit; font-size: 1.15rem; font-weight: 800;
+  padding: 16px 30px; min-height: 58px; border-radius: 14px;
+  border: 2px solid transparent; cursor: pointer; text-decoration: none;
+  background: var(--c-teal); color: #fff; transition: background .15s, transform .1s;
+}
+.cab-btn:hover { background: var(--c-teal-dark); }
+.cab-btn:active { transform: scale(.98); }
+.cab-btn-lg { width: 100%; font-size: 1.25rem; padding: 18px; }
+.cab-btn-ghost { background: #fff; color: var(--c-teal); border-color: var(--c-line); }
+.cab-btn-ghost:hover { background: #f3f8f7; border-color: var(--c-teal); }
+.cab-btn-ok { background: var(--c-ok); }
+.cab-btn-ok:hover { background: #176b3a; }
+.cab-btn-warn { background: #fff; color: var(--c-warn); border-color: #ecd6c3; }
+.cab-btn-warn:hover { background: var(--c-warn); color: #fff; }
+.cab-btn-danger { background: #fff; color: var(--c-danger); border-color: #f0d5d2; }
+.cab-btn-danger:hover { background: var(--c-danger); color: #fff; }
+.cab-btn-sm { font-size: 1rem; padding: 11px 18px; min-height: 46px; }
+
+/* ---------- Forms ---------- */
+.cab-form { background: var(--c-card); border: 2px solid var(--c-line); border-radius: 20px; padding: 28px; box-shadow: var(--c-shadow); }
+.cab-field { margin-bottom: 24px; }
+.cab-field > label {
+  display: block; font-size: 1.12rem; font-weight: 800; margin-bottom: 9px; color: var(--c-ink);
+}
+.cab-input {
+  width: 100%; font-family: inherit; font-size: 1.1rem; color: var(--c-ink);
+  padding: 15px 17px; border: 2px solid var(--c-line); border-radius: 13px;
+  background: #fcfdfd; transition: border-color .15s, box-shadow .15s;
+}
+.cab-input:focus { outline: none; border-color: var(--c-teal); box-shadow: 0 0 0 4px rgba(31,110,120,.14); background: #fff; }
+textarea.cab-input { resize: vertical; min-height: 110px; line-height: 1.6; }
+.cab-help { font-size: .98rem; color: var(--c-muted); margin-top: 7px; }
+.cab-errors { list-style: none; padding: 0; margin: 8px 0 0; color: var(--c-danger); font-weight: 700; font-size: 1rem; }
+.cab-file { font-size: 1rem; padding: 10px 0; }
+.cab-current-img { margin-top: 10px; }
+.cab-current-img img { max-height: 130px; border-radius: 12px; border: 2px solid var(--c-line); }
+
+/* checkbox big */
+.cab-checkrow { display: flex; align-items: center; gap: 14px; padding: 8px 0; }
+.cab-checkrow input { width: 30px; height: 30px; accent-color: var(--c-teal); flex: none; cursor: pointer; }
+.cab-checkrow label { font-size: 1.12rem; font-weight: 700; cursor: pointer; }
+
+.cab-form-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+
+/* ---------- Item lists (leads, reviews, diary) ---------- */
+.cab-item {
+  background: var(--c-card); border: 2px solid var(--c-line); border-radius: 18px;
+  padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--c-shadow);
+}
+.cab-item.done { opacity: .62; }
+.cab-item.pending { border-color: #f0d9bf; }
+.cab-item-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.cab-item-name { font-size: 1.3rem; font-weight: 800; }
+.cab-item-meta { font-size: 1rem; color: var(--c-muted); margin-top: 2px; }
+.cab-item-body { font-size: 1.08rem; margin-top: 12px; line-height: 1.55; }
+.cab-tag { font-size: .92rem; font-weight: 800; padding: 6px 13px; border-radius: 999px; white-space: nowrap; }
+.cab-tag.new { background: #fdeede; color: var(--c-warn); }
+.cab-tag.done { background: var(--c-ok-bg); color: var(--c-ok); }
+.cab-tag.on { background: var(--c-ok-bg); color: var(--c-ok); }
+.cab-tag.off { background: #f1eceb; color: var(--c-muted); }
+.cab-item-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.cab-phone { font-size: 1.15rem; font-weight: 800; color: var(--c-teal); text-decoration: none; }
+.cab-phone:hover { text-decoration: underline; }
+
+.cab-empty { text-align: center; padding: 50px 20px; color: var(--c-muted); font-size: 1.15rem; }
+.cab-empty .big { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+/* ---------- Login ---------- */
+.cab-login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: linear-gradient(160deg, #19403f, #0c2a2c); }
+.cab-login-card { width: 100%; max-width: 430px; background: #fff; border-radius: 24px; padding: 38px 34px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+.cab-login-card h1 { font-size: 1.7rem; font-weight: 800; margin: 0 0 4px; text-align: center; }
+.cab-login-card .sub { text-align: center; color: var(--c-muted); margin: 0 0 26px; }
+.cab-login-err { background: #fbeae8; color: var(--c-danger); border: 2px solid #f0d5d2; border-radius: 12px; padding: 13px 16px; font-weight: 700; margin-bottom: 18px; font-size: 1rem; }
