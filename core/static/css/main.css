@@ -412,16 +412,42 @@ footer .container { display: flex; flex-direction: column; align-items: center; 
 @media (max-width: 1200px) {
   .mobile-menu-toggle { display: block; }
   .desktop-nav {
-    position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px);
-    flex-direction: column; align-items: flex-start; justify-content: center; gap: 22px;
-    padding: 40px; background: var(--teal-900);
-    transform: translateX(100%); transition: transform .5s var(--ease-out);
+    position: fixed; inset: 0 0 0 auto; width: min(86vw, 360px);
+    flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 6px;
+    padding: 88px 22px 32px;
+    background-color: #0C2A2C;           /* сплошной тёмный фон (явный hex) */
+    background-image: none;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    transform: translateX(100%); transition: transform .45s var(--ease-out);
     box-shadow: var(--shadow-lg);
   }
   .desktop-nav.active { transform: translateX(0); }
-  header:not(.scrolled) .desktop-nav a, .desktop-nav a { color: #fff; font-size: 1.05rem; }
-  .desktop-nav a:last-child { background: linear-gradient(120deg, var(--teal), var(--aqua)); }
+  /* текст меню — всегда белый, при любом состоянии шапки */
+  .desktop-nav a,
+  header .desktop-nav a,
+  header.scrolled .desktop-nav a,
+  header:not(.scrolled) .desktop-nav a {
+    color: #ffffff !important;
+    font-size: 1.12rem; font-weight: 600;
+    padding: 14px 16px; border-radius: 12px;
+    width: 100%; white-space: normal;
+  }
+  .desktop-nav a::after { display: none; }
+  .desktop-nav a:hover, .desktop-nav a:active { background: rgba(255,255,255,.10); }
+  .desktop-nav a:last-child {
+    margin-top: 12px; text-align: center; color: #ffffff !important;
+    background-image: linear-gradient(120deg, var(--teal), var(--aqua));
+    box-shadow: 0 8px 20px rgba(70,194,201,.3);
+  }
   #hero::after { background: linear-gradient(180deg, rgba(8,31,33,.4), rgba(8,31,33,.75)); }
+}
+
+/* затемнение позади открытого мобильного меню + блокировка прокрутки */
+body.menu-open { overflow: hidden; }
+body.menu-open::after {
+  content: ""; position: fixed; inset: 0; z-index: 90;
+  background: rgba(8, 20, 22, .55);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
 }
 @media (max-width: 560px) {
   body { font-size: 16px; }
