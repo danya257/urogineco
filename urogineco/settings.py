@@ -1,5 +1,5 @@
 """
-Django settings for urogineco project.
+Django settings for urogineco project — Beget hosting.
 """
 
 import os
@@ -9,25 +9,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY',
-    'django-insecure-r5x)y4pb)i#t57=ny@+70ub7(s#&(ke#^b8$o&jnr56g5tl*ow'
+    'dev-only-insecure-key'
 )
 
-DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
+DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'
 
 ALLOWED_HOSTS = [
-    'urogineco.onrender.com',
+    'drgvozkc.beget.tech',
+    'www.drgvozkc.beget.tech',
     '127.0.0.1',
     'localhost',
-    '192.168.2.148',
-    '0.0.0.0',
 ]
-# Для локальной разработки разрешаем любые хосты
-if DEBUG:
-    ALLOWED_HOSTS.append('*')
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_REFERRER_POLICY = 'same-origin'
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+# Secure-cookies включаются файлом-флагом HTTPS_ON рядом с manage.py, когда на домене заработает SSL
+HTTPS_ON = (BASE_DIR / 'HTTPS_ON').exists()
+SESSION_COOKIE_SECURE = HTTPS_ON
+CSRF_COOKIE_SECURE = HTTPS_ON
+CSRF_TRUSTED_ORIGINS = ['https://drgvozkc.beget.tech', 'http://drgvozkc.beget.tech']
+# HSTS включим когда убедимся что HTTPS 100% работает
+# SECURE_HSTS_SECONDS = 31536000
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,7 +65,8 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage" if not DEBUG
+        # На проде без ManifestStorage — CKEditor кидает css без хешей и падает при collectstatic --clear
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage" if not DEBUG
                    else "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
@@ -84,10 +92,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'urogineco.wsgi.application'
 
+# Beget автоматически создал MySQL БД при установке Django
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', 'drgvozkc_dj1'),
+        'USER': os.environ.get('DB_USER', 'drgvozkc_dj1'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+        },
     }
 }
 
@@ -107,10 +124,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static & Media
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = '/home/d/drgvozkc/drgvozkc.beget.tech/public_html/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/d/drgvozkc/drgvozkc.beget.tech/public_html/media'
 
 CKEDITOR_CONFIGS = {
     'minimal': {
@@ -135,21 +152,43 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+# Оператор ПД (для страниц политики и согласия по 152-ФЗ)
+OPERATOR_INFO = {
+    'name': 'Гвоздев Михаил Юрьевич',
+    'role': 'врач-урогинеколог',
+    'address': '',
+    'email': os.environ.get('OPERATOR_EMAIL', 'dr-gvozdev@mail.ru'),
+    'phone': os.environ.get('OPERATOR_PHONE', ''),
+    'site': 'https://drgvozkc.beget.tech',
+    'privacy_updated': '14.09.2026',
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {'class': 'logging.StreamHandler'},
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': '/home/d/drgvozkc/drgvozkc.beget.tech/public_html/HelloDjango/HelloDjango/tmp/django.log',
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {name}: {message}',
+            'style': '{',
+        },
     },
     'root': {'handlers': ['console']},
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'ERROR',
             'propagate': False,
         },

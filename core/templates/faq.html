@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}Вопрос — ответ | Гвоздев М.Ю.{% endblock %}
+{% block description %}Самые частые вопросы об операциях при недержании мочи, пролапсе, свищах: подготовка, наркоз, восстановление.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Наблюдения из&nbsp;практики</span>
+    <h1>Вопрос&nbsp;— <em>ответ</em></h1>
+    <p class="lead">Самые частые вопросы, которые задают на&nbsp;приёме. Если вашего вопроса здесь нет&nbsp;— напишите, я&nbsp;отвечу лично.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container-narrow">
+    {% if general_faqs %}
+    <div class="faq-list" data-stagger>
+      {% for f in general_faqs %}
+      <details class="faq-item reveal">
+        <summary><span>{{ f.question|typo }}</span><span class="useful-plus" aria-hidden="true"></span></summary>
+        <div class="faq-answer rich">{{ f.answer|safe|typo }}</div>
+      </details>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for group in faq_groups %}
+    <div class="faq-group">
+      <h2><a href="{{ group.disease.get_absolute_url }}">{{ group.disease.nav_title|typo }}</a></h2>
+      <div class="faq-list">
+        {% for f in group.items %}
+        <details class="faq-item reveal">
+          <summary><span>{{ f.question|typo }}</span><span class="useful-plus" aria-hidden="true"></span></summary>
+          <div class="faq-answer rich">{{ f.answer|safe|typo }}</div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    {% if not general_faqs and not faq_groups %}
+    <div class="empty"><div class="empty-icon"><i class="fas fa-circle-question"></i></div><h3>Раздел заполняется</h3></div>
+    {% endif %}
+  </div>
+</section>
+
+{% include 'partials/contact.html' %}
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}Пациенткам — памятки и подготовка | Гвоздев М.Ю.{% endblock %}
+{% block description %}Памятки пациенткам: подготовка к консультации и операции, дневник мочеиспускания, восстановление. Каждую памятку можно распечатать.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Пациенткам</span>
+    <h1>Важное перед <em>визитом</em></h1>
+    <p class="lead">Всё, что нужно знать о&nbsp;подготовке и&nbsp;восстановлении. Любую памятку можно открыть и&nbsp;распечатать.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if memos %}
+    <div class="memo-grid" data-stagger>
+      {% for m in memos %}
+      <a class="memo-card reveal" href="{{ m.get_absolute_url }}">
+        <span class="memo-num">{{ m.number }}</span>
+        <h3>{{ m.title|typo }}</h3>
+        {% if m.subtitle %}<p>{{ m.subtitle|typo }}</p>{% endif %}
+        <span class="memo-card-more">Открыть <i class="fas fa-arrow-right"></i></span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty"><div class="empty-icon"><i class="fas fa-clipboard-list"></i></div><h3>Памятки готовятся</h3></div>
+    {% endif %}
+  </div>
+</section>
+
+{% if useful_info.prep_consultation or useful_info.prep_surgery or useful_info.anesthesia_info or useful_info.postop_period %}
+<section class="section bg-paper">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">Коротко</span>
+      <h2>Ответы <em>в&nbsp;двух словах</em></h2>
+    </div>
+    <div class="useful-grid" data-stagger>
+      {% if useful_info.prep_consultation %}
+      <details class="useful-card reveal" open>
+        <summary><span class="useful-num">01</span><h3>Подготовка к&nbsp;консультации</h3><span class="useful-plus" aria-hidden="true"></span></summary>
+        <div class="useful-body rich">{{ useful_info.prep_consultation|safe|typo }}</div>
+      </details>
+      {% endif %}
+      {% if useful_info.prep_surgery %}
+      <details class="useful-card reveal" open>
+        <summary><span class="useful-num">02</span><h3>Подготовка к&nbsp;операции</h3><span class="useful-plus" aria-hidden="true"></span></summary>
+        <div class="useful-body rich">{{ useful_info.prep_surgery|safe|typo }}</div>
+      </details>
+      {% endif %}
+      {% if useful_info.anesthesia_info %}
+      <details class="useful-card reveal" open>
+        <summary><span class="useful-num">03</span><h3>Обезболивание</h3><span class="useful-plus" aria-hidden="true"></span></summary>
+        <div class="useful-body rich">{{ useful_info.anesthesia_info|safe|typo }}</div>
+      </details>
+      {% endif %}
+      {% if useful_info.postop_period %}
+      <details class="useful-card reveal" open>
+        <summary><span class="useful-num">04</span><h3>Послеоперационный период</h3><span class="useful-plus" aria-hidden="true"></span></summary>
+        <div class="useful-body rich">{{ useful_info.postop_period|safe|typo }}</div>
+      </details>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include 'partials/contact.html' %}
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

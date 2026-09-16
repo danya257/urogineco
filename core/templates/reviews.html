@@ -1,92 +1,56 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load typo %}
 
-{% block title %}Отзывы пациенток | Доктор Гвоздев М.Ю.{% endblock %}
+{% block title %}Отзывы пациенток — Гвоздев М.Ю.{% endblock %}
 
 {% block content %}
-<section id="reviews-page">
-  <div class="container">
-
-    <div class="reviews-header">
-      <div class="reviews-header-text">
-        <span class="eyebrow">Истории пациенток</span>
-        <h1>Отзывы и благодарности</h1>
-        <p class="text-muted" style="margin-top: 0.4rem;">Каждый отзыв — личная история возвращённого здоровья</p>
-      </div>
-      <a href="{% url 'add_review' %}" class="btn reviews-header-cta">
-        <i class="fas fa-pen-to-square"></i> Оставить отзыв
-      </a>
+<section class="page-hero">
+  <div class="container page-hero-row">
+    <div class="reveal">
+      <span class="eyebrow">Истории пациенток</span>
+      <h1>Отзывы <em>и&nbsp;благодарности</em></h1>
+      <p class="lead">Каждый отзыв публикуется после модерации и&nbsp;только с&nbsp;согласия автора.</p>
     </div>
+    <a href="{% url 'add_review' %}" class="btn reveal"><i class="fas fa-pen"></i> Оставить отзыв</a>
+  </div>
+</section>
 
-    <style>
-      .reviews-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        margin-bottom: clamp(2rem, 4vw, 3rem);
-      }
-      .reviews-header-text { flex: 1 1 280px; min-width: 0; }
-      @media (max-width: 600px) {
-        .reviews-header-cta { width: 100%; }
-      }
-    </style>
-
+<section class="page-body">
+  <div class="container">
     {% if testimonials %}
-      <div class="reviews-grid">
-        {% for test in testimonials %}
-          <article class="review-card">
-            <div class="review-text">{{ test.text|safe }}</div>
-            <div class="review-author">
-              {% if test.photo %}
-                <img src="{{ test.photo.url }}" alt="{{ test.name }}">
-              {% else %}
-                <span class="review-author-default">{{ test.name|first|upper }}</span>
-              {% endif %}
-              <div>
-                <div class="review-author-name">{{ test.name }}{% if test.age %}, {{ test.age }} лет{% endif %}</div>
-                <div class="review-author-meta">{{ test.created_at|date:"d E Y" }}</div>
-              </div>
-            </div>
-          </article>
-        {% endfor %}
+      <div class="reviews-grid" data-stagger>
+        {% for t in testimonials %}{% include 'partials/review_card.html' %}{% endfor %}
       </div>
 
       {% if page_obj.paginator.num_pages > 1 %}
-        <nav class="pagination" aria-label="Навигация по страницам">
-          {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" aria-label="Назад"><i class="fas fa-chevron-left"></i></a>
-          {% else %}
-            <span class="disabled" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+      <nav class="pagination" aria-label="Страницы отзывов">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая страница"><i class="fas fa-chevron-left"></i></a>
+        {% else %}
+          <span class="disabled" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <span class="current" aria-current="page">{{ num }}</span>
+          {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+            <a href="?page={{ num }}">{{ num }}</a>
           {% endif %}
-
-          {% for num in page_obj.paginator.page_range %}
-            {% if num == page_obj.number %}
-              <span class="current" aria-current="page">{{ num }}</span>
-            {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-              <a href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
-          {% endfor %}
-
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" aria-label="Вперёд"><i class="fas fa-chevron-right"></i></a>
-          {% else %}
-            <span class="disabled" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-          {% endif %}
-        </nav>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" aria-label="Следующая страница"><i class="fas fa-chevron-right"></i></a>
+        {% else %}
+          <span class="disabled" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        {% endif %}
+      </nav>
       {% endif %}
     {% else %}
-      <div class="card" style="text-align: center; padding: 4rem 2rem;">
-        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-comments"></i></span>
+      <div class="empty reveal">
+        <div class="empty-icon"><i class="fas fa-comment-medical"></i></div>
         <h3>Отзывов пока нет</h3>
-        <p class="text-muted">Будьте первой, кто поделится своей историей.</p>
-        <div style="margin-top: 1.5rem;">
-          <a href="{% url 'add_review' %}" class="btn">Оставить отзыв</a>
-        </div>
+        <p>Если вы лечились у&nbsp;Михаила Юрьевича, поделитесь опытом. Это поможет другим женщинам решиться на&nbsp;лечение.</p>
+        <a href="{% url 'add_review' %}" class="btn">Оставить первый отзыв</a>
       </div>
     {% endif %}
-
   </div>
 </section>
 {% endblock %}

@@ -1,53 +1,45 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load typo %}
 
-{% block title %}Оставить отзыв | Доктор Гвоздев М.Ю.{% endblock %}
+{% block title %}Оставить отзыв — Гвоздев М.Ю.{% endblock %}
 
 {% block content %}
-<section>
+<section class="page-hero">
   <div class="container">
-    <div style="max-width: 640px; margin: 0 auto;">
+    <a href="{% url 'reviews' %}" class="back-link"><i class="fas fa-arrow-left"></i> Все отзывы</a>
+    <div class="reveal" style="margin-top:1.2rem">
+      <span class="eyebrow">Поделитесь историей</span>
+      <h1>Оставить <em>отзыв</em></h1>
+      <p class="lead">Отзыв появится на&nbsp;сайте после проверки. Можно указать только имя, без фамилии.</p>
+    </div>
+  </div>
+</section>
 
-      <a href="{% url 'reviews' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
-        <i class="fas fa-chevron-left"></i> К отзывам
-      </a>
+<section class="page-body">
+  <div class="container">
+    <div class="form-card form-page reveal">
+      <form method="post" data-once>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<ul class="field-errors">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
 
-      <div class="contact-form-card">
-        <span class="eyebrow">Поделитесь историей</span>
-        <h3 style="margin-bottom: 0.4rem;">Оставить отзыв</h3>
-        <p class="form-intro">
-          Ваш отзыв поможет другим женщинам решиться на лечение. Публикуется после модерации.
-        </p>
+        {% for field in form %}{% if field.name != 'consent' %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="req">*</span>{% endif %}</label>
+          {{ field }}
+          {% if field.help_text %}<span class="field-hint">{{ field.help_text }}</span>{% endif %}
+          {% if field.errors %}<ul class="field-errors">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+        {% endif %}{% endfor %}
 
-        <form method="post" novalidate>
-          {% csrf_token %}
-          {% for field in form %}
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span style="color: var(--primary);">*</span>{% endif %}</label>
-              {{ field }}
-              {% if field.help_text %}
-                <small style="color: var(--text-soft); font-size: 0.82rem; display: block; margin-top: 0.3rem;">{{ field.help_text }}</small>
-              {% endif %}
-              {% if field.errors %}
-                <ul class="field-errors">
-                  {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          {% endfor %}
+        <div class="consent">
+          <input type="checkbox" id="{{ form.consent.id_for_label }}" name="{{ form.consent.html_name }}" required {% if form.consent.value %}checked{% endif %}>
+          <label for="{{ form.consent.id_for_label }}">Даю <a href="{% url 'consent' %}" target="_blank">согласие на&nbsp;обработку персональных данных</a> и&nbsp;публикацию отзыва на&nbsp;сайте, принимаю <a href="{% url 'privacy' %}" target="_blank">политику конфиденциальности</a>.</label>
+        </div>
+        {% if form.consent.errors %}<ul class="field-errors" style="margin-top:-.8rem;margin-bottom:1rem">{% for e in form.consent.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
 
-          <div style="display: flex; gap: 0.6rem; margin-top: 0.5rem; flex-wrap: wrap;">
-            <button type="submit" class="btn" style="flex: 1; min-width: 200px;">
-              <i class="fas fa-paper-plane"></i> Отправить на модерацию
-            </button>
-            <a href="{% url 'reviews' %}" class="btn btn-ghost">Отмена</a>
-          </div>
-
-          <p style="margin-top: 1.2rem; font-size: 0.82rem; color: var(--text-soft); text-align: center;">
-            Отправляя отзыв, вы соглашаетесь на его публикацию на сайте
-          </p>
-        </form>
-      </div>
+        <button type="submit" class="btn btn-block"><i class="fas fa-paper-plane"></i> Отправить на&nbsp;модерацию</button>
+        <p class="form-note">Поля со&nbsp;звёздочкой обязательны</p>
+      </form>
     </div>
   </div>
 </section>

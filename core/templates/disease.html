@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}{{ disease.title }} — Гвоздев М.Ю.{% endblock %}
+{% block description %}{{ disease.short_description|default:disease.subtitle }}{% endblock %}
+
+{% block content %}
+
+<section class="disease-hero{% if disease.banner %} has-photo{% endif %}">
+  {% if disease.banner %}<img class="disease-hero-bg" src="{{ disease.banner.url }}" alt="" aria-hidden="true">{% endif %}
+  <div class="disease-hero-shade" aria-hidden="true"></div>
+  <div class="container disease-hero-body">
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="/">Главная</a> <span aria-hidden="true">/</span> <a href="{% url 'diseases' %}">Операции</a>
+    </nav>
+    <h1>{{ disease.title|accent_title }}</h1>
+    {% if disease.subtitle %}<p class="disease-hero-sub">{{ disease.subtitle|typo }}</p>{% endif %}
+    <p class="disease-hero-doc">Гвоздев М.Ю.&nbsp;— д.м.н., профессор, урогинеколог</p>
+    {% if disease.counter %}<p class="disease-hero-counter"><i class="fas fa-notes-medical"></i> {{ disease.counter|typo }}</p>{% endif %}
+    <div class="hero-cta">
+      <a href="#contact" class="btn">Записаться на&nbsp;консультацию <i class="fas fa-arrow-right btn-arrow"></i></a>
+    </div>
+  </div>
+</section>
+
+<nav class="disease-tabs" aria-label="Заболевания">
+  <div class="container disease-tabs-row">
+    {% for d in diseases %}
+    <a href="{{ d.get_absolute_url }}"{% if d.pk == disease.pk %} class="is-active" aria-current="page"{% endif %}>{{ d.nav_title|typo }}</a>
+    {% endfor %}
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container disease-layout">
+    <div class="disease-main">
+      {% if disease.video_file or disease.video_url %}
+      <div class="disease-video reveal">
+        {% if disease.video_file %}
+        <video controls playsinline preload="metadata" {% if disease.video_poster %}poster="{{ disease.video_poster.url }}"{% elif disease.banner %}poster="{{ disease.banner.url }}"{% endif %}>
+          <source src="{{ disease.video_file.url }}" type="video/mp4">
+          Ваш браузер не поддерживает воспроизведение видео.
+        </video>
+        {% else %}
+        <a class="video-link" href="{{ disease.video_url }}" target="_blank" rel="noopener">
+          {% if disease.video_poster %}<img src="{{ disease.video_poster.url }}" alt="Видео о лечении" loading="lazy">{% endif %}
+          <span class="video-play"><i class="fas fa-play"></i></span>
+          <span class="video-caption">Смотреть видео</span>
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if disease.lead %}<div class="rich lead-rich reveal">{{ disease.lead|safe|typo }}</div>{% endif %}
+
+      {% if disease.highlight_title or disease.highlight_text %}
+      <aside class="disease-note reveal">
+        {% if disease.highlight_title %}<h2>{{ disease.highlight_title|typo }}</h2>{% endif %}
+        <div class="rich">{{ disease.highlight_text|safe|typo }}</div>
+      </aside>
+      {% endif %}
+
+      {% if disease.advantages %}
+      <div class="disease-block reveal">
+        <h2>Преимущества</h2>
+        <div class="rich check-list">{{ disease.advantages|safe|typo }}</div>
+      </div>
+      {% endif %}
+
+      {% if disease.benefits %}
+      <div class="disease-block reveal">
+        <h2>Основные плюсы операции</h2>
+        <div class="rich check-list">{{ disease.benefits|safe|typo }}</div>
+      </div>
+      {% endif %}
+
+      {% if disease.details %}
+      <div class="disease-block reveal">
+        <h2>Подробнее об&nbsp;операции</h2>
+        <div class="rich">{{ disease.details|safe|typo }}</div>
+      </div>
+      {% endif %}
+
+      {% if disease.about %}
+      <div class="disease-block reveal">
+        <h2>Подробнее о&nbsp;заболевании</h2>
+        <div class="rich">{{ disease.about|safe|typo }}</div>
+      </div>
+      {% endif %}
+
+      {% if disease.appeal %}
+      <div class="disease-appeal reveal">
+        <div class="rich">{{ disease.appeal|safe|typo }}</div>
+        <a href="#contact" class="btn btn-gold">Записаться ко&nbsp;мне на&nbsp;приём <i class="fas fa-arrow-right btn-arrow"></i></a>
+      </div>
+      {% endif %}
+
+      {% if faqs %}
+      <div class="disease-block reveal" id="faq">
+        <h2>Вопрос&nbsp;— ответ</h2>
+        <div class="faq-list">
+          {% for f in faqs %}
+          <details class="faq-item">
+            <summary><span>{{ f.question|typo }}</span><span class="useful-plus" aria-hidden="true"></span></summary>
+            <div class="faq-answer rich">{{ f.answer|safe|typo }}</div>
+          </details>
+          {% endfor %}
+        </div>
+        <p style="margin-top:1.4rem"><a href="{% url 'faq' %}" class="link-arrow">Все вопросы и&nbsp;ответы <i class="fas fa-arrow-right"></i></a></p>
+      </div>
+      {% endif %}
+    </div>
+
+    <aside class="disease-side">
+      <div class="side-card reveal">
+        <h3>Полезное рядом</h3>
+        <ul class="side-links">
+          <li><a href="{% url 'about' %}"><i class="fas fa-user-doctor"></i> Обо мне</a></li>
+          {% if disease.memo %}<li><a href="{{ disease.memo.get_absolute_url }}"><i class="fas fa-file-lines"></i> Памятка пациентке</a></li>{% endif %}
+          <li><a href="{% url 'memos' %}"><i class="fas fa-clipboard-list"></i> Все памятки</a></li>
+          <li><a href="{% url 'faq' %}"><i class="fas fa-circle-question"></i> Вопрос&nbsp;— ответ</a></li>
+          <li><a href="{% url 'reviews' %}"><i class="fas fa-comment-dots"></i> Отзывы пациенток</a></li>
+        </ul>
+      </div>
+      {% if disease.memo %}
+      <div class="side-card side-card-accent reveal">
+        <h3>{{ disease.memo.title|typo }}</h3>
+        {% if disease.memo.subtitle %}<p>{{ disease.memo.subtitle|typo }}</p>{% endif %}
+        <a href="{{ disease.memo.get_absolute_url }}" class="btn btn-sm">Открыть памятку</a>
+      </div>
+      {% endif %}
+      <div class="side-card reveal">
+        <h3>Записаться</h3>
+        <p>Задайте вопрос или опишите ситуацию&nbsp;— отвечу лично.</p>
+        <a href="#contact" class="btn btn-sm btn-gold">Оставить заявку</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% include 'partials/clinics.html' %}
+{% include 'partials/contact.html' %}
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

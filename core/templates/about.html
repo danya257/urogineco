@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}Обо мне — Гвоздев Михаил Юрьевич, врач-урогинеколог{% endblock %}
+{% block description %}Гвоздев Михаил Юрьевич — д.м.н., профессор кафедры урологии Российского университета медицины, заслуженный врач РФ. Более 30 лет практики и 20 000 операций.{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="container about-hero-grid">
+    <div class="about-hero-body">
+      <span class="eyebrow">Обо мне</span>
+      <h1>Опыт, которому <em>доверяют</em></h1>
+      {% if hero_stats %}
+      <div class="hero-facts">
+        {% for st in hero_stats %}
+        <div class="hero-fact">
+          <span class="hero-fact-num">{{ st.value }}</span>
+          <span class="hero-fact-label">{{ st.label|typo }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% if hero.image %}
+    <div class="about-hero-media">
+      <img src="{{ hero.image.url }}" alt="Гвоздев Михаил Юрьевич" width="700" height="875">
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-grid">
+    <div class="about-body reveal">
+      <div class="rich">{{ about_doctor.bio|safe|typo }}</div>
+      {% if about_doctor.patents %}<div class="rich" style="margin-top:1.4rem">{{ about_doctor.patents|safe|typo }}</div>{% endif %}
+      {% if about_doctor.awards %}<div class="rich" style="margin-top:1.4rem">{{ about_doctor.awards|safe|typo }}</div>{% endif %}
+    </div>
+    <div class="creds" data-stagger>
+      {% for a in achievements %}
+      <div class="cred reveal">
+        <span class="cred-icon"><i class="fas {% cycle 'fa-award' 'fa-user-doctor' 'fa-certificate' 'fa-book-open' %}"></i></span>
+        <div>
+          <div class="cred-title">{{ a.title|typo }}</div>
+          <div class="cred-text">{{ a.description|safe|typo }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if education_items %}
+  <div class="container">
+    <div class="timeline reveal timeline-light">
+      <h3>Путь в&nbsp;профессии</h3>
+      <ol class="timeline-list">
+        {% for e in education_items %}
+        <li class="timeline-item">
+          <div class="timeline-year">{{ e.year }}</div>
+          <div class="timeline-title">{{ e.title|typo }}</div>
+          <div class="timeline-text">{{ e.description|plain }}</div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+{% if letter.is_visible and letter.text %}
+<section class="section bg-paper letter-section">
+  <div class="container letter-grid letter-solo">
+    <div class="letter-body reveal">
+      <span class="eyebrow">Обращение врача</span>
+      <h2>{{ letter.greeting|typo }}</h2>
+      <p class="letter-intro">{{ letter.intro|typo }}</p>
+      <div class="rich letter-text">{{ letter.text|safe|typo }}</div>
+      {% if letter.signature %}<p class="letter-sign">{{ letter.signature|typo }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include 'partials/clinics.html' %}
+{% include 'partials/contact.html' %}
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

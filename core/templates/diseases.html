@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}Операции и заболевания — Гвоздев М.Ю.{% endblock %}
+{% block description %}Хирургическое лечение недержания мочи, пролапса тазовых органов, свищей, кист и дивертикулов уретры, осложнений после операций.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Что я&nbsp;лечу</span>
+    <h1>Операции <em>и&nbsp;заболевания</em></h1>
+    <p class="lead">Выберите направление&nbsp;— на&nbsp;странице заболевания подробно описано, как проходит операция, восстановление и&nbsp;чего ждать после.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if diseases %}
+    <div class="services-grid" data-stagger>
+      {% for d in diseases %}
+      <a class="service-card is-link reveal" href="{{ d.get_absolute_url }}">
+        <div class="service-top">
+          <span class="service-icon"><i class="fas {{ d.icon|default:'fa-stethoscope' }}"></i></span>
+          <span class="service-num" aria-hidden="true"></span>
+        </div>
+        <h3>{{ d.nav_title|typo }}</h3>
+        <p class="service-text">{{ d.short_description|typo }}</p>
+        {% if d.counter %}<p class="service-counter">{{ d.counter|typo }}</p>{% endif %}
+        <span class="service-more">Подробнее <i class="fas fa-arrow-right"></i></span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty"><div class="empty-icon"><i class="fas fa-stethoscope"></i></div><h3>Раздел заполняется</h3></div>
+    {% endif %}
+  </div>
+</section>
+
+{% include 'partials/clinics.html' %}
+{% include 'partials/contact.html' %}
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

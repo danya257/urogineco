@@ -1,112 +1,160 @@
-{% load static %}<!DOCTYPE html>
+{% load static typo %}<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ seo_info.meta_description|default:'Врач-урогинеколог высшей категории. Деликатное и профессиональное лечение пролапса, недержания, свищей. Автор патентованной методики.' }}">
-    <meta name="theme-color" content="#FAF6F1">
-    <title>{% block title %}{{ seo_info.meta_title|default:"Доктор Гвоздев М.Ю. | Урогинеколог в Москве" }}{% endblock %}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    {% block extra_css %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ seo_info.meta_title|default:"Гвоздев М.Ю. — врач-урогинеколог" }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ seo_info.meta_description|default:'Врач-урогинеколог, д.м.н., профессор. Хирургическое лечение недержания мочи, пролапса тазовых органов, свищей.' }}{% endblock %}">
+  <meta name="theme-color" content="#12271E">
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function(){if(!window.__reveal){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')})}},3000);
+  </script>
+  <link rel="preload" href="{% static 'vendor/fonts/CormorantGaramond-normal-500-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'vendor/fonts/Inter-normal-400-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'vendor/css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260916c">
+  {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
-<header>
-    <div class="header-inner">
-        <a href="/" class="logo">
-            <span class="logo-mark" aria-hidden="true"></span>
-            <span>Гвоздев<span style="color: var(--primary)">.</span>МЮ</span>
-        </a>
-        <button class="mobile-menu-toggle" aria-label="Открыть меню" aria-controls="main-nav" aria-expanded="false">
-            <i class="fas fa-bars"></i>
-        </button>
-        <nav id="main-nav" class="desktop-nav" aria-label="Главное меню">
-            <a href="/">Главная</a>
-            <a href="/#procedures">Операции</a>
-            <a href="/#about">Обо мне</a>
-            <a href="/#useful">Пациенткам</a>
-            <a href="{% url 'diary' %}">Дневник</a>
-            <a href="{% url 'reviews' %}">Отзывы</a>
-            <a href="{% url 'events' %}">События</a>
-            <a href="/#clinics">Клиники</a>
-            <a href="/#contact" class="nav-cta">Записаться</a>
-        </nav>
-    </div>
+<a class="skip-link" href="#main">К содержимому</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Михаил Гвоздев — на главную">
+      <span class="brand-mark" aria-hidden="true">МГ</span>
+      <span class="brand-text">
+        <span class="brand-name">Михаил Гвоздев</span>
+        <span class="brand-sub">врач-урогинеколог</span>
+      </span>
+    </a>
+
+    <nav id="main-nav" class="main-nav" aria-label="Главное меню">
+      <span class="nav-item{% if nav_diseases %} has-sub{% endif %}">
+        <a href="{% url 'diseases' %}">Операции</a>
+        {% if nav_diseases %}
+        <button class="nav-sub-toggle" type="button" aria-expanded="false" aria-label="Показать список операций"><i class="fas fa-chevron-down"></i></button>
+        <span class="nav-sub" role="group" aria-label="Операции">
+          <a href="{% url 'diseases' %}">Все направления</a>
+          {% for d in nav_diseases %}<a href="{{ d.get_absolute_url }}">{{ d.nav_title }}</a>{% endfor %}
+          <a href="{% url 'faq' %}">Вопрос&#8209;ответ</a>
+        </span>
+        {% endif %}
+      </span>
+      <a href="{% url 'about' %}">Обо мне</a>
+      <a href="{% url 'memos' %}">Пациенткам</a>
+      <a href="{% url 'diary' %}">Дневник</a>
+      <a href="{% url 'events' %}">Мероприятия</a>
+      <a href="{% url 'reviews' %}">Отзывы</a>
+      <a href="/#clinics">Клиники</a>
+      <span class="nav-msg">
+        {% if contact_info.telegram_link %}<a href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener" class="msg-link tg" aria-label="Написать в Telegram" title="Telegram"><i class="fab fa-telegram-plane"></i></a>{% endif %}
+        {% if contact_info.max_link %}<a href="{{ contact_info.max_link }}" target="_blank" rel="noopener" class="msg-link max" aria-label="Написать в MAX" title="MAX">MAX</a>{% endif %}
+        {% if contact_info.whatsapp_link %}<a href="{{ contact_info.whatsapp_link }}" target="_blank" rel="noopener" class="msg-link wa" aria-label="Написать в WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>{% endif %}
+      </span>
+      <a href="/#contact" class="btn btn-sm nav-cta">Записаться</a>
+      <div class="nav-drawer-foot">
+        {% if contact_info.telegram_link %}<a href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener"><i class="fab fa-telegram-plane"></i> Написать в&nbsp;Telegram</a>{% endif %}
+        {% if contact_info.max_link %}<a href="{{ contact_info.max_link }}" target="_blank" rel="noopener"><i class="fas fa-comment"></i> Написать в&nbsp;MAX</a>{% endif %}
+        {% if contact_info.email %}<a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a>{% endif %}
+        <p>Ответ на заявку — в течение 24 часов</p>
+      </div>
+    </nav>
+
+    <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Открыть меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
+<div class="nav-backdrop" aria-hidden="true"></div>
 
 {% if messages %}
-<div class="messages-wrap">
-    <div class="container">
-        <ul class="messages">
-            {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+<ul class="toasts" role="status" aria-live="polite">
+  {% for message in messages %}
+  <li class="toast {{ message.tags }}">
+    <span class="toast-icon" aria-hidden="true"><i class="fas {% if message.tags == 'error' %}fa-exclamation{% else %}fa-check{% endif %}"></i></span>
+    <span>{{ message|typo }}</span>
+    <button class="toast-close" type="button" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+  </li>
+  {% endfor %}
+</ul>
 {% endif %}
 
-<main>
-    {% block content %}{% endblock %}
+<main id="main">
+  {% block content %}{% endblock %}
 </main>
 
-<footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="/" class="logo">
-                    <span class="logo-mark" aria-hidden="true"></span>
-                    <span style="color: white">Гвоздев<span style="color: var(--primary)">.</span>МЮ</span>
-                </a>
-                <p class="footer-tag">
-                    Врач-урогинеколог высшей категории. Помогаю женщинам вернуть здоровье и качество жизни — деликатно, профессионально, без боли.
-                </p>
-                <div class="social-icons">
-                    {% if contact_info.telegram_link %}
-                    <a href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                    {% endif %}
-                    {% if contact_info.whatsapp_link %}
-                    <a href="{{ contact_info.whatsapp_link }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    {% endif %}
-                    {% if contact_info.email %}
-                    <a href="mailto:{{ contact_info.email }}" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div>
-                <h4>Разделы</h4>
-                <ul>
-                    <li><a href="/">Главная</a></li>
-                    <li><a href="/#procedures">Операции</a></li>
-                    <li><a href="/#about">Обо мне</a></li>
-                    <li><a href="/#useful">Пациенткам</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4>Полезное</h4>
-                <ul>
-                    <li><a href="{% url 'diary' %}">Дневник врача</a></li>
-                    <li><a href="{% url 'reviews' %}">Отзывы</a></li>
-                    <li><a href="{% url 'events' %}">События</a></li>
-                    <li><a href="/#clinics">Адреса клиник</a></li>
-                    <li><a href="/#contact">Записаться</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © {% now "Y" %} Доктор Гвоздев М.Ю. Все права защищены.
-        </div>
+<footer class="site-footer">
+  <div class="container">
+    {% block footer_cta %}
+    <div class="footer-cta">
+      <h2>Первый шаг к&nbsp;здоровью — <em>просто написать</em></h2>
+      <a href="/#contact" class="btn btn-gold">Записаться на&nbsp;консультацию <i class="fas fa-arrow-right btn-arrow"></i></a>
     </div>
+    {% endblock %}
+
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="brand">
+          <span class="brand-mark" aria-hidden="true">МГ</span>
+          <span class="brand-text">
+            <span class="brand-name">Михаил Гвоздев</span>
+            <span class="brand-sub">врач-урогинеколог</span>
+          </span>
+        </a>
+        <p class="footer-about">Доктор медицинских наук, профессор кафедры урологии Российского университета медицины Минздрава России, заслуженный врач Российской Федерации.</p>
+        {% if contact_info.email %}
+        <p style="margin-top:1rem"><a class="link-arrow" style="color:var(--gold-light)" href="mailto:{{ contact_info.email }}"><i class="fas fa-envelope"></i> {{ contact_info.email }}</a></p>
+        {% endif %}
+        <div class="footer-msg">
+          {% if contact_info.telegram_link %}<a href="{{ contact_info.telegram_link }}" target="_blank" rel="noopener"><i class="fab fa-telegram-plane"></i> Telegram</a>{% endif %}
+          {% if contact_info.max_link %}<a href="{{ contact_info.max_link }}" target="_blank" rel="noopener"><i class="fas fa-comment"></i> MAX</a>{% endif %}
+          {% if contact_info.whatsapp_link %}<a href="{{ contact_info.whatsapp_link }}" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a>{% endif %}
+        </div>
+      </div>
+      <div>
+        <div class="footer-title">Разделы</div>
+        <ul class="footer-links">
+          <li><a href="{% url 'diseases' %}">Операции</a></li>
+          <li><a href="{% url 'about' %}">Обо мне</a></li>
+          <li><a href="{% url 'memos' %}">Пациенткам</a></li>
+          <li><a href="{% url 'faq' %}">Вопрос-ответ</a></li>
+          <li><a href="/#clinics">Клиники</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-title">Материалы</div>
+        <ul class="footer-links">
+          <li><a href="{% url 'diary' %}">Дневник врача</a></li>
+          <li><a href="{% url 'events' %}">Мероприятия</a></li>
+          <li><a href="{% url 'reviews' %}">Отзывы</a></li>
+          <li><a href="{% url 'faq' %}">Вопрос-ответ</a></li>
+          <li><a href="{% url 'add_review' %}">Оставить отзыв</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <span>© {% now "Y" %} Гвоздев Михаил Юрьевич</span>
+      <nav aria-label="Правовая информация">
+        <a href="{% url 'privacy' %}">Политика конфиденциальности</a>
+        <a href="{% url 'consent' %}">Согласие на&nbsp;обработку данных</a>
+        <a href="{% url 'disclaimer' %}">Информация об&nbsp;услугах</a>
+      </nav>
+    </div>
+    <p class="footer-warning">18+ · Имеются противопоказания, необходима консультация специалиста. Информация на&nbsp;сайте носит справочный характер и&nbsp;не&nbsp;является публичной офертой.</p>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">Гвоздев</div>
 </footer>
 
-<script src="{% static 'js/main.js' %}"></script>
-{% block extra_js %}{% endblock %}
+<div class="cookie" id="cookie" role="dialog" aria-label="Уведомление о cookies" hidden>
+  <p>Сайт использует cookies, чтобы работали формы. Продолжая, вы соглашаетесь с&nbsp;<a href="{% url 'privacy' %}">политикой конфиденциальности</a>.</p>
+  <button type="button" class="btn btn-sm btn-gold" id="cookie-ok">Понятно</button>
+</div>
 
+<script src="{% static 'js/main.js' %}?v=20260916c" defer></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

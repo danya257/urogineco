@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load typo %}
+
+{% block title %}{{ memo.title }} — памятка пациентке | Гвоздев М.Ю.{% endblock %}
+{% block description %}{{ memo.subtitle|default:memo.title }}{% endblock %}
+
+{% block body_class %}memo-page{% endblock %}
+
+{% block content %}
+<article class="section memo-sheet">
+  <div class="container container-narrow">
+    <nav class="crumbs no-print" aria-label="Хлебные крошки">
+      <a href="/">Главная</a> <span aria-hidden="true">/</span> <a href="{% url 'memos' %}">Пациенткам</a>
+    </nav>
+
+    <header class="memo-head">
+      {% if memo.number %}<span class="memo-num big">{{ memo.number }}</span>{% endif %}
+      <h1>{{ memo.title|typo }}</h1>
+      {% if memo.subtitle %}<p class="lead">{{ memo.subtitle|typo }}</p>{% endif %}
+      <p class="memo-author">Гвоздев Михаил Юрьевич&nbsp;— д.м.н., профессор, врач-урогинеколог</p>
+    </header>
+
+    <div class="memo-actions no-print">
+      <button type="button" class="btn btn-sm js-print"><i class="fas fa-print"></i> Распечатать</button>
+      {% if memo.file %}<a href="{{ memo.file.url }}" class="btn btn-sm btn-ghost" download><i class="fas fa-download"></i> Скачать файл</a>{% endif %}
+    </div>
+
+    {% if memo.body %}
+    <div class="rich memo-body">{{ memo.body|safe|typo }}</div>
+    {% else %}
+    <p class="memo-body">Текст памятки готовится. Пока вы&nbsp;можете задать вопрос напрямую&nbsp;— <a href="/#contact">через форму записи</a>.</p>
+    {% endif %}
+
+    <p class="memo-warning">Памятка носит справочный характер и&nbsp;не&nbsp;заменяет очную консультацию врача.</p>
+
+    {% if memos %}
+    <div class="memo-other no-print">
+      <h2>Другие памятки</h2>
+      <div class="memo-chips">
+        {% for m in memos %}
+        <a class="memo-chip" href="{{ m.get_absolute_url }}"><span class="memo-chip-num">{{ m.number }}</span>{{ m.title|typo }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}
+
+{% block footer_cta %}{% endblock %}

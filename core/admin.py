@@ -40,13 +40,13 @@ class TestimonialAdmin(admin.ModelAdmin):
     """Отзывы пишут пациенты через сайт.
     Администратор может только модерировать (публиковать/снимать с публикации) и удалять."""
 
-    list_display = ['name', 'age', 'short_text', 'is_published', 'created_at']
+    list_display = ['name', 'title', 'age', 'short_text', 'is_published', 'created_at']
     list_filter = ['is_published', 'created_at']
     list_editable = ['is_published']
     search_fields = ['name', 'text']
     ordering = ['-created_at']
     readonly_fields = ['name', 'age', 'text', 'photo', 'created_at']
-    fields = ['name', 'age', 'text', 'photo', 'created_at', 'is_published']
+    fields = ['name', 'age', 'text', 'photo', 'created_at', 'title', 'is_published']
 
     @admin.display(description='Отзыв')
     def short_text(self, obj):
@@ -101,7 +101,8 @@ class ContactInfoAdmin(admin.ModelAdmin):
 # === Прочее ===
 @admin.register(ClinicLocation)
 class ClinicLocationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'address', 'order']
+    list_display = ['order', 'name', 'city', 'phone']
+    list_editable = ['name', 'city', 'phone']
     ordering = ['order']
 
 
@@ -122,3 +123,7 @@ class AchievementAdmin(admin.ModelAdmin):
 class EducationItemAdmin(admin.ModelAdmin):
     list_display = ['year', 'title', 'order']
     ordering = ['order']
+
+from . import admin_lead  # noqa: F401  # регистрация LeadAdmin
+
+from . import admin_extra  # noqa: F401,E402  # цифры под баннером
