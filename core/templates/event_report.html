@@ -1,56 +1,40 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load typo %}
 
-{% block title %}{{ event.title }} | Отчёт о мероприятии{% endblock %}
+{% block title %}{{ event.title }} — отчёт о мероприятии{% endblock %}
 
 {% block content %}
-<section>
+<section class="page-hero">
   <div class="container">
-
-    <a href="{% url 'events' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
-      <i class="fas fa-chevron-left"></i> Календарь мероприятий
-    </a>
-
-    <div style="display: grid; grid-template-columns: 110px 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem;">
-      <div class="event-date-block">
-        <span class="day">{{ event.date|date:"d" }}</span>
-        <span class="month">{{ event.date|date:"M" }}</span>
-        <span class="year">{{ event.date|date:"Y" }}</span>
-      </div>
-      <div>
-        <span class="eyebrow">Отчёт о мероприятии</span>
-        <h1 style="margin-bottom: 0.6rem;">{{ event.title }}</h1>
-        <div class="event-meta" style="margin: 0;">
-          <i class="fas fa-location-dot"></i>{{ event.location }}
-        </div>
-      </div>
+    <a href="{% url 'events' %}" class="back-link"><i class="fas fa-arrow-left"></i> Календарь мероприятий</a>
+    <div class="reveal" style="margin-top:1.2rem">
+      <span class="eyebrow">Отчёт о&nbsp;мероприятии · {{ event.date|date:"j E Y" }}</span>
+      <h1>{{ event.title|typo }}</h1>
+      {% if event.location %}<p class="lead"><i class="fas fa-location-dot" style="color:var(--gold)"></i> {{ event.location|typo }}</p>{% endif %}
     </div>
+  </div>
+</section>
 
+<section class="page-body">
+  <div class="container">
     {% if blog_post %}
-      <article class="blog-item">
-        {% if blog_post.image %}
-          <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}">
-        {% endif %}
-        <h2>{{ blog_post.title }}</h2>
-        <div class="blog-content">{{ blog_post.content|safe }}</div>
+      <article class="post reveal">
+        {% if blog_post.image %}<img class="post-cover" src="{{ blog_post.image.url }}" alt="">{% endif %}
+        <h2>{{ blog_post.title|typo }}</h2>
+        <div class="rich">{{ blog_post.content|safe|typo }}</div>
       </article>
     {% else %}
-      <div class="card" style="text-align: center; padding: 3rem 2rem;">
-        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-clock"></i></span>
+      <div class="empty reveal">
+        <div class="empty-icon"><i class="fas fa-hourglass-half"></i></div>
         <h3>Отчёт готовится</h3>
-        <p class="text-muted">Материалы по этому мероприятию скоро будут опубликованы.</p>
+        <p>Материалы по&nbsp;этому мероприятию опубликуем в&nbsp;дневнике.</p>
       </div>
     {% endif %}
 
-    <div style="margin-top: 2.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
-      <a href="{% url 'events' %}" class="btn btn-ghost">
-        <i class="fas fa-chevron-left"></i> Все мероприятия
-      </a>
-      <a href="{% url 'diary' %}" class="btn btn-outline">
-        <i class="fas fa-book-open"></i> Дневник врача
-      </a>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2.5rem">
+      <a href="{% url 'events' %}" class="btn btn-ghost"><i class="fas fa-arrow-left"></i> Все мероприятия</a>
+      <a href="{% url 'diary' %}" class="btn btn-ghost">Дневник врача</a>
     </div>
-
   </div>
 </section>
 {% endblock %}

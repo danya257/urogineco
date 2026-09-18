@@ -122,3 +122,5 @@ class AchievementAdmin(admin.ModelAdmin):
 class EducationItemAdmin(admin.ModelAdmin):
     list_display = ['year', 'title', 'order']
     ordering = ['order']
+
+from . import admin_lead  # noqa: F401  # регистрация LeadAdmin

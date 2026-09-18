@@ -1,105 +1,135 @@
-// main.js — Doctor Gvozdev site
+(function () {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
+  var root = document.documentElement;
+  var body = document.body;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Scroll reveal ----
-  const revealEls = document.querySelectorAll(
-    'section, .card, .review-card, .clinic-card, .event-card, .useful-card, .blog-item, .stat-box, .hero-media, .hero-content'
-  );
-  revealEls.forEach(el => el.classList.add('reveal'));
+  /* Header shadow on scroll */
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
+  /* Mobile drawer */
+  var toggle = document.querySelector('.menu-toggle');
+  var nav = document.getElementById('main-nav');
+  var backdrop = document.querySelector('.nav-backdrop');
+
+  function setMenu(open) {
+    if (!toggle || !nav) return;
+    body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    if (open) {
+      var first = nav.querySelector('a');
+      if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 250);
+    }
+  }
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      setMenu(!body.classList.contains('menu-open'));
+    });
+    if (backdrop) backdrop.addEventListener('click', function () { setMenu(false); });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && body.classList.contains('menu-open')) {
+        setMenu(false);
+        toggle.focus();
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    window.matchMedia('(min-width: 1181px)').addEventListener('change', function (mq) {
+      if (mq.matches) setMenu(false);
+    });
+  }
 
-  revealEls.forEach(el => io.observe(el));
+  /* Active nav item */
+  if (nav) {
+    var path = location.pathname;
+    nav.querySelectorAll('a[href^="/"]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (href.indexOf('#') !== -1 || a.classList.contains('nav-cta')) return;
+      if ((href === '/' && path === '/') || (href !== '/' && path.indexOf(href) === 0)) a.classList.add('active');
+    });
+  }
 
-  // ---- Smooth-scroll for in-page anchors ----
-  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      const isHome = location.pathname === '/' || location.pathname === '';
-      const hash = href.startsWith('/#') ? href.slice(1) : href;
-      if (href.startsWith('/#') && !isHome) return;
-      if (!hash || hash === '#') return;
-      const target = document.querySelector(hash);
-      if (!target) return;
-      e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top, behavior: 'smooth' });
-      history.pushState(null, '', hash);
+  /* Reveal on scroll */
+  window.__reveal = true;
+  var revealEls = document.querySelectorAll('.reveal');
+  function revealNow(scope) {
+    (scope || document).querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+  if (revealEls.length && 'IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -4% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+    var revealHashTarget = function () {
+      if (!location.hash || location.hash.length < 2) return;
+      var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (target) revealNow(target);
+    };
+    revealHashTarget();
+    window.addEventListener('hashchange', revealHashTarget);
+  } else {
+    revealNow();
+  }
+  document.querySelectorAll('[data-stagger]').forEach(function (group) {
+    Array.prototype.forEach.call(group.children, function (child, i) {
+      child.style.setProperty('--d', Math.min(i * 0.08, 0.4) + 's');
     });
   });
 
-  // ---- Mobile drawer menu ----
-  const toggle = document.querySelector('.mobile-menu-toggle');
-  const nav = document.getElementById('main-nav');
-  const body = document.body;
-
-  const closeMenu = () => {
-    if (!nav || !toggle) return;
-    nav.classList.remove('active');
-    body.classList.remove('menu-open');
-    toggle.setAttribute('aria-expanded', 'false');
-    const icon = toggle.querySelector('i');
-    if (icon) { icon.classList.remove('fa-times'); icon.classList.add('fa-bars'); }
-  };
-
-  if (toggle && nav) {
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = nav.classList.toggle('active');
-      body.classList.toggle('menu-open', isOpen);
-      toggle.setAttribute('aria-expanded', String(isOpen));
-      const icon = toggle.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-bars', !isOpen);
-        icon.classList.toggle('fa-times', isOpen);
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) closeMenu();
-    });
-
-    nav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMenu();
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 900) closeMenu();
-    });
+  /* Accordions: on phones keep only the first open */
+  var usefulCards = document.querySelectorAll('.useful-card');
+  if (usefulCards.length && window.matchMedia('(max-width: 900px)').matches) {
+    usefulCards.forEach(function (d, i) { if (i > 0) d.removeAttribute('open'); });
   }
 
-  // ---- Contact form (only on home) ----
-  const form = document.getElementById('contactForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = form.name.value.trim();
-      const phone = form.phone.value.trim();
-      const message = form.message.value.trim();
-      if (!name || !phone || !message) {
-        alert('Пожалуйста, заполните все поля.');
-        return;
-      }
-      const btn = form.querySelector('button[type=submit]');
-      const original = btn ? btn.innerHTML : null;
-      if (btn) { btn.innerHTML = 'Отправка…'; btn.disabled = true; }
-      setTimeout(() => {
-        alert('✓ Спасибо за заявку! Администратор свяжется с вами в течение 24 часов.');
-        form.reset();
-        if (btn) { btn.innerHTML = original; btn.disabled = false; }
-      }, 400);
+  /* Toasts */
+  document.querySelectorAll('.toast').forEach(function (t) {
+    var close = function () {
+      t.classList.add('hide');
+      setTimeout(function () { t.remove(); }, 350);
+    };
+    var btn = t.querySelector('.toast-close');
+    if (btn) btn.addEventListener('click', close);
+    if (!t.classList.contains('error')) setTimeout(close, 7000);
+  });
+
+  /* Forms: prevent double submit */
+  document.querySelectorAll('form[data-once]').forEach(function (form) {
+    form.addEventListener('submit', function () {
+      var btn = form.querySelector('button[type="submit"]');
+      if (!btn) return;
+      setTimeout(function () {
+        btn.disabled = true;
+        btn.dataset.label = btn.innerHTML;
+        btn.textContent = 'Отправляем…';
+      }, 0);
+    });
+  });
+
+  /* Cookie notice */
+  var cookie = document.getElementById('cookie');
+  if (cookie) {
+    var accepted = false;
+    try { accepted = localStorage.getItem('cookies_accepted_v1') === '1'; } catch (e) {}
+    if (!accepted) cookie.hidden = false;
+    var ok = document.getElementById('cookie-ok');
+    if (ok) ok.addEventListener('click', function () {
+      try { localStorage.setItem('cookies_accepted_v1', '1'); } catch (e) {}
+      cookie.hidden = true;
     });
   }
-});
+})();

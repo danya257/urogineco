@@ -1,40 +1,42 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load typo %}
 
-{% block title %}Дневник врача | Доктор Гвоздев М.Ю.{% endblock %}
+{% block title %}Дневник врача — Гвоздев М.Ю.{% endblock %}
 
 {% block content %}
-<section id="diary-page">
-  <div class="container">
-    <div class="section-head" style="text-align: left;">
-      <span class="eyebrow">Дневник</span>
-      <h1>Заметки практикующего врача</h1>
-      <p>Клинические случаи, размышления и наблюдения из практики</p>
-    </div>
+<section class="page-hero">
+  <div class="container reveal">
+    <span class="eyebrow">Дневник</span>
+    <h1>Заметки <em>практикующего врача</em></h1>
+    <p class="lead">Клинические случаи, наблюдения из&nbsp;практики и&nbsp;отчёты о&nbsp;мероприятиях.</p>
+  </div>
+</section>
 
-    {% for post in blog_posts %}
-      <article class="blog-item">
-        <div class="blog-meta">{{ post.published_date|date:"d E Y" }}</div>
-        <h2>{{ post.title }}</h2>
-        {% if post.image %}
-          <img src="{{ post.image.url }}" alt="{{ post.title }}">
-        {% endif %}
-        <div class="blog-content">{{ post.content|safe }}</div>
+<section class="page-body">
+  <div class="container">
+    {% if blog_posts %}
+    <div class="posts">
+      {% for post in blog_posts %}
+      <article class="post reveal" id="post-{{ post.pk }}">
+        <div class="post-date">{{ post.published_date|date:"j E Y" }}</div>
+        <h2>{{ post.title|typo }}</h2>
+        {% if post.image %}<img class="post-cover" src="{{ post.image.url }}" alt="" loading="lazy">{% endif %}
+        <div class="rich">{{ post.content|safe|typo }}</div>
         {% if post.related_event %}
-          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-            <a href="{% url 'event_report' post.related_event.id %}" class="btn btn-outline btn-sm">
-              <i class="fas fa-arrow-right"></i> Связанное мероприятие
-            </a>
-          </div>
+        <div class="post-foot">
+          <a href="{% url 'event_report' post.related_event.id %}" class="link-arrow">Мероприятие: {{ post.related_event.title|typo }} <i class="fas fa-arrow-right"></i></a>
+        </div>
         {% endif %}
       </article>
-    {% empty %}
-      <div class="card" style="text-align: center; padding: 4rem 2rem;">
-        <span class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-book-open"></i></span>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty reveal">
+        <div class="empty-icon"><i class="fas fa-book-open"></i></div>
         <h3>Записей пока нет</h3>
-        <p class="text-muted">Скоро здесь появятся первые заметки.</p>
+        <p>Скоро здесь появятся первые заметки.</p>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
 </section>
 {% endblock %}

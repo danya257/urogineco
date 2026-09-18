@@ -19,7 +19,7 @@ from datetime import date
 
 # ============ SEO ============
 seo = SEOAndContent.load()
-seo.meta_title = "Гвоздев М.Ю. — урогинеколог в Москве | Запись на приём"
+seo.meta_title = "Гвоздев М.Ю. — врач-урогинеколог, хирург | Запись на консультацию"
 seo.meta_description = (
     "Доктор медицинских наук, профессор, заслуженный врач РФ. "
     "Хирургическое лечение недержания мочи, пролапса тазовых органов, "
@@ -124,10 +124,10 @@ u.save()
 
 # ============ CONTACTS ============
 c = ContactInfo.load()
-c.address = "Москва — приём в нескольких клиниках. Уточните при записи."
-c.telegram_link = "https://t.me/gvozdev_md"
-c.whatsapp_link = "https://wa.me/79991234567"
-c.email = "info@gvozdev.md"
+c.address = ""
+c.telegram_link = ""
+c.whatsapp_link = ""
+c.email = "dr-gvozdev@mail.ru"
 c.save()
 
 # ============ PROCEDURES (Операции) ============

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Страница не найдена — Гвоздев М.Ю.{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="container">
+    <div class="error-code">404</div>
+    <h1 style="font-size:clamp(1.8rem,1.3rem + 2vw,2.6rem);margin-top:1rem">Такой страницы нет</h1>
+    <p class="lead" style="margin:1rem auto 2rem;max-width:32rem">Возможно, ссылка устарела. Начните с&nbsp;главной или сразу оставьте заявку.</p>
+    <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+      <a href="/" class="btn">На&nbsp;главную</a>
+      <a href="/#contact" class="btn btn-ghost">Записаться</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

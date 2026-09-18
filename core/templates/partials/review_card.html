@@ -1,0 +1,15 @@
+{% load typo %}<article class="review-card reveal">
+  <div class="review-quote" aria-hidden="true">“</div>
+  <div class="review-text">{{ t.text|plain }}</div>
+  <div class="review-author">
+    {% if t.photo %}
+      <img class="review-avatar" src="{{ t.photo.url }}" alt="" width="46" height="46" loading="lazy">
+    {% else %}
+      <span class="review-avatar" aria-hidden="true">{{ t.name|first|upper }}</span>
+    {% endif %}
+    <div>
+      <div class="review-name">{{ t.name }}{% if t.age %}, {{ t.age }}&nbsp;лет{% endif %}</div>
+      <div class="review-meta">{{ t.created_at|date:"j E Y" }}</div>
+    </div>
+  </div>
+</article>

@@ -289,3 +289,6 @@ class ClinicLocation(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.address}"
+
+# --- 152-ФЗ: заявки с формы ---
+from .legal_models import Lead  # noqa: E402,F401

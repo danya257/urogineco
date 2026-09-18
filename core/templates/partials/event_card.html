@@ -1,0 +1,25 @@
+{% load typo %}<article class="event-card reveal">
+  <div class="event-date{% if past %} past{% endif %}">
+    <span class="event-day">{{ event.date|date:"d" }}</span>
+    <span class="event-month">{{ event.date|date:"b" }}</span>
+    <span class="event-year">{{ event.date|date:"Y" }}</span>
+  </div>
+  <div class="event-body">
+    <h3>{{ event.title|typo }}</h3>
+    {% if event.location %}<div class="event-place"><i class="fas fa-location-dot"></i>{{ event.location|typo }}</div>{% endif %}
+    {% if show_desc and event.description %}<div class="event-desc rich">{{ event.description|safe|typo }}</div>{% endif %}
+    {% if event.link or event.has_diary_entry %}
+    <div class="event-actions">
+      {% if event.has_diary_entry %}
+      <a href="{% url 'event_report' event.id %}" class="btn btn-sm"><i class="fas fa-file-lines"></i> Отчёт о&nbsp;мероприятии</a>
+      {% endif %}
+      {% if event.link %}
+      <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">Подробнее <i class="fas fa-arrow-up-right-from-square" style="font-size:.75em"></i></a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% if event.has_diary_entry %}
+  <a href="{% url 'event_report' event.id %}" class="event-arrow" aria-label="Запись в дневнике о мероприятии «{{ event.title }}»"><i class="fas fa-arrow-right"></i></a>
+  {% endif %}
+</article>

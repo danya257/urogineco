@@ -43,6 +43,7 @@ def home(request):
         'about_doctor': AboutDoctor.load(),
         'useful_info': UsefulInfo.load(),
         'clinic_locations': ClinicLocation.objects.all().order_by('order'),
+        'lead_draft': request.session.pop('lead_draft', None) or {},
     }
     return render(request, 'index.html', context)
 
