@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% block title %}{{ seo_info.meta_title|default:"Гвоздев М.Ю. — врач-урогинеколог" }}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ seo_info.meta_description|default:'Врач-урогинеколог, д.м.н., профессор. Хирургическое лечение недержания мочи, пролапса тазовых органов, свищей.' }}{% endblock %}">
-  <meta name="theme-color" content="#12271E">
+  <meta name="theme-color" content="#0E343C">
   <script>
     document.documentElement.classList.add('js');
     setTimeout(function(){if(!window.__reveal){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')})}},3000);
@@ -14,7 +14,7 @@
   <link rel="preload" href="{% static 'vendor/fonts/Inter-normal-400-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{% static 'vendor/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260916c">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260918a">
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -130,7 +130,6 @@
           <li><a href="{% url 'diary' %}">Дневник врача</a></li>
           <li><a href="{% url 'events' %}">Мероприятия</a></li>
           <li><a href="{% url 'reviews' %}">Отзывы</a></li>
-          <li><a href="{% url 'faq' %}">Вопрос-ответ</a></li>
           <li><a href="{% url 'add_review' %}">Оставить отзыв</a></li>
         </ul>
       </div>
@@ -154,7 +153,7 @@
   <button type="button" class="btn btn-sm btn-gold" id="cookie-ok">Понятно</button>
 </div>
 
-<script src="{% static 'js/main.js' %}?v=20260916c" defer></script>
+<script src="{% static 'js/main.js' %}?v=20260918a" defer></script>
 {% block extra_js %}{% endblock %}
 </body>
 </html>
