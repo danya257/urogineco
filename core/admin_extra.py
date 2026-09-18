@@ -44,7 +44,7 @@ class DiseaseAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('nav_title', 'slug', 'order', 'is_visible', 'icon')}),
         ('Баннер', {'fields': ('title', 'subtitle', 'counter', 'banner')}),
-        ('Видео', {'fields': ('video_file', 'video_url', 'video_poster')}),
+        ('Видео', {'fields': ('video_file', 'video_url', 'video_poster', 'video_caption')}),
         ('Карточка на главной', {'fields': ('short_description',)}),
         ('Текст страницы', {'fields': (
             'lead', 'highlight_title', 'highlight_text',

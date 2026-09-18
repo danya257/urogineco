@@ -48,6 +48,7 @@
           <span class="video-caption">Смотреть видео</span>
         </a>
         {% endif %}
+        {% if disease.video_caption %}<p class="video-note">{{ disease.video_caption|typo }}</p>{% endif %}
       </div>
       {% endif %}
 

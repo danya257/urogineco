@@ -412,6 +412,10 @@ class Disease(models.Model):
         help_text="Если файла нет — ссылка на VK Видео / Rutube / YouTube",
     )
     video_poster = models.ImageField("Обложка видео", upload_to="diseases/", blank=True, null=True)
+    video_caption = models.CharField(
+        "Подпись под видео", max_length=200, blank=True,
+        help_text="Например: демонстрационный ролик",
+    )
 
     lead = RichTextField("Вступление", config_name='minimal', blank=True)
     highlight_title = models.CharField("Заголовок врезки", max_length=200, blank=True)
