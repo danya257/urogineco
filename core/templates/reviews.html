@@ -53,4 +53,36 @@
     {% endif %}
   </div>
 </section>
+
+{% if faq_groups %}
+<section class="section" id="faq">
+  <div class="container container-narrow">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">Наблюдения из практики</span>
+      <h2>Самые часто задаваемые <em>вопросы</em></h2>
+    </div>
+    {% for group in faq_groups %}
+    <div class="faq-group">
+      <h3><a href="{{ group.disease.get_absolute_url }}">{{ group.disease.nav_title|typo }}</a></h3>
+      <div class="faq-list">
+        {% for f in group.items %}
+        <details class="faq-item reveal">
+          <summary><span>{{ f.question|typo }}</span><span class="useful-plus" aria-hidden="true"></span></summary>
+          <div class="faq-answer rich">{{ f.answer|safe|typo }}</div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    <p style="margin-top:1.6rem"><a href="{% url 'faq' %}" class="link-arrow">Все вопросы и&nbsp;ответы <i class="fas fa-arrow-right"></i></a></p>
+  </div>
+</section>
+{% endif %}
+
+{% include 'partials/useful_publications.html' %}
+{% include 'partials/clinics.html' %}
+{% include 'partials/contact.html' %}
+
 {% endblock %}
+
+{% block footer_cta %}{% endblock %}

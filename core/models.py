@@ -488,5 +488,34 @@ class HeroSlide(models.Model):
         return self.title or self.get_kind_display()
 
 
+class Publication(models.Model):
+    """Блок «Это может быть полезно»: обложка публикации, по клику открывается материал."""
+
+    title = models.CharField("Название", max_length=250)
+    subtitle = models.CharField("Подпись", max_length=250, blank=True)
+    cover = models.ImageField("Обложка", upload_to="publications/")
+    file = models.FileField(
+        "Файл (PDF)", upload_to="publications/", blank=True, null=True,
+        help_text="Если файла нет — можно указать ссылку",
+    )
+    link = models.URLField("Ссылка", blank=True)
+    order = models.PositiveIntegerField("Порядок", default=0)
+    is_visible = models.BooleanField("Показывать", default=True)
+
+    class Meta:
+        verbose_name = "Публикация"
+        verbose_name_plural = "Это может быть полезно"
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def target(self):
+        if self.file:
+            return self.file.url
+        return self.link
+
+
 # --- 152-ФЗ: заявки с формы ---
 from .legal_models import Lead  # noqa: E402,F401

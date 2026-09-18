@@ -7,7 +7,7 @@ from .models import (
     Hero, AboutDoctor, UsefulInfo, ClinicLocation,
     Direction, WorkExample, Achievement, EducationItem,
     Procedure, Testimonial, BlogPost, Event, HeroStat, DoctorLetter,
-    Disease, Memo, Faq, HeroSlide,
+    Disease, Memo, Faq, HeroSlide, Publication,
 )
 from .forms import TestimonialForm
 
@@ -39,6 +39,15 @@ def _calendar(future, past):
             'is_past': e.date < date.today(),
         })
     return items
+
+
+def _clinics_and_draft(request):
+    """Общий хвост страниц по ТЗ: адреса клиник и форма записи."""
+    return {
+        'clinic_locations': ClinicLocation.objects.all().order_by('order'),
+        'lead_draft': request.session.pop('lead_draft', None) or {},
+        'contact_intro': True,
+    }
 
 
 def home(request):
@@ -81,22 +90,32 @@ def diary(request):
     qs = BlogPost.objects.filter(is_published=True).order_by('-published_date')
     paginator = Paginator(qs, 3)
     page_obj = paginator.get_page(request.GET.get('page'))
-    return render(request, 'diary.html', {
+    ctx = {
         'blog_posts': page_obj.object_list,
         'page_obj': page_obj,
         'paginator': paginator,
-    })
+    }
+    ctx.update(_clinics_and_draft(request))
+    return render(request, 'diary.html', ctx)
 
 
 def reviews(request):
     qs = Testimonial.objects.filter(is_published=True).order_by('-created_at')
     paginator = Paginator(qs, 6)
     page_obj = paginator.get_page(request.GET.get('page'))
-    return render(request, 'reviews.html', {
+    ctx = {
         'testimonials': page_obj.object_list,
         'page_obj': page_obj,
         'paginator': paginator,
-    })
+        'publications': Publication.objects.filter(is_visible=True),
+        'faq_groups': [
+            {'disease': d, 'items': list(d.faqs.filter(is_visible=True))}
+            for d in Disease.objects.filter(is_visible=True)
+            if d.faqs.filter(is_visible=True).exists()
+        ],
+    }
+    ctx.update(_clinics_and_draft(request))
+    return render(request, 'reviews.html', ctx)
 
 
 def add_testimonial(request):
@@ -118,12 +137,14 @@ def events(request):
     for i, e in enumerate(future_events):
         e.expanded = (i == 0)
 
-    return render(request, 'events.html', {
+    ctx = {
         'future_events': future_events,
         'past_events': past_all[:2],
         'past_rest': past_all[2:],
         'calendar': _calendar(future_events, past_all),
-    })
+    }
+    ctx.update(_clinics_and_draft(request))
+    return render(request, 'events.html', ctx)
 
 
 def event_report(request, event_id):
@@ -133,15 +154,6 @@ def event_report(request, event_id):
         'event': event,
         'blog_post': blog_post,
     })
-
-
-def _clinics_and_draft(request):
-    """Общий хвост страниц: адреса клиник и черновик формы записи."""
-    return {
-        'clinic_locations': ClinicLocation.objects.all().order_by('order'),
-        'lead_draft': request.session.pop('lead_draft', None) or {},
-        'contact_intro': True,
-    }
 
 
 def diseases(request):
@@ -209,6 +221,7 @@ def faq(request):
         'general_faqs': general,
         'faq_groups': [{'disease': d, 'items': v} for d, v in by_disease.items()],
         'diseases': Disease.objects.filter(is_visible=True),
+        'publications': Publication.objects.filter(is_visible=True),
     }
     ctx.update(_clinics_and_draft(request))
     return render(request, 'faq.html', ctx)

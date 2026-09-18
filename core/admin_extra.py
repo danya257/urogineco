@@ -1,7 +1,7 @@
 """Админка для блоков, добавленных по ТЗ от 09.07.2026."""
 from django.contrib import admin
 
-from .models import HeroStat, DoctorLetter, HeroSlide, Disease, Memo, Faq
+from .models import HeroStat, DoctorLetter, HeroSlide, Disease, Memo, Faq, Publication
 
 
 @admin.register(HeroStat)
@@ -67,4 +67,11 @@ class FaqAdmin(admin.ModelAdmin):
     list_display = ('order', 'question', 'disease', 'is_visible')
     list_editable = ('question', 'disease', 'is_visible')
     list_filter = ('disease',)
+    ordering = ('order',)
+
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    list_display = ('order', 'title', 'is_visible')
+    list_editable = ('title', 'is_visible')
     ordering = ('order',)

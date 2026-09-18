@@ -1,0 +1,21 @@
+{% load typo %}
+{% if publications %}
+<section class="section bg-cream2" id="useful-materials">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">Наблюдения из практики</span>
+      <h2>Это может быть <em>полезно</em></h2>
+      <p class="lead">Методические рекомендации и пособия, написанные мной и коллегами.</p>
+    </div>
+    <div class="pub-grid" data-stagger>
+      {% for p in publications %}
+      {% if p.target %}<a class="pub-card reveal" href="{{ p.target }}" target="_blank" rel="noopener">{% else %}<div class="pub-card reveal">{% endif %}
+        <img src="{{ p.cover.url }}" alt="{{ p.title }}" loading="lazy">
+        <span class="pub-title">{{ p.title|typo }}</span>
+        {% if p.subtitle %}<span class="pub-sub">{{ p.subtitle|typo }}</span>{% endif %}
+      {% if p.target %}</a>{% else %}</div>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
