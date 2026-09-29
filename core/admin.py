@@ -90,7 +90,10 @@ class UsefulInfoAdmin(admin.ModelAdmin):
 
 @admin.register(AboutDoctor)
 class AboutDoctorAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = (
+        (None, {'fields': ('bio', 'experience_years', 'patents', 'awards')}),
+        ('Видео в блоке «Обо мне»', {'fields': ('video_file', 'video_url', 'video_poster', 'video_caption')}),
+    )
 
 
 @admin.register(ContactInfo)

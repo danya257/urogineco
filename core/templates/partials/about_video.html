@@ -1,0 +1,18 @@
+{% load typo %}
+{% if about_doctor.video_file or about_doctor.video_url %}
+<div class="about-video reveal" style="--d:.08s">
+  {% if about_doctor.video_file %}
+  <video controls playsinline preload="metadata" {% if about_doctor.video_poster %}poster="{{ about_doctor.video_poster.url }}"{% endif %}>
+    <source src="{{ about_doctor.video_file.url }}" type="video/mp4">
+    Ваш браузер не поддерживает воспроизведение видео.
+  </video>
+  {% else %}
+  <a class="video-link" href="{{ about_doctor.video_url }}" target="_blank" rel="noopener">
+    {% if about_doctor.video_poster %}<img src="{{ about_doctor.video_poster.url }}" alt="Видео о враче" loading="lazy">{% endif %}
+    <span class="video-play"><i class="fas fa-play"></i></span>
+    <span class="video-caption">Смотреть видео</span>
+  </a>
+  {% endif %}
+  {% if about_doctor.video_caption %}<p class="video-note">{{ about_doctor.video_caption|typo }}</p>{% endif %}
+</div>
+{% endif %}

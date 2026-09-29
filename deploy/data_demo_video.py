@@ -4,7 +4,7 @@
 import os
 from datetime import date
 from django.core.files import File
-from core.models import HeroSlide, Disease, Event
+from core.models import HeroSlide, Disease, Event, AboutDoctor
 
 SRC = os.environ.get('DEMO_VIDEO', '')
 BANNER = os.environ.get('TZ_MEDIA', '')
@@ -51,3 +51,11 @@ e = Event.objects.filter(date__gte=date.today()).order_by('date').first()
 if e:
     put(e.video_file, os.path.join(SRC, 'event_demo.mp4'), 'event-demo.mp4')
     print('видео в мероприятии:', e.title, e.video_file.url if e.video_file else None)
+
+a = AboutDoctor.load()
+put(a.video_file, os.path.join(SRC, 'about_demo.mp4'), 'about-demo.mp4')
+put(a.video_poster, os.path.join(SRC, 'about_poster.jpg'), 'about-demo-poster.jpg')
+if not a.video_caption:
+    a.video_caption = 'Демонстрационный ролик — заменим на ваше видео'
+a.save()
+print('видео в блоке «Обо мне»:', a.video_file.url if a.video_file else None)

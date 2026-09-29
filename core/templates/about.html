@@ -36,18 +36,10 @@
       {% if about_doctor.patents %}<div class="rich" style="margin-top:1.4rem">{{ about_doctor.patents|safe|typo }}</div>{% endif %}
       {% if about_doctor.awards %}<div class="rich" style="margin-top:1.4rem">{{ about_doctor.awards|safe|typo }}</div>{% endif %}
     </div>
-    <div class="creds" data-stagger>
-      {% for a in achievements %}
-      <div class="cred reveal">
-        <span class="cred-icon"><i class="fas {% cycle 'fa-award' 'fa-user-doctor' 'fa-certificate' 'fa-book-open' %}"></i></span>
-        <div>
-          <div class="cred-title">{{ a.title|typo }}</div>
-          <div class="cred-text">{{ a.description|safe|typo }}</div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
+    {% include 'partials/about_video.html' %}
   </div>
+
+  <div class="container">{% include 'partials/creds.html' %}</div>
 
   {% if education_items %}
   <div class="container">

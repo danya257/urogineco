@@ -234,22 +234,10 @@
         <p style="margin-top:1.8rem"><a href="{% url 'about' %}" class="btn btn-gold">Подробнее обо&nbsp;мне <i class="fas fa-arrow-right btn-arrow"></i></a></p>
       </div>
 
-      <div class="creds" data-stagger>
-        {% for a in achievements %}
-        <div class="cred reveal">
-          <span class="cred-icon"><i class="fas {% cycle 'fa-award' 'fa-user-doctor' 'fa-certificate' 'fa-book-open' %}"></i></span>
-          <div>
-            <div class="cred-title">{{ a.title|typo }}</div>
-            <div class="cred-text">{{ a.description|safe|typo }}</div>
-          </div>
-        </div>
-        {% empty %}
-          {% if about_doctor.patents %}
-          <div class="cred reveal"><span class="cred-icon"><i class="fas fa-certificate"></i></span><div><div class="cred-title">Патенты</div><div class="cred-text">{{ about_doctor.patents|safe|typo }}</div></div></div>
-          {% endif %}
-        {% endfor %}
-      </div>
+      {% include 'partials/about_video.html' %}
     </div>
+
+    {% include 'partials/creds.html' %}
 
     {% if education_items %}
     <div class="timeline reveal">

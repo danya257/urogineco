@@ -249,6 +249,13 @@ class AboutDoctor(models.Model):
     experience_years = models.PositiveIntegerField("Стаж (лет)", default=18)
     patents = RichTextField("Патенты и разработки", config_name='minimal', blank=True)
     awards = RichTextField("Награды и заслуги", config_name='minimal', blank=True)
+    video_file = models.FileField(
+        "Видео о враче (MP4)", upload_to="doctor/video/", blank=True, null=True,
+        help_text="Показывается в блоке «Обо мне» рядом с биографией",
+    )
+    video_url = models.URLField("Ссылка на видео", blank=True, help_text="Если файла нет")
+    video_poster = models.ImageField("Обложка видео", upload_to="doctor/", blank=True, null=True)
+    video_caption = models.CharField("Подпись под видео", max_length=200, blank=True)
 
     class Meta:
         verbose_name = "О враче"
