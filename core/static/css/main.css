@@ -1563,19 +1563,26 @@ a.cp-value:hover { color: var(--gold-light); }
   gap: .5rem;
 }
 .hero-dot {
+  /* сама кнопка прозрачная и крупная, видимая полоска — во ::before */
+  width: 34px;
+  height: 32px;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.hero-dot::before {
+  content: '';
+  display: block;
   width: 34px;
   height: 4px;
-  border: 0;
   border-radius: 999px;
   background: rgba(232, 241, 244, .35);
-  cursor: pointer;
-  /* полоска остаётся 34x4, но нажимать удобно: отступы входят в зону клика */
-  box-sizing: content-box;
-  padding: 14px 0;
-  background-clip: content-box;
   transition: background .25s var(--ease);
 }
-.hero-dot.is-active { background: var(--gold-light); }
+.hero-dot.is-active::before { background: var(--gold-light); }
 .hero-play {
   position: absolute;
   right: clamp(.75rem, 2vw, 2rem);

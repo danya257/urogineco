@@ -22,8 +22,9 @@ HeroSlide.objects.all().delete()
 
 slide1 = HeroSlide.objects.create(
     kind='video', order=0, is_visible=True,
-    title='Гвоздев М.Ю.|д.м.н., профессор, урогинеколог',
-    subtitle='Помогаю женщинам вернуть здоровье и качество жизни — деликатно и профессионально.',
+    title='Гвоздев М.Ю.',
+    subtitle='Д.м.н., профессор, урогинеколог. Помогаю женщинам вернуть здоровье и качество жизни — '
+             'деликатно и профессионально.',
     button_text='Записаться на консультацию', button_url='/#contact',
 )
 put(slide1.video_file, os.path.join(SRC, 'hero_demo.mp4'), 'hero-demo.mp4')
