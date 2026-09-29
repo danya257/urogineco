@@ -1569,7 +1569,10 @@ a.cp-value:hover { color: var(--gold-light); }
   border-radius: 999px;
   background: rgba(232, 241, 244, .35);
   cursor: pointer;
-  padding: 0;
+  /* полоска остаётся 34x4, но нажимать удобно: отступы входят в зону клика */
+  box-sizing: content-box;
+  padding: 14px 0;
+  background-clip: content-box;
   transition: background .25s var(--ease);
 }
 .hero-dot.is-active { background: var(--gold-light); }
